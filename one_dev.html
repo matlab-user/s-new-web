@@ -7,12 +7,22 @@
 		<title>实唯物联</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-		<!--<script src="my-js/one_dev/"></script>-->
+		<script src="my-js/one_dev/one_dev_init.js"></script>
 		
 		<script>
-			
+		
 			$( function() {
 			
+				$('body').css( 'overflow-x','hidden' );
+				
+				add_dev_info();
+				// 如果参数多于7个，则分2个更新栏显示最新数据
+				var d_index = add_data_info( 0 );
+				if ( d_index>0 )
+					add_data_info( d_index );
+				
+				$('#dev_info').outerWidth( $('body').width() );
+				
 				var dev_info_update = function() {
 					alert('hello');
 				};
@@ -56,6 +66,7 @@
 		</div>
 		
 		<ul id='dev_info'>
+<!--
 			<li class="dev_info_li">    
 				<table>
 					<caption class='title'>设备信息</caption>
@@ -68,7 +79,7 @@
 				</table>
 			</li>
 			<li class='data_info_li'>
-				<table style="width:100%;padding:0 20px;">
+				<table>
 					<caption class='title'>数据最新更新</caption>
 					<tbody>
 						<tr>
@@ -79,6 +90,7 @@
 					</tbody>
 				</table>
 			</li>
+-->
 		</ul>
 		
 				

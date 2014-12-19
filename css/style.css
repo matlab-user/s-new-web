@@ -85,7 +85,7 @@ ul#new-img li .img{margin:0 20px;padding:10px;background:#fff;position:relative;
 ul#new-img li time{font-size:13px;position:absolute;bottom:6px;padding:5px 10px}
 ul#new-img li img{width:100%;display:block}
 
-#dev_info{width:100%;height:240px;padding:20px;margin-bottom:30px;background:#303030}
+#dev_info{width:100%;height:250px;padding:20px;margin-bottom:30px;background:#303030}
 .dev_info_li,.data_info_li{list-style:none;float:left;width:34%;height:100%;background:rgba(255,255,255,0.95);border-radius:2px;}
 .data_info_li{margin-left:40px}
 .dev_info_li table{margin-top:20px;width:100%;padding:0 20px}
