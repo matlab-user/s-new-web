@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>SWAY-LOGIN</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		
+		<style type="text/css">
+			body { background-image:url(image/texture.jpg); 
+					background-repeat:repeat-x repeat-y;
+			}
+				
+			.ICP {
+				width: 100%;
+				position: absolute;
+				bottom: 0px;
+				color: rgba(255,255,255,0.4);
+				text-align: center;
+				font-family: "Microsoft Yahei";
+				text-decoration: none;
+				font-size: 12px;
+			}
+		</style>
+    </head>
+
+    <body>
+        <div class="login">
+
+            <form id="loginform" method="post">
+
+                <!-- <p class="title">SWAY.LOGIN 管理系统</p> -->
+
+                <input type="text" name="username" id="username" value="" placeholder="用户名">
+                <input type="password" name="password" id="password" value="" placeholder="密　码">
+                <label for="rememberme">
+                    <input id="rememberme" type="checkbox" name="rememberme" value="forever">记住我的登录信息
+                </label>
+                <input class="login_button" type="submit" name="submit" value="登　录">
+
+            </form>
+		</div>
+		<a class="ICP" target="_blank" href="http://www.miitbeian.gov.cn/">蜀ICP备14031015号-1</a>
+	</body>
+	
+</html>
