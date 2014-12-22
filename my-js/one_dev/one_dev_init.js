@@ -1,24 +1,33 @@
 /*
-	dev	.g1
+	dev		.g1
 			.name
 			.state
 			.tz
 			.lt  			(UTC 或 ‘N’)
 			.company		(设备生产厂商，未实现)
+			.lo				经度 （以后实时更新）
+			.la				纬度 （以后实时更新）
 			.data[]			Object 数组
 			.update_fun		设备UI更新函数
 			
 	data[j] .d_id			参数id
+			.plot			flot handler/ or UI handle
 			.d_name			参数名称
 			.ss				ss==0 累积数据; ss==1 不累积数据; ss==2 图片显示; ss==3 视频显示 ss==4 文本数据;
 			.unit			单位
-			.new_v			最新数据值
+			.new_v			最新数据值 or image src
 			.new_t			更新时间
+			.update_fun		此参数的更新函数
 */
 
-var dev = new Array();
+var dev = new Object();
 
 dev.data = new Array(12);
+$.each( dev.data, function(i,v) {
+	dev.data[i] = new Object();
+	dev.data[i].new_v = new Array();
+	dev.data[i].new_t = new Array();
+} );
 
 // devs_table - 添加设备 tr 元素的父对象，jquery对象
 // dev_i - 待添加设备在 devs 数组中的索引
@@ -29,6 +38,14 @@ function add_dev_info() {
 	var table = $("<table><caption class='title'>设备信息</caption><tbody></tbody></table>");
 	li.append( table );
 	
+	var tbody = table.children('tbody');						
+	tbody.append( $('<tr><th width="40%">设备名称：</th><th width="60%">sway dev</th></tr>') );
+	tbody.append( $('<tr><th width="40%">别名：</th><th width="60%">××××××××</th></tr>') );
+	tbody.append( $('<tr><th width="40%">设备guid号：</th><th width="60%">××××××××</th></tr>') );
+	tbody.append( $('<tr><th width="40%">所在地经纬度：</th><th width="60%">×××××  ××××××</th></tr>') );
+	tbody.append( $('<tr><th width="40%">所在地时区：</th><th width="60%">东八区</th></tr>') );
+	tbody.append( $('<tr><th width="40%">生产厂家：</th><th width="60%">××××××××</th></tr>') );
+
 	main.append( li );
 }
 
@@ -55,7 +72,7 @@ function add_data_info( d_i_s ) {
 			d_index = i;
 			return false;
 		}	
-		var tr = $('<tr></tr>');
+		var tr = $('<tr id="'+i+'_lastest'+'"></tr>');			//  后续时需要修改此代码
 		table.append( tr );	
 		var ths = $('<th width="30%">参数1</th><th width="20%">124</th><th width="50%">2014-12-19 12:45:20</th>');
 		tr.append( ths );	
@@ -65,6 +82,7 @@ function add_data_info( d_i_s ) {
 	return d_index;
 }
 
+/*
 // UTC - 单位为: 秒
 function formatDate( UTC ) {
 	var d = new Date( UTC*1000 );
@@ -76,8 +94,6 @@ function formatDate( UTC ) {
 	var second = d.getUTCSeconds();     
 	return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;     
 }
-			  
-var res = '<xml><dev><g1>00000000000000000000A0B0C0D0E0F0</g1><s>unknown</s><n>气象数据采集仪</n><tz>8</tz><lt>N</lt></dev><dev><g1>1982011602030410182910a1F2C3D02A</g1><s>unknown</s><n>空气参数测量仪</n><tz>8</tz><lt>1406637812</lt></dev><dev><g1>1982011602030410182910a1F2C3D08A</g1><s>need_data</s><n>图像采集仪</n><tz>8</tz><lt>1418785363</lt></dev><dev><g1>54455354444556535357415900000001</g1><s>unknown</s><n>农业环境测量仪</n><tz>8</tz><lt>1418908245</lt></dev><dev><g1>54455354444556535357415900000002</g1><s>unknown</s><n>农业环境测量仪</n><tz>8</tz><lt>1418908233</lt></dev><dev><g1>54455354444556535357415900000003</g1><s>unknown</s><n>农业环境测量仪</n><tz>8</tz><lt>N</lt></dev><dev><g1>A1B0C4D0E0FF</g1><s>unknown</s><n>环境数据采集仪</n><tz>8</tz><lt>N</lt></dev></xml>';
 
 function xml_parser( responseTxt ) {
 	
@@ -116,5 +132,5 @@ function xml_parser( responseTxt ) {
 			devs[dev_i].lt = parseInt( lt );
 	
 	} );
-	
 }
+*/

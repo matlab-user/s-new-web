@@ -5,16 +5,22 @@
     <head>
 		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>实唯物联</title>
+		
 		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+		<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
+		<script src="js-lib/jquery-2.1.1.min.js"></script>
 		<script src="my-js/one_dev/one_dev_init.js"></script>
+		<script src="my-js/one_dev/flot_block.js"></script>
+		<script src="my-js/one_dev/image_block.js"></script>
+		
+		<script src="js-lib/jquery.flot.js"></script>
+		<script src="js-lib/jquery.flot.time.js"></script>
 		
 		<script>
 		
 			$( function() {
 			
-				$('body').css( 'overflow-x','hidden' );
-				
+				// add dev_info_li and data_info_li		
 				add_dev_info();
 				// 如果参数多于7个，则分2个更新栏显示最新数据
 				var d_index = add_data_info( 0 );
@@ -22,6 +28,18 @@
 					add_data_info( d_index );
 				
 				$('#dev_info').outerWidth( $('body').width() );
+				//-----------------------------------------------------
+				add_flot_view( 0 );
+				add_flot_view( 1 );
+				
+				add_image_view( 2 );
+				add_image_view(	3 );
+				add_image_view( 4 );
+				add_image_view( 5 );
+				
+				dev.data[0].update_fun();
+				//$('body').bind('wdh',function(){alert('wang dehui')});
+				
 				
 				var dev_info_update = function() {
 					alert('hello');
@@ -34,7 +52,7 @@
 		</script>
     </head>
 	
-	<body style="min-width:1349px">
+	<body style="min-width:1349px;overflow-x:hidden">
 	    <header class="header">
             <span class="logo">LOGO</span>
 
@@ -93,25 +111,25 @@
 -->
 		</ul>
 		
-				
+			
 		<ul class="modules">
+<!--	
 			<li class="module">
 				<p class="title">某某一数据</p>
-				<div id="placeholder" style="height:240px;"></div>
+				<div id="placeholder"></div>
 			</li>
-			
-			<li class="module">
-				<p class="title">某某二数据</p>
-				<div id="placeholder2" style="height:240px;"></div>
-			</li>
+-->			
 		</ul>
+		
 
-		<ul id="new-img">
+		<ul id="new_img">
+<!--
 			<li><div class="img"><img src="http://img.newtheme.cn/www/2014/09/tao2014-thumb.jpg"><time>2014.12.10 22:44:10</time></div></li>
 			<li><div class="img"><img src="http://img.newtheme.cn/www/2014/08/tao0805-thumb.jpg"><time>2014.12.10 22:44:10</time></div></li>
 			<li><div class="img"><img src="http://img.newtheme.cn/www/2014/09/new0806-thumb.jpg"><time>2014.12.10 22:44:10</time></div></li>
 			<li><div class="img"><img src="http://img.newtheme.cn/www/2014/10/tao0805-mobile-thumb.jpg"><time>2014.12.10 22:44:10</time></div></li>
+-->
 		</ul>
-		
+	
 	</body>
 </html>
