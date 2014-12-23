@@ -12,6 +12,7 @@
 		<script src="my-js/one_dev/one_dev_init.js"></script>
 		<script src="my-js/one_dev/flot_block.js"></script>
 		<script src="my-js/one_dev/image_block.js"></script>
+		<script src="my-js/one_dev/data_info_get.js"></script>
 		
 		<script src="js-lib/jquery.flot.js"></script>
 		<script src="js-lib/jquery.flot.time.js"></script>
@@ -28,34 +29,27 @@
 				
 				// add dev_info_li and data_info_li		
 				add_dev_info();
-				// 如果参数多于7个，则分2个更新栏显示最新数据
-				var d_index = add_data_info( 0 );
-				if ( d_index>0 )
-					add_data_info( d_index );
+				data_info_get_and_add_views();
+				get_dev_info_update();
 				
 				$('#dev_info').outerWidth( $('body').width() );
-				//-----------------------------------------------------
-				add_flot_view( 0 );
-				add_flot_view( 1 );
-				
-				add_image_view( 2 );
-				add_image_view(	3 );
-				add_image_view( 4 );
-				add_image_view( 5 );
-				
-				dev.data[0].update_fun();
-				//$('body').bind('wdh',function(){alert('wang dehui')});
-				
-				
-				var dev_info_update = function() {
-					alert('hello');
-				};
-				
-				//dev_info_update();
-				
+	
 			} );
 			
 		</script>
+		
+		<script>
+			function get_dev_info_update() {
+				$.post( "my-php/dev_info_get.php", {'g1':dev.g1}, function( data ) {
+					var sig = info_xml_parser( data );
+					if( sig==true ) {
+						dev.update_fun();
+						$('title').text('实唯-'+dev.name);
+					}
+				});
+			};
+		</script>
+		
     </head>
 	
 	<body style="min-width:1349px;overflow-x:hidden">

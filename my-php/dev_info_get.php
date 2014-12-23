@@ -1,7 +1,6 @@
 <?php
 	// 获取指定设备的所有数据
-	$_POST['g1'] = '1982011602030410182910a1F2C3D02A';
-	$_POST['lt'] = 0;
+	//$_POST['g1'] = '1982011602030410182910a1F2C3D02A';
 	
 	if( !isset($_POST['g1']) )
 		exit;
@@ -24,6 +23,8 @@
 	$xml .= '<tz>'.$row[5].'</tz>';	
 	$xml .= '<longitude>'.$row[6].'</longitude>';
 	$xml .= '<latitude>'.$row[7].'</latitude>';
+	
+	mysql_free_result ( $res );
 	
 	mysql_close( $con );
 	

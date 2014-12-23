@@ -30,13 +30,16 @@ dev.lt = 0;
 dev.company = 'swaytech';
 dev.lo = '104.06<sup>。</sup>';
 dev.la = '30.67<sup>。</sup>';
+dev.update_fun = '';
 
-dev.data = new Array(12);
+dev.data = new Array();
+/*
 $.each( dev.data, function(i,v) {
 	dev.data[i] = new Object();
 	dev.data[i].new_v = new Array();
 	dev.data[i].new_t = new Array();
 } );
+*/
 
 // devs_table - 添加设备 tr 元素的父对象，jquery对象
 // dev_i - 待添加设备在 devs 数组中的索引
@@ -48,18 +51,32 @@ function add_dev_info() {
 	li.append( table );
 	
 	var tbody = table.children('tbody');						
-	tbody.append( $('<tr><th width="40%">设备名称：</th><th width="60%">'+dev.model+'</th></tr>') );
-	tbody.append( $('<tr><th width="40%">别名：</th><th width="60%">'+dev.name+'</th></tr>') );
-	tbody.append( $('<tr><th width="40%">设备guid号：</th><th width="60%">'+dev.g1+'</th></tr>') );
-	tbody.append( $('<tr><th width="40%">所在地经纬度：</th><th width="60%">'+dev.lo+"&nbsp;"+dev.la+'</th></tr>') );
+	tbody.append( $('<tr><th width="40%">设备名称：</th><th id="dev_info_model" width="60%">'+dev.model+'</th></tr>') );
+	tbody.append( $('<tr><th width="40%">别名：</th><th id="dev_info_name" width="60%">'+dev.name+'</th></tr>') );
+	tbody.append( $('<tr><th width="40%">设备guid号：</th><th id="dev_info_g1" width="60%">'+dev.g1+'</th></tr>') );
+	tbody.append( $('<tr><th width="40%">所在地经纬度：</th><th id="dev_info_lo_la" width="60%">'+dev.lo+"&nbsp;"+dev.la+'</th></tr>') );
 	if (dev.tz>0)
-		tbody.append( $('<tr><th width="40%">所在地时区：</th><th width="60%">东'+dev.tz+'区</th></tr>') );
+		tbody.append( $('<tr><th width="40%">所在地时区：</th><th id="dev_info_tz" width="60%">东'+dev.tz+'区</th></tr>') );
 	else
-		tbody.append( $('<tr><th width="40%">所在地时区：</th><th width="60%">西'+Math.abs(dev.tz)+'区</th></tr>') );
+		tbody.append( $('<tr><th width="40%">所在地时区：</th><th id="dev_info_tz" width="60%">西'+Math.abs(dev.tz)+'区</th></tr>') );
 	
-	tbody.append( $('<tr><th width="40%">生产厂家：</th><th width="60%">'+dev.company+'</th></tr>') );
+	tbody.append( $('<tr><th width="40%">生产厂家：</th><th id="dev_info_company" width="60%">'+dev.company+'</th></tr>') );
 
 	main.append( li );
+	
+	if( dev.update_fun==='' )
+		dev.update_fun = function() {
+			$('#dev_info_name').html( dev.name );
+			$('#dev_info_model').html( dev.model );
+			$('#dev_info_g1').html( dev.g1 );
+			$('#dev_info_lo_la').html( dev.lo+"&nbsp;"+dev.la );
+			if (dev.tz>0)
+				$('#dev_info_tz').html( '东'+dev.tz+'区' );
+			else
+				$('#dev_info_tz').html( '西'+Math.abs(dev.tz)+'区' );
+			
+			$('#dev_info_company').html( dev.company );
+		};
 }
 
 // d_i_s - 从第几个索引参数开始显示
@@ -85,14 +102,30 @@ function add_data_info( d_i_s ) {
 			d_index = i;
 			return false;
 		}	
-		var tr = $('<tr id="'+i+'_lastest'+'"></tr>');			//  后续时需要修改此代码
+		var tr = $('<tr></tr>');			//  后续时需要修改此代码
 		table.append( tr );	
-		var ths = $('<th width="30%">参数1</th><th width="20%">124</th><th width="50%">2014-12-19 12:45:20</th>');
+		var ths = $('<th width="30%">'+dev.data[i].name+'</th><th id="'+i+'_data_info_v" width="20%">no data</th><th id="'+i+'_data_info_t" width="50%">2014-12-19 12:45:20</th>');
 		tr.append( ths );	
 	} );
 	main.append( li );
 	
 	return d_index;
+}
+
+function info_xml_parser( responseTxt ) {
+			
+	var xml = $(responseTxt);
+	if ( xml.length<=0 )
+		return false;
+	
+	dev.name = xml.find('name').text();
+	dev.model = xml.find('model').text();
+	dev.company = xml.find('company').text();
+	dev.tz = parseInt( xml.find('tz').text() );
+	dev.lo = xml.find('longitude').text()+'<sup>。</sup>';
+	dev.la = xml.find('latitude').text()+'<sup>。</sup>';
+	
+	return true;
 }
 
 /*
@@ -106,44 +139,5 @@ function formatDate( UTC ) {
 	var minute = d.getUTCMinutes();     
 	var second = d.getUTCSeconds();     
 	return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;     
-}
-
-function xml_parser( responseTxt ) {
-	
-	var dev_i = -1;			// dev 索引
-			
-	var xml = $(responseTxt);
-	if ( xml.length<=0 )
-		return false;
-	
-	var ds = xml.find('dev');
-	$.each( ds, function( i, v ) {			// 遍历 xml
-		
-		var g1 = $(this).children('g1').text();
-		dev_i = -1;
-		$.each( devs, function( i, v ) {
-			if( this.g1==g1 ) {
-				dev_i = i;
-				return false;
-			}
-		} );
-
-		if( dev_i<0 ) {
-			dev_i = devs.length;
-			devs[dev_i] = new Object();
-			devs[dev_i].g1 = g1;
-		}
-		
-		devs[dev_i].name = $(this).children('n').text();
-		devs[dev_i].tz = parseInt( $(this).children('tz').text() );
-		devs[dev_i].state = $(this).children('s').text();
-		
-		var lt = $(this).children('lt').text();
-		if ( lt=='N' )
-			devs[dev_i].lt = lt;
-		else
-			devs[dev_i].lt = parseInt( lt );
-	
-	} );
 }
 */
