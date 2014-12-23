@@ -1,6 +1,7 @@
 /*
 	dev		.g1
-			.name
+			.name			用户自定义名称
+			.model			设备型号名称
 			.state
 			.tz
 			.lt  			(UTC 或 ‘N’)
@@ -21,6 +22,14 @@
 */
 
 var dev = new Object();
+dev.name = '我的设备1';
+dev.model = 'swaytech-1';
+dev.g1 = '00001';
+dev.tz = 8;
+dev.lt = 0;
+dev.company = 'swaytech';
+dev.lo = '104.06<sup>。</sup>';
+dev.la = '30.67<sup>。</sup>';
 
 dev.data = new Array(12);
 $.each( dev.data, function(i,v) {
@@ -39,12 +48,16 @@ function add_dev_info() {
 	li.append( table );
 	
 	var tbody = table.children('tbody');						
-	tbody.append( $('<tr><th width="40%">设备名称：</th><th width="60%">sway dev</th></tr>') );
-	tbody.append( $('<tr><th width="40%">别名：</th><th width="60%">××××××××</th></tr>') );
-	tbody.append( $('<tr><th width="40%">设备guid号：</th><th width="60%">××××××××</th></tr>') );
-	tbody.append( $('<tr><th width="40%">所在地经纬度：</th><th width="60%">×××××  ××××××</th></tr>') );
-	tbody.append( $('<tr><th width="40%">所在地时区：</th><th width="60%">东八区</th></tr>') );
-	tbody.append( $('<tr><th width="40%">生产厂家：</th><th width="60%">××××××××</th></tr>') );
+	tbody.append( $('<tr><th width="40%">设备名称：</th><th width="60%">'+dev.model+'</th></tr>') );
+	tbody.append( $('<tr><th width="40%">别名：</th><th width="60%">'+dev.name+'</th></tr>') );
+	tbody.append( $('<tr><th width="40%">设备guid号：</th><th width="60%">'+dev.g1+'</th></tr>') );
+	tbody.append( $('<tr><th width="40%">所在地经纬度：</th><th width="60%">'+dev.lo+"&nbsp;"+dev.la+'</th></tr>') );
+	if (dev.tz>0)
+		tbody.append( $('<tr><th width="40%">所在地时区：</th><th width="60%">东'+dev.tz+'区</th></tr>') );
+	else
+		tbody.append( $('<tr><th width="40%">所在地时区：</th><th width="60%">西'+Math.abs(dev.tz)+'区</th></tr>') );
+	
+	tbody.append( $('<tr><th width="40%">生产厂家：</th><th width="60%">'+dev.company+'</th></tr>') );
 
 	main.append( li );
 }

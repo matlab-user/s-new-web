@@ -37,11 +37,14 @@ function change_view() {
 // devs_table - 添加设备 tr 元素的父对象，jquery对象
 // dev_i - 待添加设备在 devs 数组中的索引
 function add_dev_tr( devs_table, dev_i ) {
+	
+	$.base64.utf8encode = true;
+		   
 	var tr = $('<tr></tr>');
 	tr.attr( 'id', devs[dev_i].g1 );
 	
 	var td_name = $('<td class="nickname"></td>');
-	td_name.html('<a href="device.php">'+devs[dev_i].name+'</a>');
+	td_name.html('<a target="_blank" href="one_dev.html?g1='+$.base64.btoa(devs[dev_i].g1)+'">'+devs[dev_i].name+'</a>');
 	tr.append( td_name );
 	
 	var td_g1 = $('<td align="center">'+devs[dev_i].g1+'</td>');
@@ -56,8 +59,9 @@ function add_dev_tr( devs_table, dev_i ) {
 		var td_time = $('<td align="center">'+formatDate(devs[dev_i].lt+devs[dev_i].tz*3600)+'</td>');
 	
 	tr.append( td_time );
-	
-	var td_detail = $('<td align="center"><a class="color" href="device.php">详情</a></td>');
+
+	var td_detail = $('<td align="center"><a class="color" target="_blank" href="one_dev.html?g1='+$.base64.btoa(devs[dev_i].g1)+'">详情</a></td>');
+
 	tr.append( td_detail );
 	
 	devs_table.append( tr );
@@ -70,7 +74,7 @@ function add_dev_icon( devs_ul, dev_i ) {
 	li.append( div );
 	
 	var p1 = $('<p class="logo">DEVICE.LOGO</p>');
-	var p2 = $('<p class="name"><a href="device.php">'+devs[dev_i].name+'</a></p>');
+	var p2 = $('<p class="name"><a target="_blank" href="one_dev.html?g1='+$.base64.btoa(devs[dev_i].g1)+'">'+devs[dev_i].name+'</a></p>');
 	div.append( p1 );
 	div.append( p2 );
 		

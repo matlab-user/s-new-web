@@ -15,11 +15,17 @@
 		
 		<script src="js-lib/jquery.flot.js"></script>
 		<script src="js-lib/jquery.flot.time.js"></script>
-		
-		<script>
-		
-			$( function() {
+		<script src="js-lib/jquery.base64.js"></script>
 			
+		<script>
+
+			$( function() {
+	
+				var url_p = window.location.href.split("?")[1];
+				var index = url_p.indexOf('=') ;
+				url_p = url_p.substr( index+1 );
+				dev.g1 = $.base64.atob(url_p, true);
+				
 				// add dev_info_li and data_info_li		
 				add_dev_info();
 				// 如果参数多于7个，则分2个更新栏显示最新数据
