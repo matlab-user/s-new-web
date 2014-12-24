@@ -109,7 +109,6 @@ function add_flot_view( d_i ) {
 		}
 	};
 	
-	
 } 
 
 // d_i - 待添加 flot UI的参数序号，dev.data 中的索引号

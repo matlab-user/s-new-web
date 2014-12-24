@@ -58,23 +58,27 @@
 			$remark = $row[4];
 			
 			$x_str .= "<d id='".$d_id."'>";
-			$x_str .= "<ty>".$ty."</ty>";
-			$x_str .= "<ss>".$d_t."</ss>";
-			$x_str .= "<name>".$remark."</name>";
+			//$x_str .= "<ty>".$ty."</ty>";
+			//$x_str .= "<ss>".$d_t."</ss>";
+			//$x_str .= "<name>".$remark."</name>";
 			
 			// 获取单位
+			/*
 			$unit = 'W';
 			$res1 = mysql_query( "SELECT unit FROM data_db.unit_table WHERE id=".$utid, $con );
 			while( $row1 = mysql_fetch_array( $res1 ) )
 				$unit = $row1[0];
 			mysql_free_result( $res1 );
 			$x_str .= "<u>".$unit."</u>";
+			*/
 			
+			/*
 			// 获取警报相关信息
 			$res2 = mysql_query( "SELECT thr, method FROM data_db.alarm WHERE dev_id='".$dev_id."' AND d_id=".$d_id, $con );
 			while( $row2 = mysql_fetch_array( $res2 ) )
 				$x_str .= "<thr>".$row2[0]."</thr><m>".$row2[1]."</m>";
 			mysql_free_result( $res2 );
+			*/
 			
 			// 获取值
 			switch( $d_t ) {
@@ -99,7 +103,7 @@
 
 					mysql_free_result( $res3 );
 					break;
-/*					
+					
 				case 1:
 					$res3 = mysql_query( "SELECT value, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id, $con );
 					while( $row3 = mysql_fetch_array( $res3 ) )
@@ -117,7 +121,7 @@
 					}
 					mysql_free_result( $res3 );
 					break;
-*/				
+			
 				default:
 					break;
 			}

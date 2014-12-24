@@ -12,20 +12,23 @@ function add_image_view( d_i ) {
 	
 	dev.data[d_i].plot = main.find('#'+d_i+'_img');
 	
+	dev.data[d_i].real_h = 0;
+	dev.data[d_i].real_w = 0;
+	
 	dev.data[d_i].update_fun = function() {
 		
 		//console.log(d_i);
 		var new_img = $( "<img>" );
 		var main = this.plot.find('img');
-		var new_t = this.new_t;
+		var real_h = this.real_h, real_w = this.real_w;
 		
 		new_img.attr( 'src', this.new_v );
 		//new_img.attr( 'src', "http://img.newtheme.cn/www/2014/09/tao2014-thumb.jpg" );
 		
 		new_img.load( function() {
 			
-			new_t.push( $(this).width() );
-			new_t.push( $(this).height() );
+			real_w = $(this).width();
+			real_w = $(this).height();
 			
 			main.animate( {opacity:0}, 800, function() {
 				this.src = "http://img.newtheme.cn/www/2014/09/tao2014-thumb.jpg";
@@ -37,7 +40,7 @@ function add_image_view( d_i ) {
 	main.find('#'+d_i+'_img').click( function(e) {
 		
 		var div = $('#float_img_div');
-		//var d_i = parseInt( this.id );			// 参数的索引
+		var d_i = parseInt( this.id );			// 参数的索引
 
 		if( div.length<=0 ) {
 			$('body').append( $('<div id="float_img_div" style="padding:0px;margin:0px;"></div>') );
@@ -46,8 +49,8 @@ function add_image_view( d_i ) {
 		}
 		
 		// use the image real size
-		div.width(360);
-		div.height(240);
+		div.width( dev.data[d_i].real_w );
+		div.height( dev.data[d_i].real_h );
 		
 		var pos_x = e.pageX + div.width(), 
 			pos_y = e.pageY - div.height();

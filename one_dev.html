@@ -19,13 +19,20 @@
 		<script src="js-lib/jquery.base64.js"></script>
 			
 		<script>
-
+		
+			var had_new_index = new Array(); 
+			
 			$( function() {
 	
 				var url_p = window.location.href.split("?")[1];
-				var index = url_p.indexOf('=') ;
-				url_p = url_p.substr( index+1 );
-				dev.g1 = $.base64.atob(url_p, true);
+
+				if( typeof(url_p) !=='undefined' ) { 
+					var index = url_p.indexOf('=');
+					url_p = url_p.substr( index+1 );
+					dev.g1 = $.base64.atob(url_p, true);
+				}
+				else
+					dev.g1 = '1982011602030410182910a1F2C3D02A';
 				
 				// add dev_info_li and data_info_li		
 				add_dev_info();
@@ -33,7 +40,9 @@
 				get_dev_info_update();
 				
 				$('#dev_info').outerWidth( $('body').width() );
-	
+				
+				get_data();
+				
 			} );
 			
 		</script>
@@ -45,7 +54,7 @@
 					if( sig==true ) {
 						dev.update_fun();
 						$('title').text('实唯-'+dev.name);
-					}
+					}	
 				});
 			};
 		</script>

@@ -16,8 +16,10 @@
 			.d_name			参数名称
 			.ss				ss==0 累积数据; ss==1 不累积数据; ss==2 图片显示; ss==3 视频显示 ss==4 文本数据;
 			.unit			单位
-			.new_v			最新数据值 or image src
+			.new_v			最新数据值
 			.new_t			更新时间
+			.real_h			图像实际 height
+			.real_w			图像实际 width
 			.update_fun		此参数的更新函数
 */
 
@@ -31,15 +33,7 @@ dev.company = 'swaytech';
 dev.lo = '104.06<sup>。</sup>';
 dev.la = '30.67<sup>。</sup>';
 dev.update_fun = '';
-
 dev.data = new Array();
-/*
-$.each( dev.data, function(i,v) {
-	dev.data[i] = new Object();
-	dev.data[i].new_v = new Array();
-	dev.data[i].new_t = new Array();
-} );
-*/
 
 // devs_table - 添加设备 tr 元素的父对象，jquery对象
 // dev_i - 待添加设备在 devs 数组中的索引
@@ -128,6 +122,95 @@ function info_xml_parser( responseTxt ) {
 	return true;
 }
 
+function data_xml_parser( responseTxt ) {
+			
+	var xml = $(responseTxt);
+	if ( xml.length<=0 )
+		return false;
+	
+	var ds = xml.find('d');
+	$.each( ds, function(i,value) {
+		var v = $(value);
+		var d_id = parseInt( v.attr('id') );
+	
+		var index = get_index( d_id );
+		if( index<0 )
+			return true;
+		
+		var b_t = v.children('base_t').text();
+		if( b_t==='' )
+				b_t = 0;
+		else
+			b_t = parseFloat( b_t );
+
+		var vs = v.children('v');
+		var v = new Array(), t = new Array();
+		
+		$.each( vs, function(i,value) {
+			var tv = $(value);
+			v[i] = parseFloat( tv.text() );
+			t[i] = b_t + parseFloat( tv.attr('t') );
+		} );
+		
+		switch( dev.data[index].ss ) {
+			case 0:
+				if( v.length>0 ) {
+					dev.data[index].new_v = v;
+					dev.data[index].new_t = t;
+					had_new_index.push( index );
+				}
+				break;
+				
+			default:
+				if( v.length>0 ) {
+					dev.data[index].new_v = v[0];
+					dev.data[index].new_t = t[0];
+					had_new_index.push( index );
+				}
+				break;
+		}
+		
+	} );
+	
+	return true;
+}
+
+function get_data() {
+
+	var temp_t = new Date().getTime();
+	
+	$.post( 'my-php/dev_data_get.php', {'tz':dev.tz,'g1':dev.g1,'lt':dev.lt}, function( data ) {
+		data_xml_parser( data );
+		console.log(dev.lt);
+		update_ui();
+		dev.lt = Math.floor( temp_t );
+		setTimeout( "get_data();",5000 );
+	} );
+	
+}
+
+// 根据 参数id 值d_id， 在dev.data 中找到其 index
+// 没有占到，返回 -1
+function get_index( d_id ) {
+	var index = -1;
+	$.each( dev.data, function(i,v) {
+		if( v.d_id==d_id ) {
+			index = i;
+			return false;
+		}
+	} );
+	return index;
+}
+
+//
+function update_ui() {
+	$.each( had_new_index, function(i,v) {
+		
+		
+	} );
+	
+	had_new_index = [];
+}
 /*
 // UTC - 单位为: 秒
 function formatDate( UTC ) {
