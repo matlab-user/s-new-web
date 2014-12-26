@@ -21,18 +21,23 @@ function add_flot_view( d_i ) {
 	var flot_holder = add_flot_holder( d_i );
 	
 	if( $('#tooltip').length<=0 ) {
-		$('body').append( $('<div id="tooltip">cos(x) of 3.00 = -0.99</div>') );
+		$('body').append( $('<div id="tooltip"></div>') );
 		$('#tooltip').hide();
 	}
 	
 	var sin = [];
-
-	for (var i = 0; i < 14; i += 0.5) {
+	for (var i=0; i<14; i+=0.5)
 		sin.push([i, Math.sin(i)]);
-	}
+	
+	var d = new Date();
+	var st = d.getTime()/1000 + dev.tz*3600;	// 当前电站本地时间，秒为单位
+	d.setTime( st*1000 );
+	var now_UTC_day = d.getUTCDate();
+	var now_UTC_month = d.getUTCMonth();
+	var now_UTC_year = d.getUTCFullYear();
 	
 	var plot = $.plot( '#'+flot_holder, [ 
-		{ data: sin, label: "sin(x)"} 
+		{ data: sin, label: 'sin(x)' } 
 	], {
 		series: {
 			lines: {
@@ -46,7 +51,10 @@ function add_flot_view( d_i ) {
 		xaxis: {
 			tickLength: 0,
 			mode: "time",
-			timeformat: "%h:%M"
+			timeformat: "%H:%M",
+			minTickSize: [5, 'minute'],
+			min: Date.UTC(now_UTC_year,now_UTC_month,now_UTC_day,0,0),
+			max: Date.UTC(now_UTC_year,now_UTC_month,now_UTC_day,23,59),
 		},
 		shadowSize: 0,
 		colors: [ flot_color[Math.ceil(Math.random()*30)%14] ],
@@ -65,10 +73,15 @@ function add_flot_view( d_i ) {
 	$('#'+flot_holder).bind("plothover", function (event, pos, item) {
 
 		if (item) {
-			var x = item.datapoint[0].toFixed(2),
+			var x = item.datapoint[0],
 				y = item.datapoint[1].toFixed(2);
-
-			$("#tooltip").html(item.series.label + " of " + x + " = " + y)
+			
+			var d = new Date( x );   
+			var hour = d.getUTCHours();     
+			var minute = d.getUTCMinutes();     
+			var date_str = hour+':'+minute+':'+d.getUTCSeconds();
+			
+			$("#tooltip").html( 'x= ' + date_str + " y= " + y)
 				.css({top: item.pageY+5, left: item.pageX+5})
 				.fadeIn(200);
 		} else
@@ -77,8 +90,7 @@ function add_flot_view( d_i ) {
 	});
 	
 	dev.data[d_i].plot = plot;
-	//dev.data[d_i].new_t = [15,16];
-	//dev.data[d_i].new_v = [1,1.5];
+
 	// define flot uodate function
 	dev.data[d_i].update_fun = function () {
 		
@@ -90,7 +102,7 @@ function add_flot_view( d_i ) {
 		if ( loop>0 ) {
 			
 			for (i=0; i<loop; i++)				
-				series.data.push( [this.new_t[i],this.new_v[i]] );			
+				series.data.push( [(this.new_t[i]+dev.tz*3600)*1000,this.new_v[i]] );			
 	
 			var y = this.new_v.pop();
 			var x = this.new_t.pop();
@@ -101,11 +113,19 @@ function add_flot_view( d_i ) {
 			this.new_t[0] = x;
 			this.new_v[0] = y;
 			
-			series.label = 'x='+x.toFixed(2)+'; y='+y.toFixed(2);
+			//series.label = 'x='+x.toFixed(2)+'; y='+y.toFixed(2);
+			series.label = '';
 			
 			plot.setData( [series] );
 			plot.setupGrid();
 			plot.draw();
+			
+			var d_i = get_index( this.d_id );
+			$('#'+d_i+'_data_info_v').html( this.new_v[0].toFixed(2)+' '+this.unit );
+			$('#'+d_i+'_data_info_t').text( formatDate( this.new_t[0]+dev.tz*3600) );
+			
+			dev.data[d_i].lt = this.new_t[0];
+			
 		}
 	};
 	
@@ -118,7 +138,7 @@ function add_flot_holder( d_i ) {
 	var div_id = d_i+'_flot_holder';		// 需要修改
 	var main = $('ul.modules');
 	
-	var li = $('<li class="module"><p class="title">某某一数据</p></li>');
+	var li = $('<li class="module"><p class="title">'+dev.data[d_i].name+'</p></li>');
 	main.append( li );
 	li.append('<div id="'+div_id+'" class="flot_holder"></div>');
 	

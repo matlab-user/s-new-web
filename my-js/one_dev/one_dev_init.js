@@ -4,14 +4,13 @@
 			.model			设备型号名称
 			.state
 			.tz
-			.lt  			(UTC 或 ‘N’)
 			.company		(设备生产厂商，未实现)
 			.lo				经度 （以后实时更新）
 			.la				纬度 （以后实时更新）
 			.data[]			Object 数组
-			.update_fun		设备UI更新函数
 			
 	data[j] .d_id			参数id
+			.lt				UTC时间，最后更新参数
 			.plot			flot handler/ or UI handle
 			.d_name			参数名称
 			.ss				ss==0 累积数据; ss==1 不累积数据; ss==2 图片显示; ss==3 视频显示 ss==4 文本数据;
@@ -32,7 +31,6 @@ dev.lt = 0;
 dev.company = 'swaytech';
 dev.lo = '104.06<sup>。</sup>';
 dev.la = '30.67<sup>。</sup>';
-dev.update_fun = '';
 dev.data = new Array();
 
 // devs_table - 添加设备 tr 元素的父对象，jquery对象
@@ -98,7 +96,7 @@ function add_data_info( d_i_s ) {
 		}	
 		var tr = $('<tr></tr>');			//  后续时需要修改此代码
 		table.append( tr );	
-		var ths = $('<th width="30%">'+dev.data[i].name+'</th><th id="'+i+'_data_info_v" width="20%">no data</th><th id="'+i+'_data_info_t" width="50%">2014-12-19 12:45:20</th>');
+		var ths = $('<th width="35%">'+dev.data[i].name+'</th><th id="'+i+'_data_info_v" width="25%">no data</th><th id="'+i+'_data_info_t" width="40%">2014-12-19 12:45:20</th>');
 		tr.append( ths );	
 	} );
 	main.append( li );
@@ -122,20 +120,26 @@ function info_xml_parser( responseTxt ) {
 	return true;
 }
 
+// 返回更新参数在 dev.data 中的 index
 function data_xml_parser( responseTxt ) {
 			
 	var xml = $(responseTxt);
 	if ( xml.length<=0 )
-		return false;
+		return -1;
 	
 	var ds = xml.find('d');
+	if( ds.length<=0 )
+		return -1;
+	
+	var res= -1;
+	
 	$.each( ds, function(i,value) {
 		var v = $(value);
 		var d_id = parseInt( v.attr('id') );
 	
 		var index = get_index( d_id );
 		if( index<0 )
-			return true;
+			return -1;
 		
 		var b_t = v.children('base_t').text();
 		if( b_t==='' )
@@ -157,7 +161,7 @@ function data_xml_parser( responseTxt ) {
 				if( v.length>0 ) {
 					dev.data[index].new_v = v;
 					dev.data[index].new_t = t;
-					had_new_index.push( index );
+					res = index;
 				}
 				break;
 				
@@ -165,28 +169,30 @@ function data_xml_parser( responseTxt ) {
 				if( v.length>0 ) {
 					dev.data[index].new_v = v[0];
 					dev.data[index].new_t = t[0];
-					had_new_index.push( index );
+					res = index;
 				}
 				break;
 		}
 		
 	} );
 	
-	return true;
+	return res;
 }
 
-function get_data() {
-
-	var temp_t = new Date().getTime();
+function get_data_and_update_ui() {
 	
-	$.post( 'my-php/dev_data_get.php', {'tz':dev.tz,'g1':dev.g1,'lt':dev.lt}, function( data ) {
-		data_xml_parser( data );
-		console.log(dev.lt);
-		update_ui();
-		dev.lt = Math.floor( temp_t );
-		setTimeout( "get_data();",5000 );
+	var loop = dev.data.length;
+	
+	$.each( dev.data, function(i,v) { 
+		//console.log( i+'---'+dev.data[i].lt );
+		$.post( 'my-php/dev_data_get.php', {'tz':dev.tz,'g1':dev.g1,'lt':dev.data[i].lt,'d_id':dev.data[i].d_id}, function( data ) {
+			var index = data_xml_parser( data );
+			if( index>=0 )
+				dev.data[index].update_fun();
+		} );	
 	} );
 	
+	setTimeout( "get_data_and_update_ui();",5000 );	
 }
 
 // 根据 参数id 值d_id， 在dev.data 中找到其 index
@@ -201,26 +207,3 @@ function get_index( d_id ) {
 	} );
 	return index;
 }
-
-//
-function update_ui() {
-	$.each( had_new_index, function(i,v) {
-		
-		
-	} );
-	
-	had_new_index = [];
-}
-/*
-// UTC - 单位为: 秒
-function formatDate( UTC ) {
-	var d = new Date( UTC*1000 );
-	var year = d.getUTCFullYear();     
-	var month = d.getUTCMonth() + 1;     
-	var date = d.getUTCDate();     
-	var hour = d.getUTCHours();     
-	var minute = d.getUTCMinutes();     
-	var second = d.getUTCSeconds();     
-	return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;     
-}
-*/

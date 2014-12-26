@@ -1,10 +1,11 @@
 <?php
 	
-	$_POST['tz'] = 8;
+	//$_POST['tz'] = 8;
 	$_POST['g1'] = '1982011602030410182910a1F2C3D02A';
-	$_POST['lt'] = 0;
+	//$_POST['lt'] = 0;
+	//$_POST['d_id'] = 0;
 	
-	if( !(isset($_POST['tz']) && isset($_POST['g1']) && isset($_POST['lt'])) )
+	if( !(isset($_POST['tz']) && isset($_POST['d_id']) && isset($_POST['g1']) && isset($_POST['lt'])) )
 		exit;
 	
 	$t_s = get_today_start( $_POST['tz'] );
@@ -17,7 +18,7 @@
 
 	mysql_query("SET NAMES 'utf8'", $con);
 	
-	$xml .= get_d( $_POST['g1'], $t_s, $_POST['lt'], $con );
+	$xml .= get_d( $_POST['g1'], $_POST['d_id'], $t_s, $_POST['lt'], $con );
 	
 	mysql_close( $con );
 	
@@ -42,10 +43,10 @@
 	// 当 $t==0， 读取 [$t_s $now] 间的数据（仅对累积型数据有效）
 	// 当 $t!=0， 读取 ($lt $now] 间的数据 （仅对累积型数据有效）
 	// $con 数据库句柄
-	function get_d( $dev_id, $t_s, $t, $con ) {
+	function get_d( $dev_id, $d_id, $t_s, $t, $con ) {
 			
 		$x_str = '';
-		$res = mysql_query( "SELECT utid, v_name, d_t, d_id, remark FROM data_db.dev_data_unit WHERE dev_id='".$dev_id."'", $con );
+		$res = mysql_query( "SELECT utid, v_name, d_t, remark FROM data_db.dev_data_unit WHERE dev_id='".$dev_id."' AND d_id=".$d_id, $con );
 		if( empty($res) )
 			return '';
 
@@ -54,10 +55,8 @@
 			$ty = $row[1];
 			$utid = $row[0];
 			$d_t = $row[2];
-			$d_id = $row[3];
-			$remark = $row[4];
+			$remark = $row[3];
 			
-			$x_str .= "<d id='".$d_id."'>";
 			//$x_str .= "<ty>".$ty."</ty>";
 			//$x_str .= "<ss>".$d_t."</ss>";
 			//$x_str .= "<name>".$remark."</name>";
@@ -92,6 +91,7 @@
 					$i = 0;					
 					while( $row3 = mysql_fetch_array( $res3 ) ) {
 						if( $i==0 ) {
+							$x_str .= "<d id='".$d_id."'>";
 							$base_t = floatval( $row3[1] );
 							$x_str .= '<base_t>'.$base_t.'</base_t>';
 							$i++;
@@ -105,18 +105,31 @@
 					break;
 					
 				case 1:
-					$res3 = mysql_query( "SELECT value, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id, $con );
-					while( $row3 = mysql_fetch_array( $res3 ) )
+					if( $t==0 ) 
+							$sql_str = "SELECT value, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id;
+						else
+							$sql_str = "SELECT value, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id.' AND time>'.$t;
+					
+					$res3 = mysql_query( $sql_str, $con );
+					if( $row3 = mysql_fetch_array( $res3 ) ) {
+						$x_str .= "<d id='".$d_id."'>";
 						$x_str .= "<v t='".$row3[1]."'>".$row3[0]."</v>";
+					}
 					mysql_free_result( $res3 );
 					break;
 					
 				case 2:
-					mysql_query( "UPDATE dev_db.dev_table SET state='need_data' WHERE dev_id='".$dev_id."'", $con );
-					$res3 = mysql_query( "SELECT bin_d, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id, $con );
-					while( $row3 = mysql_fetch_array( $res3 ) ) {
+					if( $t==0 ) 
+						$sql_str = "SELECT bin_d, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id;
+					else
+						$sql_str = "SELECT bin_d, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id.' AND time>'.$t;
+					
+					$res3 = mysql_query( $sql_str, $con );		
+					if( $row3 = mysql_fetch_array( $res3 ) ) {
+						mysql_query( "UPDATE dev_db.dev_table SET state='need_data' WHERE dev_id='".$dev_id."'", $con );
 						if( empty($row3[0]) )
 							continue;
+						$x_str .= "<d id='".$d_id."'>";
 						$x_str .= "<v t='".$row3[1]."'>".$row3[0]."</v>";
 					}
 					mysql_free_result( $res3 );

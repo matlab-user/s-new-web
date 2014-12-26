@@ -19,8 +19,6 @@
 		<script src="js-lib/jquery.base64.js"></script>
 			
 		<script>
-		
-			var had_new_index = new Array(); 
 			
 			$( function() {
 	
@@ -36,13 +34,9 @@
 				
 				// add dev_info_li and data_info_li		
 				add_dev_info();
-				data_info_get_and_add_views();
-				get_dev_info_update();
-				
 				$('#dev_info').outerWidth( $('body').width() );
-				
-				get_data();
-				
+				get_dev_info_update();
+				data_info_get_and_add_views_update();
 			} );
 			
 		</script>
@@ -52,7 +46,6 @@
 				$.post( "my-php/dev_info_get.php", {'g1':dev.g1}, function( data ) {
 					var sig = info_xml_parser( data );
 					if( sig==true ) {
-						dev.update_fun();
 						$('title').text('实唯-'+dev.name);
 					}	
 				});
@@ -71,7 +64,7 @@
             </ul>
 
             <ul class="nav right">
-                <li>User.Name</li>
+                <li id='user_name'>User.Name</li>
                 <li><a href="#" class="login-out">注销</a></li>
             </ul>
         </header>
@@ -93,44 +86,11 @@
 		</div>
 		
 		<ul id='dev_info'>
-<!--
-			<li class="dev_info_li">    
-				<table>
-					<caption class='title'>设备信息</caption>
-					<tbody>
-						<tr>
-							<th width="40%">设备名称</th>
-							<th width="60%">设备ID</th>
-						</tr>
-					</tbody>
-				</table>
-			</li>
-			<li class='data_info_li'>
-				<table>
-					<caption class='title'>数据最新更新</caption>
-					<tbody>
-						<tr>
-							<th width="40%">参数1</th>
-							<th width="20%">124</th>
-							<th width="40%">2014-12-19 12:45:20</th>
-						</tr>
-					</tbody>
-				</table>
-			</li>
--->
+		</ul>
+					
+		<ul class="modules">			
 		</ul>
 		
-			
-		<ul class="modules">
-<!--	
-			<li class="module">
-				<p class="title">某某一数据</p>
-				<div id="placeholder"></div>
-			</li>
--->			
-		</ul>
-		
-
 		<ul id="new_img">
 <!--
 			<li><div class="img"><img src="http://img.newtheme.cn/www/2014/09/tao2014-thumb.jpg"><time>2014.12.10 22:44:10</time></div></li>
