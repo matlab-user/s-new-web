@@ -45,6 +45,7 @@ dev.la = '30.67<sup>。</sup>';
 dev.data = new Array();
 
 var op = new Array();
+/*
 op[0] = new Object();
 op[0].id = 1;
 op[0].name = 'w1';
@@ -57,7 +58,7 @@ op[1] = new Object();
 op[1].id = 2;
 op[1].name = 'w2';
 op[1].p_num = 0;
-
+*/
 // devs_table - 添加设备 tr 元素的父对象，jquery对象
 // dev_i - 待添加设备在 devs 数组中的索引
 function add_dev_info() {
@@ -291,7 +292,13 @@ function tab_control_show() {
 	
 	if( tab_init['control']==0 ) {
 		tab_init['control'] = 1;
-		add_control_list( 'info_set' );
+		
+		if( op.length<=0 ) {
+			$.post('my-php/dev_fun_get.php', {'g1':dev.g1}, function( data ) {
+				parse_fun_xml( data );
+				add_control_list( 'info_set' );
+			} );
+		}
 	}
 	else
 		return;
@@ -356,4 +363,39 @@ function input_blur() {
 	var h = $(this);
 	if( !(h.val()) )
 		h.val( h.attr('n') );
+}
+
+function parse_fun_xml( xml ) {
+	
+	var xml_obj = $(xml);
+	var ops = xml_obj.children('op');
+	$.each( ops, function(i,v) {
+		if(!v)
+			return ture;
+		
+		var jv = $(v);
+		var mid_op = new Object();
+		mid_op.id = jv.attr('id');
+		mid_op.name = jv.children('n').text();
+		mid_op.remark = jv.children('rm').text();
+		
+		var ps = jv.children('p');
+		mid_op.p_num = ps.length;
+		
+		$.each( ps, function(i,v) {
+			if( !mid_op.P )
+				mid_op.P = new Array();
+			
+			var midp = new Object();
+			var jv2 = $(v);
+			midp.id = jv2.attr( 'ind' ); 
+			midp.name = jv2.children('n').text(); 
+			midp.remark = jv2.children('prm').text();
+			midp.unit = jv2.children('pu').text();
+			
+			mid_op.P.push( midp );
+		} );
+		
+		op.push( mid_op );
+	} );
 }

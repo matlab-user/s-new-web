@@ -116,9 +116,9 @@
 		foreach( $p as $k=>$v ) {
 			$mid_unit = '';
 			foreach( $p_unit_id as $k2=>$v2 ) { 
-				echo $v."-------".$v2."\r\n";
+				//echo $v."-------".$v2."\r\n";
 				if( $v2==$v ) {
-					$mid_unit = $v2;
+					$mid_unit = $p_unit[$k2];
 					break;
 				}
 			}
@@ -135,5 +135,5 @@
 	mysql_close( $con );
 
 	echo $xml."\r\n";
-
+	//echo STDOUT."\r\n";
 ?>
