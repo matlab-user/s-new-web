@@ -20,6 +20,17 @@
 			.real_h			图像实际 height
 			.real_w			图像实际 width
 			.update_fun		此参数的更新函数
+			
+	op[j] .id
+		  .name
+		  .remark
+		  .p_num
+		  .P[0]....
+	
+	P[j] .id
+		 .name
+		 .remark
+		 .unit
 */
 
 var dev = new Object();
@@ -33,6 +44,20 @@ dev.lo = '104.06<sup>。</sup>';
 dev.la = '30.67<sup>。</sup>';
 dev.data = new Array();
 
+var op = new Array();
+op[0] = new Object();
+op[0].id = 1;
+op[0].name = 'w1';
+op[0].p_num = 2;
+op[0].P = new Array();
+op[0].P[0] = { id:23, name:'高度', unit:'m', remark:'控制设备高度信息' };
+op[0].P[1] = { id:24, name:'方位', unit:'m', remark:'控制设备方位信息' };
+
+op[1] = new Object();
+op[1].id = 2;
+op[1].name = 'w2';
+op[1].p_num = 0;
+
 // devs_table - 添加设备 tr 元素的父对象，jquery对象
 // dev_i - 待添加设备在 devs 数组中的索引
 function add_dev_info() {
@@ -44,7 +69,7 @@ function add_dev_info() {
 	
 	var tbody = table.children('tbody');						
 	tbody.append( $('<tr><th width="40%">设备名称：</th><th id="dev_info_model" width="60%">'+dev.model+'</th></tr>') );
-	tbody.append( $('<tr><th width="40%">别名：</th><th id="dev_info_name" width="60%">'+dev.name+'</th></tr>') );
+	tbody.append( $('<tr><th width="40%">昵称：</th><th id="dev_info_name" width="60%">'+dev.name+'</th></tr>') );
 	tbody.append( $('<tr><th width="40%">设备guid号：</th><th id="dev_info_g1" width="60%">'+dev.g1+'</th></tr>') );
 	tbody.append( $('<tr><th width="40%">所在地经纬度：</th><th id="dev_info_lo_la" width="60%">'+dev.lo+"&nbsp;"+dev.la+'</th></tr>') );
 	if (dev.tz>0)
@@ -206,4 +231,129 @@ function get_index( d_id ) {
 		}
 	} );
 	return index;
+}
+
+function change_tab( tab_mode ) {
+	switch( tab_mode ) {
+		case 'main':
+			tab_main_show();
+			return true;
+		case 'set':
+			tab_set_show();
+			return true;
+		case 'control':
+			tab_control_show();
+			return true;
+		case 'record':
+			tab_record_show();
+			return true;
+		default:
+			return false;
+	}
+}
+
+function tab_main_show() {
+	$('#tab_main').css( 'display','block');
+	$('#tab_set').css( 'display','None');
+	$('#tab_control').css( 'display','None');
+	$('#tab_record').css( 'display','None');
+	
+	if( tab_init['main']==0 )
+		tab_init['main'] = 1;
+	else
+		return;
+	
+	// add dev_info_li and data_info_li		
+	add_dev_info();
+	$('#dev_info').outerWidth( $('body').width() );
+	get_dev_info_update();
+	data_info_get_and_add_views_update();
+}
+
+function tab_set_show() {
+	$('#tab_set').css( 'display','block');
+	$('#tab_control').css( 'display','None');
+	$('#tab_record').css( 'display','None');
+	$('#tab_main').css( 'display','None');
+	
+	if( tab_init['set']==0 )
+		tab_init['set'] = 1;
+	else
+		return;
+	
+}
+
+function tab_control_show() {
+	$('#tab_set').css( 'display','None');
+	$('#tab_control').css( 'display','block');
+	$('#tab_record').css( 'display','None');
+	$('#tab_main').css( 'display','None');
+	
+	if( tab_init['control']==0 ) {
+		tab_init['control'] = 1;
+		add_control_list( 'info_set' );
+	}
+	else
+		return;
+	
+}
+
+function tab_record_show() {
+	$('#tab_set').css( 'display','None');
+	$('#tab_control').css( 'display','None');
+	$('#tab_record').css( 'display','block');
+	$('#tab_main').css( 'display','None');
+	
+	if( tab_init['record']==0 )
+		tab_init['record'] = 1;
+	else
+		return;
+}
+
+function add_control_list( table_id ) {
+	var table = $('#'+table_id);
+	var tbody = table.next('tbody');
+	
+	if( typeof(op)==='undefined' )
+		return;
+	
+	$.each( op, function(i,v) {
+		console.log(v);
+		var tr = $('<tr></tr>');
+		var td_f = $('<td class="f"></td>');
+		var td_s = $('<td class="s"></td>');
+		var td_t = $('<td class="t"></td>');
+		
+		var bt = $("<input class='button' type='submit' name='submit'>");
+		bt.attr( 'value',v.name );
+		bt.attr( 'index', i );
+		td_s.append( bt );
+		
+		if( op[i].p_num>0 ) {
+			$.each( op[i].P, function(i,v) {
+				var input = $('<input type="text"/>');
+				input.val( v.name );
+				input.attr( 'n', v.name );
+				input.focus( input_focus );
+				input.blur( input_blur );
+				td_f.append( input );
+			} );
+		}
+		
+		tr.append( td_f );
+		tr.append( td_s );
+		tr.append( td_t );
+		table.append( tr );
+	} );
+}
+
+//-----------------------------------------------------------------------------
+function input_focus() {
+	$(this).val('');
+}
+
+function input_blur() {
+	var h = $(this);
+	if( !(h.val()) )
+		h.val( h.attr('n') );
 }
