@@ -317,6 +317,7 @@ function tab_record_show() {
 		return;
 }
 
+var test;
 function add_control_list( table_id ) {
 	var table = $('#'+table_id);
 	var tbody = table.next('tbody');
@@ -325,8 +326,9 @@ function add_control_list( table_id ) {
 		return;
 	
 	$.each( op, function(i,v) {
-		console.log(v);
+
 		var tr = $('<tr></tr>');
+		tr.attr( 'op_id', v.id );
 		var td_f = $('<td class="f"></td>');
 		var td_s = $('<td class="s"></td>');
 		var td_t = $('<td class="t"></td>');
@@ -334,13 +336,46 @@ function add_control_list( table_id ) {
 		var bt = $("<input class='button' type='submit' name='submit'>");
 		bt.attr( 'value',v.name );
 		bt.attr( 'index', i );
+		bt.attr( 'op_id', v.id );
+		bt.click( function() {
+			var mtr = $(this).parent().parent();
+			var td_f = mtr.children('td.f');
+			var ps_str = '';
+	
+			var inputs = td_f.children('input');
+			if( inputs.length<=0 )
+				return;
+
+			inputs.each( function(i,v) {
+				ps_str += ',' + v.value;
+			} );
+			
+			var cmd = '['+dev.g1+',('+mtr.attr('op_id')+ps_str+')]';
+			// data 返回值大于0，为正常
+			$.post( 'my-php/dev_ctrl.php', {'g1':dev.g1,'cmd':cmd}, function( data ) {
+				if( parseInt(data)>0 )
+					console.log( $(this).attr('op_id') );
+				
+				
+			} ).fail( function() {
+				
+			} );
+
+		} );
+		
 		td_s.append( bt );
 		
 		if( op[i].p_num>0 ) {
 			$.each( op[i].P, function(i,v) {
 				var input = $('<input type="text"/>');
-				input.val( v.name );
-				input.attr( 'n', v.name );
+				if( v.name=='' ) {
+					input.val( '未知' );
+					input.attr( 'n', '未知' );	
+				}	
+				else {
+					input.val( v.name );
+					input.attr( 'n', v.name );
+				}
 				input.focus( input_focus );
 				input.blur( input_blur );
 				td_f.append( input );
