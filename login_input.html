@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>SWAYTECH</title>
+	
+		<link rel="stylesheet" type="text/css" href="css/slide_style.css">
+		<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
+		<script src="js-lib/jquery-2.1.1.min.js"></script>
+			
+		<style type='text/css'>
+			html{-webkit-text-size-adjust:none}
+			body{margin:0 auto;color:#333;background:#f9f9f9;font-size:14px;font-family:"Microsoft Yahei","Helvetica Neue",Helvetica,Arial,sans-serif;line-height:24px;cursor:default}
+			
+			#header{line-height:66px;text-align:center;vertical-align:middle;width:100%;height:66px;background:#000}
+			#header img{margin-left:10%;height:100%;float:left}
+			#header div{position:absolute;top:0;right:100px;color:#AAA}
+			#header div a{cursor:pointer}
+			#header div a:hover{color:#fff}
+			
+			ul.nav{color:#FFF;text-align:center;vertical-align:middle;width:600px;height:100%;position:relative;left:30%}
+			ul.nav li{float:left;line-height:70px;list-style-type:none;height:100%;width:94px}
+			ul.nav li a{font-weight:bold;color:#aaa;cursor:pointer;font-size:14px}
+			ul.nav li a:hover{color:#fff}
+			ul.nav li a.cur{color:#fff}
+			
+			#login{color:#FFF;font-size:17px;list-style:none;height:180px;margin-top:12%;padding:0 30%}
+			#login td{text-align:left;width:260px;}
+			#login td.label{width:100px;}
+			#login input{border-radius:2px;font-size:16px;width:90%;height:32px;margin:15px 0px;padding-left:10px}
+			#login .button{text-align:right}
+			a.b{position:relative;left:200px;font-weight:bold;text-shadow:0 1px 0 rgba(0,0,0,0.4);line-height:40px;text-align:center;width:80px;height:40px;font-size:17px;color:#FFF;border-radius:4px;background:rgb(93,154,255);margin:10px 30% 0 0}
+			a.b:hover{background:rgba(93,154,255,0.6);text-decoration:none}
+			
+			.foot{vertical-align:middle;margin:0 10%;padding-top:5px;width:80%;height:40px;line-height:12px;font-size:12px;color:#909090;border-top:solid 1px #E0E0E0}
+			.foot span{line-height:40px}
+			.foot .ICP{float:right}
+		</style> 
+		
+		<script>		
+			$( function() {
+				var b_image = "url('image/login/banner.jpg')";
+				$('.slide_top_level').css('background',b_image);	
+				$('a.b').click( function() {
+					if( $('#user').val()=='' | $('#passwd').val()=='' )
+						return;
+					$.post( 'login/login.php',{user:$('#user').val(),passwd:$('#passwd').val()}, function(data) {
+					
+					} );
+				} );
+			} );
+
+		</script>
+		
+    </head>
+	
+	<body>
+		<div id='header'>
+			<img src='image/login/swaytech.png'/>
+			<ul class='nav'>
+				<li><a class='cur' href='login.html'>首页</a></li>
+				<li><a>资料中心</a></li>
+				<li><a>账号管理</a></li>
+			</ul>
+			<div class='login'>
+				<a style='padding:0 10px;border-right:solid 1px #ddd'>登录</a>
+				<a style='padding:0 10px'>注册</a>
+			</div>
+		</div>
+		
+		<div class='slide_top_level'>
+			<table id='login' cellspacing='0'  cellpadding='0'>
+				<tbody>
+					<tr style='height:80px'>
+						<td class='label'>用户名:</td>
+						<td><input id='user' type="text" /></td>
+					</tr>
+					<tr style='height:80px'>
+						<td class='label'>密 码:</td>
+						<td><input id='passwd' type="text" /></td>
+					</tr>
+					<tr>
+						<td class='label'></td>
+						<td><a id='login_b' class='b'>登 陆</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class='foot'><span>&copy;2014 - 2015 Swaytech All Right Reserved.</span><span class='ICP'>蜀ICP备14031015号-1</span></div>
+
+	</body>
+</html>
