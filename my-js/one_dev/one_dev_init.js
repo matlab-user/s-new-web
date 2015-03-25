@@ -317,7 +317,6 @@ function tab_record_show() {
 		return;
 }
 
-var test;
 function add_control_list( table_id ) {
 	var table = $('#'+table_id);
 	var tbody = table.next('tbody');
@@ -343,22 +342,31 @@ function add_control_list( table_id ) {
 			var ps_str = '';
 	
 			var inputs = td_f.children('input');
-			if( inputs.length<=0 )
-				return;
-
-			inputs.each( function(i,v) {
-				ps_str += ',' + v.value;
-			} );
+			if( inputs.length>0 ) {
+				inputs.each( function(i,v) {
+					ps_str += ',' + v.value;
+				} );
+			}
+			
+			var res_h = $(this).parent().next('.t');
+			res_h.text('已发送');
 			
 			var cmd = '['+dev.g1+',('+mtr.attr('op_id')+ps_str+')]';
 			// data 返回值大于0，为正常
 			$.post( 'my-php/dev_ctrl.php', {'g1':dev.g1,'cmd':cmd}, function( data ) {
-				if( parseInt(data)>0 )
-					console.log( $(this).attr('op_id') );
-				
-				
+				switch( data ) {
+					case'OK':
+						res_h.text('成功');
+						res_h.delay(3000).fadeIn(function(){$(this).text('');});
+						break;
+					default:
+						res_h.text('失败');
+						res_h.delay(3000).fadeIn(function(){$(this).text('');});
+						break;
+				}
 			} ).fail( function() {
-				
+				res_h.text('失败');
+				res_h.delay(3000).fadeIn(function(){$(this).text('');});
 			} );
 
 		} );
