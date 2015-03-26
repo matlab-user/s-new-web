@@ -26,13 +26,15 @@
 			ul.nav li a:hover{color:#fff}
 			ul.nav li a.cur{color:#fff}
 			
-			#login{color:#FFF;font-size:17px;list-style:none;height:180px;margin-top:12%;padding:0 30%}
+			#login{color:#FFF;font-size:17px;list-style:none;height:180px;margin-top:10%;padding:0 30%}
 			#login td{text-align:left;width:260px;}
 			#login td.label{width:100px;}
 			#login input{border-radius:2px;font-size:16px;width:90%;height:32px;margin:15px 0px;padding-left:10px}
 			#login .button{text-align:right}
-			a.b{position:relative;left:200px;font-weight:bold;text-shadow:0 1px 0 rgba(0,0,0,0.4);line-height:40px;text-align:center;width:80px;height:40px;font-size:17px;color:#FFF;border-radius:4px;background:rgb(93,154,255);margin:10px 30% 0 0}
+			a.b{position:relative;left:240px;font-weight:bold;text-shadow:0 1px 0 rgba(0,0,0,0.4);line-height:40px;text-align:center;width:80px;height:40px;font-size:17px;color:#FFF;border-radius:4px;background:rgb(93,154,255);margin:10px 30% 0 0}
 			a.b:hover{background:rgba(93,154,255,0.6);text-decoration:none}
+			
+			#info_show {font-size:14px;height:100%;width:240px;}
 			
 			.foot{vertical-align:middle;margin:0 10%;padding-top:5px;width:80%;height:40px;line-height:12px;font-size:12px;color:#909090;border-top:solid 1px #E0E0E0}
 			.foot span{line-height:40px}
@@ -44,14 +46,33 @@
 				var b_image = "url('image/login/banner.jpg')";
 				$('.slide_top_level').css('background',b_image);	
 				$('a.b').click( function() {
-					if( $('#user').val()=='' | $('#passwd').val()=='' )
+					if( $('#user').val()=='' | $('#passwd1').val()=='' | $('#passwd2').val()=='' )
 						return;
+						
+					if( $('#passwd1').val() !== $('#passwd2').val() ) {
+						$('#passwd2').val('');
+						$('#info_show').text('密码2次输入不一致，请重新输入!');
+						setTimeout( "$('#info_show').text('');", 3000 );
+						return;
+					}
+					
+					var patten = new RegExp(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/);
+					if( patten.test( $('#user').val() ) ) {
+					
+					}
+					else {
+						$('#info_show').text('不是合法的邮件地址，请重新输入!');
+						setTimeout( "$('#info_show').text('');", 3000 );
+					}
+						
+/*					
 					$.post( 'my-php/login/login.php',{user:$('#user').val(),passwd:$('#passwd').val()}, function(data) {
 						//console.log( data );
 						if( data=='' | data=='NO' )
 							return;
 						window.location.href= data;
 					} );
+*/
 				} );
 			} );
 
@@ -68,8 +89,8 @@
 				<li><a>账号管理</a></li>
 			</ul>
 			<div class='login'>
-				<a style='padding:0 10px;border-right:solid 1px #ddd'>登录</a>
-				<a style='padding:0 10px' href='register_user.html'>注册</a>
+				<a style='padding:0 10px;border-right:solid 1px #ddd' href='login_input.html'>登录</a>
+				<a style='padding:0 10px'>注册</a>
 			</div>
 		</div>
 		
@@ -77,16 +98,20 @@
 			<table id='login' cellspacing='0'  cellpadding='0'>
 				<tbody>
 					<tr style='height:80px'>
-						<td class='label'>用户名:</td>
+						<td class='label'>邮件(用户):</td>
 						<td><input id='user' type="text" /></td>
 					</tr>
 					<tr style='height:80px'>
 						<td class='label'>密 码:</td>
-						<td><input id='passwd' type="password" /></td>
+						<td><input id='passwd1' type="password" /></td>
+					</tr>
+					<tr style='height:80px'>
+						<td class='label'>密码确认:</td>
+						<td><input id='passwd2' type="password" /></td>
 					</tr>
 					<tr>
 						<td class='label'></td>
-						<td><a id='login_b' class='b'>登 陆</a></td>
+						<td><p id='info_show'></p><a id='login_b' class='b'>注 册</a></td>
 					</tr>
 				</tbody>
 			</table>
