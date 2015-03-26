@@ -2,12 +2,14 @@
 	session_start();
 	
 	require_once( "../php-lib/codec_lib.php" );
-	
+		
 	$config = read_config( '../php-lib/config.cf' );
 	$mysql_user = $config->user;
 	$mysql_pass = $config->pass;
+	
+	$domain = $config->domain;
 
-	$_POST['user'] = 'free-bug@163.c';
+	$_POST['user'] = 'free-bug@163.com';
 	$_POST['passwd'] = 'wdh';
 	if( !( isset($_POST['user']) & isset($_POST['passwd']) ) )
 		exit;
@@ -21,7 +23,7 @@
 	$query_str = "SET @UID='';";
 	mysql_unbuffered_query( $query_str, $sql_con );
 	
-	$query_str = "CALL add_user_2( @UID, '".$_POST['user']."', '', '".$_POST['passwd']."' )";
+	$query_str = "CALL add_user_3( @UID, '".$_POST['user']."', '', '".$_POST['passwd']."', ".time()." )";
 	mysql_unbuffered_query( $query_str, $sql_con );
 	
 	$res = mysql_query( "SELECT @UID;", $sql_con );
@@ -103,7 +105,10 @@ EOD;
 
 //---------------------------------------------------------------------------------
 //  发送邮件
-
+$body = '<a href="'.$domain.'/'.'my-php/login/'.$file_name.'" target="_blank">'.$file_name.'</a>';
+echo $body."\r\n";
+$res = send_mail( "free-bug@163.com", "35424743@qq.com", "成都实唯物联平台-用户激活", $body ); 
+echo $res."\r\n";
 
 //-----------------------------------------------------------------------------
 function touch_mysql() {
@@ -117,5 +122,28 @@ function touch_mysql() {
 	mysql_unbuffered_query( "SET NAMES 'utf8'", $con );
 	mysql_select_db( 'user_db', $con );
 	return $con;
-}	
+}
+
+function send_mail($frommail,$tomail,$subject,$body) {  
+
+    require_once( 'class.phpmailer.php' );
+    include( 'class.smtp.php' );
+	
+	$mail = new PHPMailer();  
+	$mail->IsSMTP();                            // 经smtp发送 
+	$mail->CharSet = "UTF-8";	
+	$mail->Host     = "smtp.163.com";           // SMTP 服务器  
+	$mail->SMTPAuth = true;                     // 打开SMTP 认证  
+	$mail->Username = "free-bug@163.com";    // 用户名  
+	$mail->Password = "second2none";          // 密码  
+	$mail->From     = $frommail;                  // 发信人  
+	$mail->FromName = "www.cdsway.com";        // 发信人别名  
+	$mail->AddAddress( $tomail );                 // 收信人  
+ 
+	$mail->WordWrap = 50;  
+	$mail->Subject  = $subject;                 // 邮件标题  
+	$mail->Body     = $body;                    // 邮件内空  
+	$mail->AltBody  =  "请使用HTML方式查看邮件。";  
+	return $mail->Send();  
+}
 ?>

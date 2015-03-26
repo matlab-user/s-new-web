@@ -26,26 +26,27 @@
 	if( empty($sql_con) )
 		exit;
 	
-	$query_str = "SELECT passwd FROM user_table WHERE mail='".$_POST['user']."'";
+	$query_str = "SELECT passwd,state FROM user_table WHERE mail='".$_POST['user']."'";
 	$res = mysql_query( $query_str, $sql_con );
 	while( $row=mysql_fetch_array($res) ) {
+		if( $row[1]=='inactive' )
+			break;
+			
 		if( $row[0]==md5($_POST['passwd']) ) {
 			$sig = 'devs_view.html';
 			$_SESSION['user'] = $_POST['user'];
 		}
-	};
+	}
+	
 	mysql_close( $sql_con );
 	echo $sig;
 
 //-----------------------------------------------------------------------------
 function touch_mysql() {
-
 	global $mysql_user, $mysql_pass;
-	
 	$con = mysql_connect( 'localhost', $mysql_user, $mysql_pass );
 	if( !$con )
-		die( 'Could not connect: ' . mysql_error() );
-		
+		die( 'Could not connect: ' . mysql_error() );	
 	mysql_unbuffered_query( "SET NAMES 'utf8'", $con );
 	mysql_select_db( 'user_db', $con );
 	return $con;
