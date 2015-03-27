@@ -26,7 +26,7 @@
 	if( empty($sql_con) )
 		exit;
 	
-	$query_str = "SELECT passwd,state FROM user_table WHERE mail='".$_POST['user']."'";
+	$query_str = "SELECT passwd,state,uid,dnum FROM user_table WHERE mail='".$_POST['user']."'";
 	$res = mysql_query( $query_str, $sql_con );
 	while( $row=mysql_fetch_array($res) ) {
 		if( $row[1]=='inactive' )
@@ -35,6 +35,8 @@
 		if( $row[0]==md5($_POST['passwd']) ) {
 			$sig = 'devs_view.html';
 			$_SESSION['user'] = $_POST['user'];
+			$_SESSION['uid'] = $row[2];
+			$_SESSION['dnum'] = $row[3];
 		}
 	}
 	

@@ -13,6 +13,7 @@
 		<script>
 			var view = 'list';					// 显示模式 list icon
 			$( function() {
+				$('#alarm_ul').hide();
 				xml_parser( res );
 				$('#devs_info_bar').text('您目前共有'+devs.length+'台设备');
 				var devs_table = $('#devices1').children('table.devs_table').children('tbody');
@@ -54,6 +55,10 @@
 				<span id='devs_info_bar' style="padding-left:200px;" ></span>
 			</p> 
 			
+			<ul class="button" style='margin-left:20%;float:left;'>
+				<li><button class="refresh" onclick="apply_dev()">申请新设备</button></li>
+			</ul>
+			
 			<ul class="button">
 				<li><button class="refresh" onclick="change_view()">视图切换</button></li>
 				<li><button class="refresh" onclick="refresh()">刷新</button></li>
@@ -74,7 +79,9 @@
             </tbody>
         </table>
     </div>
-		
+	
+	<ul id='alarm_ul'><li></li></ul>
+	
 	</body>
 	
 </html>

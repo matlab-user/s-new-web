@@ -15,7 +15,6 @@ function change_view() {
 		view = 'list';
 		$('#devices2').hide();
 		target.show();
-		
 	}
 	else {
 		view = 'icon';
@@ -32,6 +31,7 @@ function change_view() {
 		}
 		$('#devices2').show();
 	}
+	refresh();
 }
 
 // devs_table - 添加设备 tr 元素的父对象，jquery对象
@@ -71,6 +71,7 @@ function add_dev_icon( devs_ul, dev_i ) {
 	
 	var li = $('<li></li>');
 	var div = $('<div class="device"></div>');
+	div.attr( 'id', devs[dev_i].g1 );
 	li.append( div );
 	
 	var p1 = $('<p class="logo">DEVICE.LOGO</p>');
@@ -131,6 +132,60 @@ function xml_parser( responseTxt ) {
 		else
 			devs[dev_i].lt = parseInt( lt );
 	
+	} );	
+}
+
+function apply_dev() {
+	$.post( 'my-php/devs_view/apply_dev.php', function( data ) {	
+		if( data=='' | data=='NO' ) {
+			//console.log( data );
+			$('#alarm_ul').children('li').text('申请新设备失败，超出最大设备拥有数量！');
+			$('#alarm_ul').show(0).delay(3000).hide(0);
+			return;
+		}
+		devs.push( {'g1':data,'name':'未命名','state':'未激活','tz':8,'lt':'N'} );
+		if( view=='list' ) {
+			var devs_table = $('#devices1').children('table.devs_table').children('tbody');
+			add_dev_tr( devs_table, devs.length-1 );
+		}
+		else {
+			var devs_ul = $('#devices2');
+			add_dev_icon( devs_ul, devs.length-1 );
+		}
+	} ).fail( function() {
+		$('#alarm_ul').children('li').text('连接服务器失败！');
+		$('#alarm_ul').show(0).delay(3000).hide(0);
+	} );
+}
+
+function refresh() {
+	if( view=='list' ) {
+		var devs_table = $('#devices1').children('table.devs_table').children('tbody');
+		var trs = devs_table.children('tr');
+	}
+	else {
+		var devs_table = $('#devices2');
+		var trs = devs_table;
+	}
+	
+	$.each( devs, function(index,value) {
+		var sig = -1;
+		$.each( trs, function(i,v) {
+			var ele = $(v);
+			var g1 = ele.attr('id');
+			
+			if( value.g1==g1 ) {
+				sig = 1;
+				return false;
+			}	
+		} );
+			
+		if( sig<0 ) {
+			if( view=='list' )
+				add_dev_tr( devs_table, index );
+			else
+				add_dev_icon( devs_table, index );
+		}
 	} );
 	
 }
