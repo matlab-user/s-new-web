@@ -93,8 +93,6 @@ function formatDate( UTC ) {
 	var second = d.getUTCSeconds();     
 	return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;     
 }
-			  
-//var res = '<xml><dev><g1>00000000000000000000A0B0C0D0E0F0</g1><s>unknown</s><n>气象数据采集仪</n><tz>8</tz><lt>N</lt></dev><dev><g1>1982011602030410182910a1F2C3D02A</g1><s>unknown</s><n>空气参数测量仪</n><tz>8</tz><lt>1406637812</lt></dev><dev><g1>1982011602030410182910a1F2C3D08A</g1><s>need_data</s><n>图像采集仪</n><tz>8</tz><lt>1418785363</lt></dev><dev><g1>54455354444556535357415900000001</g1><s>unknown</s><n>农业环境测量仪</n><tz>8</tz><lt>1418908245</lt></dev><dev><g1>54455354444556535357415900000002</g1><s>unknown</s><n>农业环境测量仪</n><tz>8</tz><lt>1418908233</lt></dev><dev><g1>54455354444556535357415900000003</g1><s>unknown</s><n>农业环境测量仪</n><tz>8</tz><lt>N</lt></dev><dev><g1>A1B0C4D0E0FF</g1><s>unknown</s><n>环境数据采集仪</n><tz>8</tz><lt>N</lt></dev></xml>';
 
 function xml_parser( responseTxt ) {
 	
@@ -138,7 +136,6 @@ function xml_parser( responseTxt ) {
 function apply_dev() {
 	$.post( 'my-php/devs_view/apply_dev.php', function( data ) {	
 		if( data=='' | data=='NO' ) {
-			//console.log( data );
 			$('#alarm_ul').children('li').text('申请新设备失败，超出最大设备拥有数量！');
 			$('#alarm_ul').show(0).delay(3000).hide(0);
 			return;
@@ -153,7 +150,7 @@ function apply_dev() {
 			add_dev_icon( devs_ul, devs.length-1 );
 		}
 	} ).fail( function() {
-		$('#alarm_ul').children('li').text('连接服务器失败！');
+		$('#alarm_ul').children('li').text('此用户拥有设备数量已达到最大值！');
 		$('#alarm_ul').show(0).delay(3000).hide(0);
 	} );
 }
