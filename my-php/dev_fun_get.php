@@ -1,6 +1,6 @@
  <?php
 	
-	$_POST['g1'] = '1982011602030410182910a1F2C3D02A';
+	//$_POST['g1'] = '1982011602030410182910a1F2C3D02A';
 	
 	if( !isset($_POST['g1']) )
 		exit;
@@ -22,15 +22,15 @@
 	<n>操作名称</n>
 	<rm>***</rm>
 	<p ind=’1’>
-	<pn>参数名称</pn>
-	<prm>参数说明</prm>
-<pu>参数单位</pu>（可选参数）
-</p>
+		<pn>参数名称</pn>
+		<prm>参数说明</prm>
+		<pu>参数单位</pu>（可选参数）
+	</p>
 	<p ind=‘2’>
-	<pn>参数名称</pn>
-	<prm>参数说明</prm>
-<pu>参数单位</pu>
-</p>
+		<pn>参数名称</pn>
+		<prm>参数说明</prm>
+		<pu>参数单位</pu>
+	</p>
 </op>
 */
 	while( $row=mysql_fetch_array($res) ) {

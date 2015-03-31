@@ -432,7 +432,7 @@ function parse_fun_xml( xml ) {
 			var midp = new Object();
 			var jv2 = $(v);
 			midp.id = jv2.attr( 'ind' ); 
-			midp.name = jv2.children('n').text(); 
+			midp.name = jv2.children('pn').text(); 
 			midp.remark = jv2.children('prm').text();
 			midp.unit = jv2.children('pu').text();
 			

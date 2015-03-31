@@ -158,7 +158,12 @@ function data_xml_parser( responseTxt ) {
 		
 		$.each( vs, function(i,value) {
 			var tv = $(value);
-			v[i] = parseFloat( tv.text() );
+			var u = dev.data[index].unit;
+			if( u.indexOf('file')>=0 | u=='bin' | u=='utf8' )
+				v[i] = tv.text();
+			else
+				v[i] = parseFloat( tv.text() );
+		
 			t[i] = b_t + parseFloat( tv.attr('t') );
 		} );
 		
@@ -189,8 +194,7 @@ function get_data_and_update_ui() {
 	
 	var loop = dev.data.length;
 	
-	$.each( dev.data, function(i,v) { 
-		//console.log( i+'---'+dev.data[i].lt );	
+	$.each( dev.data, function(i,v) {
 		$.post( 'my-php/dev_data_get.php', {'tz':dev.tz,'g1':dev.g1,'lt':v.lt,'d_id':v.d_id}, function( data ) {
 			var index = data_xml_parser( data );
 			if( index>=0 )
@@ -198,7 +202,7 @@ function get_data_and_update_ui() {
 		} );	
 	} );
 	
-	//setTimeout( "get_data_and_update_ui();",5000 );	
+	setTimeout( "get_data_and_update_ui();",5000 );	
 }
 
 // 根据 参数id 值d_id， 在dev.data 中找到其 index
@@ -253,8 +257,10 @@ function tab_set_show() {
 	$('#tab_record').css( 'display','None');
 	$('#tab_main').css( 'display','None');
 	
-	if( tab_init['set']==0 )
+	if( tab_init['set']==0 ) {
 		tab_init['set'] = 1;
+		add_set_list();
+	}
 	else
 		return;
 	
@@ -270,7 +276,7 @@ function tab_control_show() {
 		tab_init['control'] = 1;
 		
 		if( op.length<=0 ) {
-			$.post('my-php/dev_fun_get.php', {'g1':dev.g1}, function( data ) {
+			$.post('../my-php/dev_fun_get.php', {'g1':dev.g1}, function( data ) {
 				parse_fun_xml( data );
 				add_control_list( 'info_set' );
 			} );
@@ -278,6 +284,69 @@ function tab_control_show() {
 	}
 	else
 		return;
+	
+}
+
+function add_set_list( ) {
+	$('#dev_name_set').val( dev.name );
+	$('#dev_tz_set').val( dev.tz );
+	
+	// 添加采集参数信息
+	var tab_p = $('#frq_set').find('tbody');
+	$.each( dev.data, function(index,val) {
+		var tr = $( '<tr></tr>' );
+		tab_p.append( tr );
+		
+		var td1 = $( '<td width="10%"></td>' );
+		td1.html( "参数&nbsp;"+val.d_id );
+		tr.append( td1 );
+		
+		var td2 = $( '<td width="10%"></td>' );
+		td2.html( val.name );
+		tr.append( td2 );
+		
+		var td3 = $( '<td width="20%"></td>' );
+		if( val.ss==0 )
+			td3.html( '保存历史数据' );
+		
+		else
+			td3.html( '仅保存最新数据' );
+		tr.append( td3 );
+		
+	} );
+		
+	var tab_a = $('#alarm_set').find('tbody');
+	$.each( dev.data, function(index,val) {
+		var u = val.unit;
+		if( u=='bin' | u=='utf8' )
+			return true;
+		
+		if( u.indexOf('file')>=0 )
+			return true;
+		
+		var tr = $( '<tr></tr>' );
+		tab_a.append( tr );
+		
+		var td1 = $( '<td width="20%"></td>' );
+		td1.html( '参数'+val.d_id+"&nbsp;&nbsp;&nbsp;&nbsp;"+val.name );
+		tr.append( td1 );
+		
+		var td2 = $( '<td width="80%"></td>' );
+		tr.append( td2 );	
+		var sel = $("<select class='alarm_rel'></select>");
+		sel.append( $('<option value="1">></option>') );
+		sel.append( $('<option value="2">>=</option>') );
+		sel.append( $('<option value="3">==</option>') );
+		sel.append( $('<option value="4"><=</option>') );
+		sel.append( $('<option value="5"><</option>') );
+		sel.append( $('<option value="6">!=</option>') );
+		td2.append( sel );
+		
+		td2.append( $("<input type='text' style='padding:5px;margin-left:10px;width:90px'/>") );
+		td2.append( $("<input type='checkbox' style='margin:0 0 0 40px'/>") );
+		td2.append( "&nbsp;生效" );
+
+	} );
 	
 }
 
@@ -396,7 +465,7 @@ function parse_fun_xml( xml ) {
 			var midp = new Object();
 			var jv2 = $(v);
 			midp.id = jv2.attr( 'ind' ); 
-			midp.name = jv2.children('n').text(); 
+			midp.name = jv2.children('pn').text(); 
 			midp.remark = jv2.children('prm').text();
 			midp.unit = jv2.children('pu').text();
 			

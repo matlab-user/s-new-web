@@ -25,6 +25,8 @@
 			.tab_table td.s input{width:40%}
 			.tab_table td.t{width:30%}
 			.tab_table td.f input{width:18%;height:100%;padding:3px 3px 3px 7px;margin:5px 7px}
+			
+			ul#new_img li time{font-size:13px;position:relative;bottom:-4px;padding:5px 10px}
 		</style>
 		
 		<script>
@@ -101,51 +103,21 @@
 			<table class='tab_table'>
 				<caption class='title'>设备信息</caption>
 				<tbody>
-					<tr><th style="width:10%">设备昵称</th><th style="width:90%"><input type="text" style='padding:5px'/></th></tr>
-					<tr><th style="width:10%">设备所在时区</th><th style="width:90%"><input type="text" style='padding:5px'/></th></tr>
+					<tr><td style="width:10%">设备昵称</td><td style="width:90%"><input id='dev_name_set' type="text" style='padding:5px'/></td></tr>
+					<tr><td style="width:10%">GUID2</td><td style="width:90%"><input id='dev_guid2_set' type="text" style='padding:5px'/></td></tr>
+					<tr><td style="width:10%">KEY</td><td style="width:90%"><input id='dev_key_set' type="password" style='padding:5px'/></td></tr>
+					<tr><td style="width:10%">设备所在时区</td><td style="width:90%"><input id='dev_tz_set' type="text" style='padding:5px'/></td></tr>
 				</tbody>
 			</table>
+			
 			<table id='frq_set' class='tab_table'>
-				<caption class='title'>采集参数信息</caption>
-				<tbody>
-					<tr><th width="10%">设备昵称</th><th width="90%"></th></tr>
-					<tr><th width="10%">设备所在时区</th><th width="90%"></th></tr>
-				</tbody>
+				<caption class='title'>采集数据信息</caption>
+				<tbody></tbody>
 			</table>
+			
 			<table id='alarm_set' class='tab_table'>
 				<caption class='title'>警报阈值</caption>
-				<tbody>
-					<tr>
-						<th style='width:10%'>参数1</th>
-						<th style="width:90%">
-							<select class='alarm_rel'>   
-								<option value="1">></option>   
-								<option value="2">>=</option>   
-								<option value="3">==</option>   
-								<option value="4"><=</option>   
-								<option value="5"><</option>
-								<option value="6">!=</option>
-							</select>
-							<input type="text" style='padding:5px;margin-left:10px;width:90px'/>
-							<input type="checkbox" style='margin:0 0 0 40px'/> 生效 
-						</th>
-					</tr>
-					<tr>
-						<th width="10%">参数2</th>
-						<th style="width:90%">
-							<select class='alarm_rel'>   
-								<option value="1">></option>   
-								<option value="2">>=</option>   
-								<option value="3">==</option>   
-								<option value="4"><=</option>   
-								<option value="5"><</option>
-								<option value="6">!=</option>
-							</select>
-							<input type="text" style='padding:5px;margin-left:10px;width:90px'/>
-							<input type="checkbox" style='margin:0 0 0 40px'/> 生效 
-						</th>
-					</tr>
-				</tbody>
+				<tbody></tbody>
 			</table>
 			
 			<ul class='button'>

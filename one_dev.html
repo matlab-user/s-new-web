@@ -84,7 +84,7 @@
 			<ul class="nav admin">
 				<li><a class="operation-control" href="javascript:void(0)" onClick="change_tab('control');">设备控制</a></li>
 				<li><a class="operation-setting" href="javascript:void(0)" onClick="change_tab('set');">设备信息</a></li>
-				<li><a class="operation-data" href="javascript:void(0)" onClick="change_tab('record');">操作记录</a></li>
+				<!--<li><a class="operation-data" href="javascript:void(0)" onClick="change_tab('record');">操作记录</a></li>-->
 			</ul>
 
 			<ul class="button">
@@ -102,8 +102,10 @@
 			<table class='tab_table'>
 				<caption class='title'>设备信息</caption>
 				<tbody>
-					<tr><th style="width:10%">设备昵称</th><th style="width:90%"><input type="text" style='padding:5px'/></th></tr>
-					<tr><th style="width:10%">设备所在时区</th><th style="width:90%"><input type="text" style='padding:5px'/></th></tr>
+					<tr><td style="width:10%">设备昵称</td><td style="width:90%"><input id='dev_name_set' type="text" style='padding:5px'/></td></tr>
+					<tr><td style="width:10%">GUID2</td><td style="width:90%"><input id='dev_guid2_set' type="text" style='padding:5px'/></td></tr>
+					<tr><td style="width:10%">KEY</td><td style="width:90%"><input id='dev_key_set' type="password" style='padding:5px'/></td></tr>
+					<tr><td style="width:10%">设备所在时区</td><td style="width:90%"><input id='dev_tz_set' type="text" style='padding:5px'/></td></tr>
 				</tbody>
 			</table>
 			<table id='frq_set' class='tab_table'>

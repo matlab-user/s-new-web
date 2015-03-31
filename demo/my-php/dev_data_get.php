@@ -1,9 +1,12 @@
 <?php
-	//$_POST['g1'] ='demo-1';
-	//$_POST['d_id'] = 1;
-	//$_POST['lt'] = 0;
-	//$_POST['tz'] = 8;
 	
+	session_start();
+/*	
+	$_POST['g1'] ='demo-1';
+	$_POST['d_id'] = 4;
+	$_POST['lt'] = time()-10;
+	$_POST['tz'] = 8;
+*/	
 	$xml = '<xml>';
 	
 	$con = mysql_connect( "localhost", "root", "blue" );
@@ -44,7 +47,7 @@ function get_d( $dev_id, $d_id, $t, $con ) {
 	if( empty($res) )
 		return '';
 
-	while( $row = mysql_fetch_array( $res ) ) {
+	while( $row=mysql_fetch_array($res) ) {
 		
 		$utid = $row[0];
 		$d_t = $row[2];
@@ -58,6 +61,45 @@ function get_d( $dev_id, $d_id, $t, $con ) {
 		
 		switch( $unit ) {
 			case 'file/image':
+				$img[0] = 'http://img.camarts.cn/2015/03/IMG_0945.jpg?imageView/2/w/800/h/800/q/90';
+				$img[1] = 'http://img.camarts.cn/2015/03/IMG_0920.jpg?imageView/2/w/800/h/800/q/90';
+				$img[2] = 'http://img.camarts.cn/2015/03/IMG_0895.jpg?imageView/2/w/800/h/800/q/90';
+				$img[3] = 'http://img.camarts.cn/2015/02/IMG_0870.jpg?imageView/2/w/800/h/800/q/90';
+				$img[4] = 'http://img.camarts.cn/2015/02/IMG_0832.jpg?imageView/2/w/800/h/800/q/90';
+				$img[5] = 'http://img.camarts.cn/2015/02/IMG_0791.jpg?imageView/2/w/800/h/800/q/90';
+				$img[6] = 'http://img.camarts.cn/2015/02/IMG_0771.jpg?imageView/2/w/800/h/800/q/90';
+				$img[7] = 'http://img.camarts.cn/2015/01/IMG_0749.jpg?imageView/2/w/800/h/800/q/90';
+				$img[8] = 'http://img.camarts.cn/2015/01/IMG_0730.jpg?imageView/2/w/800/h/800/q/90';
+				
+				$t_s = get_today_start( $_POST['tz'] );
+				$step = 30;	
+				$mid1 = floor( (time()-$t_s)/$step ) * $step;
+				$in_t = $t - $t_s;
+				if( $in_t<0 ) 
+					$in_t = 0;
+				
+				if( $mid1<$in_t )
+					return '';
+				
+				$_SESSION['img_lt'] = $mid1 + $t_s;
+				if( $_SESSION['img_lt']==$t )
+					return '';
+				
+				if( !isset($_SESSION['cur_img']) ) {
+					$_SESSION['cur_img'] = 0;
+					$x_str = "<d id='".$d_id."'>";
+					$res = addslashes( $img[$_SESSION['cur_img']] );
+					$x_str .= "<v t='".($mid1+$t_s)."'>".$res."</v></d>";
+					break;
+				}
+				
+				$_SESSION['cur_img']++;
+				if( $_SESSION['cur_img']>=9 )
+					$_SESSION['cur_img'] = 0;
+				
+				$x_str = "<d id='".$d_id."'>";
+				$res = addslashes( $img[$_SESSION['cur_img']] );
+				$x_str .= "<v t='".($mid1+$t_s)."'>".$res."</v></d>";
 				break;
 			
 			default:
@@ -76,7 +118,7 @@ function get_d( $dev_id, $d_id, $t, $con ) {
 function get_one_d( $in_t, $d_id ) {
 	
 	$now = time();
-	$step = 10;				// 间隔10秒
+	$step = 20;				// 间隔
 	
 	$u = 13.5 * 3600;	
 	$t_s = get_today_start( $_POST['tz'] );
@@ -102,7 +144,7 @@ function get_one_d( $in_t, $d_id ) {
 
 function get_ds( $in_t, $d_id ) {
 	
-	$step = 10800;				// 间隔10秒
+	$step = 20;				// 间隔
 	
 	$u = 13.5 * 3600;	
 	$t_s = get_today_start( $_POST['tz'] );
