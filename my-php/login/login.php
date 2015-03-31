@@ -31,7 +31,7 @@
 	while( $row=mysql_fetch_array($res) ) {
 		if( $row[1]=='inactive' )
 			break;
-			
+
 		if( $row[0]==md5($_POST['passwd']) ) {
 			$sig = 'devs_view.html';
 			$_SESSION['user'] = $_POST['user'];

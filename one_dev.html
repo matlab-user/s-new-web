@@ -29,6 +29,7 @@
 		
 		<script>
 			var tab_init = {'main':0,'set':0,'control':0,'record':0};
+			var user = '';
 			
 			$( function() {
 	
@@ -41,7 +42,14 @@
 				}
 				else
 					dev.g1 = '1982011602030410182910a1F2C3D02A';
-					
+				
+				$.post( "my-php/get_user.php", function( data ) {
+					if( data=='' )
+						return;
+					user = data;
+					$('#user_name').html( user );
+				} );
+				
 				tab_main_show();
 				
 			} );
@@ -63,7 +71,7 @@
 	
 	<body style="min-width:1349px;overflow-x:hidden">
 	    <header class="header">
-            <span class="logo">LOGO</span>
+            <img class='logo' height=50 src='image/login/swaytech.png' />
 
             <ul class="nav">
                 <li><a href="devs_view.html">监控中心</a></li>
