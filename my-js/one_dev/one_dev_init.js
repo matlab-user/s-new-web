@@ -4,7 +4,7 @@
 			.model			设备型号名称
 			.state
 			.tz
-			.company		(设备生产厂商，未实现)
+			.maker		(设备生产厂商，未实现)
 			.lo				经度 （以后实时更新）
 			.la				纬度 （以后实时更新）
 			.data[]			Object 数组
@@ -34,16 +34,17 @@
 */
 
 var dev = new Object();
+dev.data = new Array();
+/*
 dev.name = '我的设备1';
 dev.model = 'swaytech-1';
 dev.g1 = '00001';
 dev.tz = 8;
 dev.lt = 0;
-dev.company = 'swaytech';
+dev.maker = 'swaytech';
 dev.lo = '104.06<sup>。</sup>';
 dev.la = '30.67<sup>。</sup>';
-dev.data = new Array();
-
+*/
 var op = new Array();
 /*
 op[0] = new Object();
@@ -78,7 +79,7 @@ function add_dev_info() {
 	else
 		tbody.append( $('<tr><th width="40%">所在地时区：</th><th id="dev_info_tz" width="60%">西'+Math.abs(dev.tz)+'区</th></tr>') );
 	
-	tbody.append( $('<tr><th width="40%">生产厂家：</th><th id="dev_info_company" width="60%">'+dev.company+'</th></tr>') );
+	tbody.append( $('<tr><th width="40%">生产厂家：</th><th id="dev_info_company" width="60%">'+dev.maker+'</th></tr>') );
 
 	main.append( li );
 	
@@ -93,7 +94,7 @@ function add_dev_info() {
 			else
 				$('#dev_info_tz').html( '西'+Math.abs(dev.tz)+'区' );
 			
-			$('#dev_info_company').html( dev.company );
+			$('#dev_info_company').html( dev.maker );
 		};
 }
 
@@ -104,7 +105,7 @@ function add_data_info( d_i_s ) {
 	
 	var li = $('<li class="data_info_li"></li>');
 	if ( d_i_s!=0 )
-		li.css( {'width':'28%','margin-left':'20px'} );
+		li.css( {'width':'31%','margin-left':'20px'} );
 	
 	var table = $("<table><caption class='title'>数据最新更新</caption><tbody></tbody></table>");
 	li.append( table );
@@ -116,7 +117,7 @@ function add_data_info( d_i_s ) {
 			return true;
 		
 		if ( i>=(7+d_i_s) ) {
-			li.css( {'width':'28%','margin-left':'20px'} );
+			li.css( {'width':'31%','margin-left':'20px'} );
 			d_index = i;
 			return false;
 		}	
@@ -138,7 +139,7 @@ function info_xml_parser( responseTxt ) {
 	
 	dev.name = xml.find('name').text();
 	dev.model = xml.find('model').text();
-	dev.company = xml.find('company').text();
+	dev.maker = xml.find('maker').text();
 	dev.tz = parseInt( xml.find('tz').text() );
 	dev.lo = xml.find('longitude').text()+'<sup>。</sup>';
 	dev.la = xml.find('latitude').text()+'<sup>。</sup>';
@@ -178,7 +179,12 @@ function data_xml_parser( responseTxt ) {
 		
 		$.each( vs, function(i,value) {
 			var tv = $(value);
-			v[i] = parseFloat( tv.text() );
+			var u = dev.data[index].unit;
+			if( u.indexOf('file')>=0 | u=='bin' | u=='utf8' )
+				v[i] = tv.text();
+			else
+				v[i] = parseFloat( tv.text() );
+		
 			t[i] = b_t + parseFloat( tv.attr('t') );
 		} );
 		
@@ -267,7 +273,6 @@ function tab_main_show() {
 	// add dev_info_li and data_info_li		
 	add_dev_info();
 	$('#dev_info').outerWidth( $('body').width() );
-	get_dev_info_update();
 	data_info_get_and_add_views_update();
 }
 
@@ -277,11 +282,12 @@ function tab_set_show() {
 	$('#tab_record').css( 'display','None');
 	$('#tab_main').css( 'display','None');
 	
-	if( tab_init['set']==0 )
+	if( tab_init['set']==0 ) {
 		tab_init['set'] = 1;
+		add_set_list();
+	}
 	else
 		return;
-	
 }
 
 function tab_control_show() {
@@ -397,6 +403,66 @@ function add_control_list( table_id ) {
 	} );
 }
 
+function add_set_list( ) {
+	$('#dev_name_set').val( dev.name );
+	$('#dev_tz_set').val( dev.tz );
+	
+	// 添加采集参数信息
+	var tab_p = $('#frq_set').find('tbody');
+	$.each( dev.data, function(index,val) {
+		var tr = $( '<tr></tr>' );
+		tab_p.append( tr );
+		
+		var td1 = $( '<td width="10%"></td>' );
+		td1.html( "参数&nbsp;"+val.d_id );
+		tr.append( td1 );
+		
+		var td2 = $( '<td width="10%"></td>' );
+		td2.html( val.name );
+		tr.append( td2 );
+		
+		var td3 = $( '<td width="20%"></td>' );
+		if( val.ss==0 )
+			td3.html( '保存历史数据' );
+		
+		else
+			td3.html( '仅保存最新数据' );
+		tr.append( td3 );
+		
+	} );
+		
+	var tab_a = $('#alarm_set').find('tbody');
+	$.each( dev.data, function(index,val) {
+		var u = val.unit;
+		if( u=='bin' | u=='utf8' )
+			return true;
+		
+		if( u.indexOf('file')>=0 )
+			return true;
+		
+		var tr = $( '<tr></tr>' );
+		tab_a.append( tr );
+		
+		var td1 = $( '<td width="20%"></td>' );
+		td1.html( '参数'+val.d_id+"&nbsp;&nbsp;&nbsp;&nbsp;"+val.name );
+		tr.append( td1 );
+		
+		var td2 = $( '<td width="80%"></td>' );
+		tr.append( td2 );	
+		var sel = $("<select class='alarm_rel'></select>");
+		sel.append( $('<option value="1">></option>') );
+		sel.append( $('<option value="2">>=</option>') );
+		sel.append( $('<option value="3">==</option>') );
+		sel.append( $('<option value="4"><=</option>') );
+		sel.append( $('<option value="5"><</option>') );
+		sel.append( $('<option value="6">!=</option>') );
+		td2.append( sel );
+		
+		td2.append( $("<input type='text' style='padding:5px;margin-left:10px;width:90px'/>") );
+		td2.append( $("<input type='checkbox' style='margin:0 0 0 40px'/>") );
+		td2.append( "&nbsp;生效" );
+	} );
+}
 //-----------------------------------------------------------------------------
 function input_focus() {
 	$(this).val('');
@@ -441,4 +507,9 @@ function parse_fun_xml( xml ) {
 		
 		op.push( mid_op );
 	} );
+}
+
+function refresh() {
+	
+	
 }

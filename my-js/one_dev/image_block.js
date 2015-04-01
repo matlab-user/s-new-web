@@ -1,4 +1,3 @@
-// <li><div class="img"><img src="http://img.newtheme.cn/www/2014/09/tao2014-thumb.jpg"><time>2014.12.10 22:44:10</time></div></li>
 // d_i - 待添加 flot UI的参数序号，dev.data 中的索引号
 function add_image_view( d_i ) {
 	
@@ -16,24 +15,48 @@ function add_image_view( d_i ) {
 	dev.data[d_i].real_w = 0;
 	
 	dev.data[d_i].update_fun = function() {
-		
-		//console.log(d_i);
+
 		var new_img = $( "<img>" );
 		var main = this.plot.find('img');
 		var real_h = this.real_h, real_w = this.real_w;
+		var new_src = '';
+				
+		var get_t = 0;
+		if( $.type(this.new_v)=='array' ) {
+			new_src = this.new_v[0];
+			get_t = this.new_t[0];
+		}
+		else {
+			new_src = this.new_v;
+			get_t = this.new_t;
+		}
 		
-		new_img.attr( 'src', this.new_v );
-		//new_img.attr( 'src', "http://img.newtheme.cn/www/2014/09/tao2014-thumb.jpg" );
+		if( main.attr('src')==new_src )
+			return;
+		
+		new_img.attr( 'src', new_src );
+		this.lt = get_t;
+		
+		// 更新 data_info_li 上内容 
+		var index = get_index( this.d_id );
+		$('#'+index+'_data_info_v').html( 'image' );
+		$('#'+index+'_data_info_t').text( formatDate( get_t+dev.tz*3600) );
 		
 		new_img.load( function() {
 			
 			real_w = $(this).width();
 			real_w = $(this).height();
-			
+					
 			main.animate( {opacity:0}, 800, function() {
-				this.src = "http://img.newtheme.cn/www/2014/09/tao2014-thumb.jpg";
-				$(this).animate( {opacity:1},800 );	
+				this.src = new_img.attr( 'src' );
+				$(this).animate( {opacity:1},800, function() {
+					new_img.remove();
+					var t = new Date();
+					t.setTime( (get_t+dev.tz*3600)*1000 );
+					time.text( t.getUTCFullYear()+'.'+(t.getUTCMonth()+1)+'.'+t.getUTCDate()+" "+t.getUTCHours()+':'+t.getUTCMinutes()+':'+t.getSeconds() );
+				} );	
 			} );	
+			
 		});	
 	};
 	
@@ -64,7 +87,7 @@ function add_image_view( d_i ) {
 			pos_y = 10;
 				
 		div.css( {'top':pos_y,'left':pos_x} );
-		div.show();
+		div.show(0);
 		
 		//dev.data[d_i].update_fun();
 		

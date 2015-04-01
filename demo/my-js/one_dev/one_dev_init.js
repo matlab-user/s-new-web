@@ -73,7 +73,7 @@ function add_dev_info() {
 			else
 				$('#dev_info_tz').html( '西'+Math.abs(dev.tz)+'区' );
 			
-			$('#dev_info_company').html( dev.company );
+			$('#dev_info_company').html( dev.maker );
 		};
 }
 
@@ -345,9 +345,7 @@ function add_set_list( ) {
 		td2.append( $("<input type='text' style='padding:5px;margin-left:10px;width:90px'/>") );
 		td2.append( $("<input type='checkbox' style='margin:0 0 0 40px'/>") );
 		td2.append( "&nbsp;生效" );
-
 	} );
-	
 }
 
 function add_control_list( table_id ) {
@@ -474,4 +472,9 @@ function parse_fun_xml( xml ) {
 		
 		op.push( mid_op );
 	} );
+}
+
+function refresh() {
+	
+	
 }

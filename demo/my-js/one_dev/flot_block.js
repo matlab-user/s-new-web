@@ -123,8 +123,7 @@ function add_flot_view( d_i ) {
 			$('#'+d_i+'_data_info_v').html( this.new_v[0].toFixed(2)+' '+this.unit );
 			$('#'+d_i+'_data_info_t').text( formatDate( this.new_t[0]+dev.tz*3600) );
 			
-			dev.data[d_i].lt = this.new_t[0];
-			
+			dev.data[d_i].lt = this.new_t[0];	
 		}
 	};
 	

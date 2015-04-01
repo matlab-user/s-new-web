@@ -15,20 +15,21 @@
 				dev.data[i].lt = 0;
 				switch( v.ss ) {
 					case 0:
-						add_flot_view( i );
+						if( v.unit=='file/image' )
+							add_image_view( i );
+						else
+							add_flot_view( i );
 						break;
+						
 					case 1:
 						dev.data[i].update_fun = function() {
-							//console.log( main.new_v + "--time:"+main.new_t+"---tz"+dev.tz );
 							var index = get_index( this.d_id );
 							$('#'+index+'_data_info_v').html( this.new_v+' '+this.unit );
 							$('#'+index+'_data_info_t').text( formatDate( this.new_t+dev.tz*3600) );
 							dev.data[index].lt = this.new_t;
-						};
+						};					
 						break;
-					case 2:
-						add_image_view( i );
-						break;
+
 					default:
 						break;
 				}				

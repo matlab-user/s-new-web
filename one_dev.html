@@ -41,7 +41,7 @@
 					dev.g1 = $.base64.atob(url_p, true);
 				}
 				else
-					dev.g1 = '1982011602030410182910a1F2C3D02A';
+					dev.g1 = 'demo-1';
 				
 				$.post( "my-php/get_user.php", function( data ) {
 					if( data=='' )
@@ -50,7 +50,7 @@
 					$('#user_name').html( user );
 				} );
 				
-				tab_main_show();
+				get_dev_info_update();
 				
 			} );
 			
@@ -61,7 +61,8 @@
 				$.post( "my-php/dev_info_get.php", {'g1':dev.g1}, function( data ) {
 					var sig = info_xml_parser( data );
 					if( sig==true ) {
-						$('title').text('实唯-'+dev.name);
+						$('.title strong').text('我的设备-'+dev.name);
+						tab_main_show();
 					}	
 				});
 			};
@@ -118,45 +119,11 @@
 			</table>
 			<table id='frq_set' class='tab_table'>
 				<caption class='title'>采集参数信息</caption>
-				<tbody>
-					<tr><th width="10%">设备昵称</th><th width="90%"></th></tr>
-					<tr><th width="10%">设备所在时区</th><th width="90%"></th></tr>
-				</tbody>
+				<tbody></tbody>
 			</table>
 			<table id='alarm_set' class='tab_table'>
 				<caption class='title'>警报阈值</caption>
-				<tbody>
-					<tr>
-						<th style='width:10%'>参数1</th>
-						<th style="width:90%">
-							<select class='alarm_rel'>   
-								<option value="1">></option>   
-								<option value="2">>=</option>   
-								<option value="3">==</option>   
-								<option value="4"><=</option>   
-								<option value="5"><</option>
-								<option value="6">!=</option>
-							</select>
-							<input type="text" style='padding:5px;margin-left:10px;width:90px'/>
-							<input type="checkbox" style='margin:0 0 0 40px'/> 生效 
-						</th>
-					</tr>
-					<tr>
-						<th width="10%">参数2</th>
-						<th style="width:90%">
-							<select class='alarm_rel'>   
-								<option value="1">></option>   
-								<option value="2">>=</option>   
-								<option value="3">==</option>   
-								<option value="4"><=</option>   
-								<option value="5"><</option>
-								<option value="6">!=</option>
-							</select>
-							<input type="text" style='padding:5px;margin-left:10px;width:90px'/>
-							<input type="checkbox" style='margin:0 0 0 40px'/> 生效 
-						</th>
-					</tr>
-				</tbody>
+				<tbody></tbody>
 			</table>
 			
 			<ul class='button'>

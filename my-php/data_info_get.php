@@ -1,6 +1,6 @@
  <?php
 	
-	//$_POST['g1'] = '1982011602030410182910a1F2C3D02A';
+	//$_POST['g1'] = '54455354444556535357415900000001';
 	
 	if( !isset($_POST['g1']) )
 		exit;
@@ -20,16 +20,16 @@
 	$x_str = '';
 	while( $row = mysql_fetch_array( $res ) ) {
 		
-		$ty = $row[1];
 		$utid = $row[0];
+		$name = $row[1];
 		$d_t = $row[2];
 		$d_id = $row[3];
 		$remark = $row[4];
 		
 		$x_str .= "<d id='".$d_id."'>";
-		$x_str .= "<ty>".$ty."</ty>";
 		$x_str .= "<ss>".$d_t."</ss>";
-		$x_str .= "<name>".$remark."</name>";
+		$x_str .= "<name>".$name."</name>";
+		$x_str .= "<rem>".$remark."</rem>";
 		
 		// 获取单位
 		$unit = 'W';
