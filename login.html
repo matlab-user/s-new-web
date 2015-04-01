@@ -36,6 +36,9 @@
 			#example_t a{cursor:pointer;text-align:center;line-height:4;width:100%;font-size:16px;color:#3292FF}
 			#example_t a:hover{text-decoration:underline}
 			
+			a.b1{display:block;text-shadow:0 1px 0 rgba(0,0,0,0.4);line-height:80px;text-align:center;height:80px;font-size:33px;color:#FFF;border-radius:7px;background:rgb(93,154,255);margin:20px 30%;}
+			a.b1:hover{opacity:0.6;}
+			
 			.foot{vertical-align:middle;margin:0 10%;padding-top:5px;width:80%;height:40px;line-height:12px;font-size:12px;color:#909090;border-top:solid 1px #E0E0E0}
 			.foot span{line-height:40px}
 			.foot .ICP{float:right}
@@ -43,9 +46,9 @@
 		
 		<script>		
 			$( function() {
-
-				slide_init();
 			
+				slide_init();
+	
 				$('.slide_show').css('left',($('body').width()-$('.slide_show').width())/2);
 				$('.slide_show').height( $('.slide_top_level').height() );
 				$('.slide_show img').width( $('.slide_top_level').height() );
@@ -55,9 +58,7 @@
 				$('#example_t .content').width( 308 );
 				$('#example_t .content').css('padding','0 '+p+'px');
 				$('#example_t .h1').css('line-height',$('#example_t div').eq(0).height()+'px');
-				
 			} );
-
 		</script>
 		
     </head>
@@ -128,8 +129,8 @@
 			</tr>
 		</table>
 		
-		<div style='width:100%;background:rgb(115,136,193);padding:40px 0;'>
-			<div style='color:#FFF;font-size:33px;font-weight:400;text-align:center;width:100%;'>如何接入我们的网络</div>
+		<div style='margin:0 10% 60px 10%;width:80%;padding:0;'>
+			<a class='b1'>快 速 接 入</a>
 		</div>
 		<div class='foot'><span>&copy;2014 - 2015 Swaytech All Right Reserved.</span><span class='ICP'>蜀ICP备14031015号-1</span></div>
 

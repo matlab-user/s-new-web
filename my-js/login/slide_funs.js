@@ -24,9 +24,9 @@
 //------------ user custom ------------------------------------------------------
 var b_image = "url('image/login/banner.jpg')";						// div.slide background-image
 var slide_top_width = '';				// div.slide_top_level's width
-var slide_top_height = '';		// div.slide_top_level's height
+var slide_top_height = '';				// div.slide_top_level's height
 
-var slide_interval = 12;						// change inteval, seconds
+var slide_interval = 12;				// change inteval, seconds
 //-------------------------------------------------------------------------------
 			
 function slide_init() {
@@ -57,7 +57,7 @@ function slide_init() {
 	} );
 	
 	var cur_li = $('.points_line .current');
-	console.log();
+
 	$('#show_'+cur_li.children('a').text()).fadeIn();
 	
 	var main = $('.slide_top_level');
