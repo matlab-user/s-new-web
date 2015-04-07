@@ -24,7 +24,7 @@ embed[type="application/thunder_download_plugin"]{display:none}
 
 .header{background:#333;height:50px;color:#fff;line-height:50px}
 .header .logo{font-size:18px;float:left;margin-right:20px;color:#009999;margin-left:20px}
-
+		
 .nav{z-index:10;float:left;display:block;margin:0 auto;list-style:none;font-size:15px}
 .nav li{position:relative;float:left;list-style:none}
 .nav li a{display:block;margin:0 20px;line-height:50px}
