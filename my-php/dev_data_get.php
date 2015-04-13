@@ -1,13 +1,13 @@
 <?php
 	
-	//$_POST['tz'] = 8;
-	$_POST['g1'] = '1982011602030410182910a1F2C3D02A';
-	//$_POST['lt'] = 0;
-	//$_POST['d_id'] = 0;
-	
+	$_POST['tz'] = 8;
+	$_POST['g1'] = 'demo-1';
+	$_POST['lt'] = 0;
+	$_POST['d_id'] = 1;
+
 	if( !(isset($_POST['tz']) && isset($_POST['d_id']) && isset($_POST['g1']) && isset($_POST['lt'])) )
 		exit;
-	
+
 	$t_s = get_today_start( $_POST['tz'] );
 
 	$xml = '<xml>';
@@ -50,26 +50,19 @@
 		if( empty($res) )
 			return '';
 
-		while( $row = mysql_fetch_array( $res ) ) {
+		while( $row=mysql_fetch_array($res) ) {
 			
 			$ty = $row[1];
 			$utid = $row[0];
 			$d_t = $row[2];
 			$remark = $row[3];
-			
-			//$x_str .= "<ty>".$ty."</ty>";
-			//$x_str .= "<ss>".$d_t."</ss>";
-			//$x_str .= "<name>".$remark."</name>";
-			
+						
 			// 获取单位
-			/*
-			$unit = 'W';
+			$unit = '';
 			$res1 = mysql_query( "SELECT unit FROM data_db.unit_table WHERE id=".$utid, $con );
 			while( $row1 = mysql_fetch_array( $res1 ) )
 				$unit = $row1[0];
 			mysql_free_result( $res1 );
-			$x_str .= "<u>".$unit."</u>";
-			*/
 			
 			/*
 			// 获取警报相关信息
@@ -79,67 +72,68 @@
 			mysql_free_result( $res2 );
 			*/
 			
-			// 获取值
-			switch( $d_t ) {
-				case 0:
-					if( $t==0 ) 
-						$sql_str = "SELECT value, time FROM data_db.his_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id." AND time>=".$t_s." AND time<=".time()." ORDER BY time ASC";
-					else
-						$sql_str = "SELECT value, time FROM data_db.his_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id." AND time>".$t." AND time<=".time()." ORDER BY time ASC";
-					
-					$res3 = mysql_query( $sql_str, $con );	
-					$i = 0;					
-					while( $row3 = mysql_fetch_array( $res3 ) ) {
-						if( $i==0 ) {
-							$x_str .= "<d id='".$d_id."'>";
-							$base_t = floatval( $row3[1] );
-							$x_str .= '<base_t>'.$base_t.'</base_t>';
-							$i++;
-						}
-						
-						$dt = floatval($row3[1]) - $base_t;
-						$x_str .= "<v t='".$dt."'>".$row3[0]."</v>";
-					}
-
-					mysql_free_result( $res3 );
-					break;
-					
-				case 1:
-					if( $t==0 ) 
-							$sql_str = "SELECT value, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id;
-						else
-							$sql_str = "SELECT value, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id.' AND time>'.$t;
-					
-					$res3 = mysql_query( $sql_str, $con );
-					if( $row3 = mysql_fetch_array( $res3 ) ) {
-						$x_str .= "<d id='".$d_id."'>";
-						$x_str .= "<v t='".$row3[1]."'>".$row3[0]."</v>";
-					}
-					mysql_free_result( $res3 );
-					break;
-					
-				case 2:
-					if( $t==0 ) 
-						$sql_str = "SELECT bin_d, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id;
-					else
-						$sql_str = "SELECT bin_d, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id.' AND time>'.$t;
-					
-					$res3 = mysql_query( $sql_str, $con );		
-					if( $row3 = mysql_fetch_array( $res3 ) ) {
-						mysql_query( "UPDATE dev_db.dev_table SET state='need_data' WHERE dev_id='".$dev_id."'", $con );
-						if( empty($row3[0]) )
-							continue;
-						$x_str .= "<d id='".$d_id."'>";
-						$x_str .= "<v t='".$row3[1]."'>".$row3[0]."</v>";
-					}
-					mysql_free_result( $res3 );
-					break;
-			
-				default:
-					break;
+			if( strpos($unit,'file') ) {
+				if( $t==0 ) 
+					$sql_str = "SELECT bin_d, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id;
+				else
+					$sql_str = "SELECT bin_d, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id.' AND time>'.$t;
+				
+				$res3 = mysql_query( $sql_str, $con );		
+				if( $row3 = mysql_fetch_array( $res3 ) ) {
+					mysql_query( "UPDATE dev_db.dev_table SET state='need_data' WHERE dev_id='".$dev_id."'", $con );
+					if( empty($row3[0]) )
+						continue;
+					$x_str .= "<d id='".$d_id."'>";
+					$x_str .= "<v t='".$row3[1]."'>".$row3[0]."</v></d>";
+				}
+				mysql_free_result( $res3 );		
 			}
-			
-			$x_str .= "</d>";
+			else {
+				// 获取值
+				switch( $d_t ) {
+					case 0:
+						if( $t==0 ) 
+							$sql_str = "SELECT value, time FROM data_db.his_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id." AND time>=".$t_s." AND time<=".time()." ORDER BY time ASC";
+						else
+							$sql_str = "SELECT value, time FROM data_db.his_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id." AND time>".$t." AND time<=".time()." ORDER BY time ASC";
+					//echo $sql_str."\r\n";
+						$res3 = mysql_query( $sql_str, $con );	
+						$i = 0;					
+						while( $row3=mysql_fetch_array($res3) ) {
+							if( $i==0 ) {
+								$x_str .= "<d id='".$d_id."'>";
+								$base_t = floatval( $row3[1] );
+								$x_str .= '<base_t>'.$base_t.'</base_t>';
+								$i++;
+							}
+							
+							$dt = floatval($row3[1]) - $base_t;
+							$x_str .= "<v t='".$dt."'>".$row3[0]."</v>";
+						}
+						if( $i>0 )
+							$x_str .= "</d>";
+						mysql_free_result( $res3 );
+						break;
+						
+					case 1:
+						if( $t==0 ) 
+								$sql_str = "SELECT value, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id;
+							else
+								$sql_str = "SELECT value, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id.' AND time>'.$t;
+						
+						$res3 = mysql_query( $sql_str, $con );
+						if( $row3 = mysql_fetch_array( $res3 ) ) {
+							$x_str .= "<d id='".$d_id."'>";
+							$x_str .= "<v t='".$row3[1]."'>".$row3[0]."</v></d>";
+						}
+						mysql_free_result( $res3 );
+						break;
+							
+					default:
+						break;
+				}
+			}	
+
 		}
 		
 		return $x_str;
