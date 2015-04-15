@@ -39,12 +39,12 @@
 		$xml .= "<n>".$row[1]."</n>";
 		$xml .= "<rm>".$row[2]."</rm>";
 		
-		$p = [];	// 记录参数单位索引号
-		$p_name = [];
-		$p_remark = [];
+		$p = array();	// 记录参数单位索引号
+		$p_name = array();
+		$p_remark = array();
 		$sql_str = '';
-		$p_unit = [];
-		$p_unit_id = [];
+		$p_unit = array();
+		$p_unit_id = array();
 		
 		switch($p_num) {
 			case 1:
