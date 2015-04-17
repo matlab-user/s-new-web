@@ -26,6 +26,7 @@
 	if( empty($sql_con) )
 		exit;
 	
+	$_POST['user'] = mysql_real_escape_string( $_POST['user'] );
 	$query_str = "SELECT passwd,state,uid,dnum FROM user_table WHERE mail='".$_POST['user']."'";
 	$res = mysql_query( $query_str, $sql_con );
 	while( $row=mysql_fetch_array($res) ) {

@@ -66,15 +66,19 @@
 						$('#info_show').text('不是合法的邮件地址，请重新输入!');
 						setTimeout( "$('#info_show').text('');", 3000 );
 					}
-						
-/*					
-					$.post( 'my-php/login/login.php',{user:$('#user').val(),passwd:$('#passwd').val()}, function(data) {
-						//console.log( data );
-						if( data=='' | data=='NO' )
+
+					$.post( 'my-php/login/register_user.php',{user:$('#user').val(),passwd:$('#passwd1').val()}, function(data) {
+						if( data=='' | data=='NO' ) {
+							$('#info_show').text('此用户名已注册，请重新注册!');
+							setTimeout( "$('#info_show').text('');", 3000 );
 							return;
-						window.location.href= data;
+						}
+						else {
+							$('#info_show').text('请在30分钟内，通过邮件内的激活链接激活用户!');
+							setTimeout( "$('#info_show').text('');", 3000 );
+						}
 					} );
-*/
+
 				} );
 			} );
 

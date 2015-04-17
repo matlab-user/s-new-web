@@ -7,12 +7,12 @@
 	$mysql_user = $config->user;
 	$mysql_pass = $config->pass;
 	$domain = $config->domain;
-	
+
 	$frommail = 'swaylink@cdsway.com';
 //	$domain = '192.168.31.21';
 	
-	$_POST['user'] = 'free-bug@163.com';
-	$_POST['passwd'] = 'wdh';
+//	$_POST['user'] = 'free-bug@163.com';
+//	$_POST['passwd'] = 'wdh';
 	if( !( isset($_POST['user']) & isset($_POST['passwd']) ) )
 		exit;
 	
@@ -22,12 +22,13 @@
 	if( empty($sql_con) )
 		exit;
 	
+	$_POST['user'] = mysql_real_escape_string( $_POST['user'] );	
 	$query_str = "SET @UID='';";
 	mysql_unbuffered_query( $query_str, $sql_con );
 	
 	$query_str = "CALL add_user_3( @UID, '".$_POST['user']."', '', '".$_POST['passwd']."', ".time()." )";
 	mysql_unbuffered_query( $query_str, $sql_con );
-	
+
 	$res = mysql_query( "SELECT @UID;", $sql_con );
 	while( $row=mysql_fetch_array($res) ) {
 		if( $row[0]=='' )
@@ -42,6 +43,8 @@
 		echo $sig;
 		return;
 	}
+	else
+		echo 'OK';
 
 //----------------------------------------------------------------------------
 	$line = array();

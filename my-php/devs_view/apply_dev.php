@@ -1,8 +1,8 @@
 <?php
 	session_start();
 	
-	$_SESSION['uid'] = '12345678';
-	$_SESSION['dnum'] = 5;
+//	$_SESSION['user'] = '12345678';
+//	$_SESSION['dnum'] = 5;
 	
 	if( !isset($_SESSION['uid']) | !isset($_SESSION['dnum']) )
 		exit;
@@ -19,7 +19,7 @@
 	
 	// 查询当前用户已经拥有多少台设备
 	$dev_num = 0;
-	$query_str = "SELECT COUNT(guid1) FROM dev_db.dev_table WHERE owner='".$_SESSION['uid']."'";
+	$query_str = "SELECT COUNT(guid1) FROM dev_db.dev_table WHERE owner='".$_SESSION['user']."'";
 	$res = mysql_query( $query_str, $sql_con );
 	while( $row=mysql_fetch_array($res) )
 		$dev_num = intval( $row[0] );
@@ -33,7 +33,7 @@
 	
 	$query_str = "SET @guid = ''";
 	mysql_unbuffered_query( $query_str, $sql_con );
-	$query_str = "CALL apply_dev_guid(8,'".$_SESSION['uid']."',@guid)";
+	$query_str = "CALL apply_dev_guid(8,'".$_SESSION['user']."',@guid)";
 	mysql_unbuffered_query( $query_str, $sql_con );
 	
 	$query_str = 'SELECT @guid';

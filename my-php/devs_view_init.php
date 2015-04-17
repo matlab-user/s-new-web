@@ -1,4 +1,5 @@
 <?php
+	session_start();
 /*
 	<xml>
 		<dev>
@@ -19,6 +20,11 @@
 	$mysql_user = $config->user;
 	$mysql_pass = $config->pass;
 	
+	if( !isset($_SESSION['user']) ) {
+		echo '';
+		return;
+	}
+	
 	$con = mysql_connect( "localhost", $mysql_user, $mysql_pass );
 	if ( !$con )
 		die( 'Could not connect: ' . mysql_error() );
@@ -27,7 +33,7 @@
 	
 	$xml = '<xml>';
 	
-	$res1 = mysql_query( "SELECT DISTINCT guid1,state,name,timezone FROM dev_db.dev_table", $con );
+	$res1 = mysql_query( "SELECT DISTINCT guid1,state,name,timezone FROM dev_db.dev_table WHERE owner='".$_SESSION['user']."'", $con );
 	while( $row1 = mysql_fetch_array( $res1 ) ) {
 
 		$xml .= '<dev><g1>'.$row1[0].'</g1>';

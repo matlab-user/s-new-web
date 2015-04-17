@@ -1,10 +1,10 @@
 <?php
-	
+/*
 	$_POST['tz'] = 8;
-	$_POST['g1'] = 'demo-1';
+	$_POST['g1'] = 'hO4Mx9Yh';
 	$_POST['lt'] = 0;
 	$_POST['d_id'] = 1;
-
+*/
 	if( !(isset($_POST['tz']) && isset($_POST['d_id']) && isset($_POST['g1']) && isset($_POST['lt'])) )
 		exit;
 
