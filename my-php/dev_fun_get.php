@@ -14,7 +14,7 @@
 	mysql_query("SET NAMES 'utf8'", $con);
 	mysql_select_db( "dev_db", $con );
 	
-	$res = mysql_query( "SELECT fun_id, fun_name, remark, p_num, p1, p2, p3, p4, p1_name, p2_name, p3_name, p4_name, p1_remark, p2_remark, p3_remark, p4_remark FROM dev_fun WHERE m<>'m' AND dev_id='".$_POST['g1']."'", $con );
+	$res = mysql_query( "SELECT fun_id, fun_name, remark, p_num, p1, p2, p3, p4, p1_name, p2_name, p3_name, p4_name, p1_remark, p2_remark, p3_remark, p4_remark FROM dev_fun WHERE m<>'a' AND dev_id='".$_POST['g1']."'", $con );
 	if( empty($res) )
 		return '';
 /*

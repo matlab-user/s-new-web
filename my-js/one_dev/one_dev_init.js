@@ -224,7 +224,7 @@ function get_data_and_update_ui() {
 		} );	
 	} );
 	
-	setTimeout( "get_data_and_update_ui();",5000 );	
+	setTimeout( "get_data_and_update_ui();",3000 );	
 }
 
 // 根据 参数id 值d_id， 在dev.data 中找到其 index

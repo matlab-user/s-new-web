@@ -72,7 +72,7 @@
 			mysql_free_result( $res2 );
 			*/
 			
-			if( strpos($unit,'file') ) {
+			if( strpos($unit,'file')!==FALSE ) {
 				if( $t==0 ) 
 					$sql_str = "SELECT bin_d, time FROM data_db.real_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id;
 				else

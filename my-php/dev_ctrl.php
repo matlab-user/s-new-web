@@ -2,8 +2,10 @@
 // $_POST['cmd'] - 控制指令，字符串
 // 指令形式为：[dev1_guid,(op1,p1,p2…)]
 	
-	$_POST['g1'] = '1982011602030410182910a1F2C3D02A';
-	//$_POST['cmd'] = 'wdh';
+//	$_POST['g1'] = 'TFwqovfw';
+//	$_POST['cmd'] = 'wdh--------';
+
+	set_time_limit( 10 );
 	
 	if( !isset($_POST['g1']) )
 		exit;
@@ -37,18 +39,29 @@
 	
 //-----------------------------------------------------------------------------------------------
 	$sock = socket_create( AF_INET, SOCK_STREAM, 0 );
-	socket_set_option( $sock, SOL_SOCKET, SO_RCVTIMEO, array("sec"=>3, "usec"=>0 ) );
-	socket_set_option( $sock, SOL_SOCKET, SO_SNDTIMEO, array("sec"=>3, "usec"=>0 ) );
+	socket_set_option( $sock, SOL_SOCKET, SO_RCVTIMEO, array("sec"=>10, "usec"=>0 ) );
+	socket_set_option( $sock, SOL_SOCKET, SO_SNDTIMEO, array("sec"=>4, "usec"=>0 ) );
 	socket_set_option( $sock, SOL_SOCKET, SO_REUSEADDR, 1 );
 	
-	socket_bind( $sock, $l_ip, $l_port );       		// 绑定客户端连接时，服务器的 ip、port
-	socket_connect( $sock, $r_ip, $r_port );
+	try {
+		socket_bind( $sock, $l_ip, $l_port );       		// 绑定客户端连接时，服务器的 ip、port
+		socket_connect( $sock, $r_ip, $r_port );
+	} catch (Exception $e) {
+		//echo 'Caught exception: ',  $e->getMessage(), "\n";
+		echo "NO";
+		exit;
+	}
 	//echo "send message!\n";
 	//$buff = "wangdehi\r\n";
-	//sleep( 1 );
+	sleep( 1 );						//matlab程序时，需要设置等待
+	
 	$buff = $_POST['cmd'];
 	$res = socket_write( $sock, $buff, strlen($buff) );
-	echo $res."\n";
+	if( $res===FALSE )
+		echo "NO";
+	else
+		echo "OK";
+			
 	socket_close( $sock );
 
 ?>
