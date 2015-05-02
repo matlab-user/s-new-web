@@ -5,11 +5,18 @@
 		
 		var sig = data_info_xml_parser( data );
 		if (sig==true) {
-			// 如果参数多于7个，则分2个更新栏显示最新数据
-			var d_index = add_data_info( 0 );
-			if ( d_index>0 )
-				add_data_info( d_index );
 			
+			var data_num = dev.data.length;
+			
+			if( data_num<=14 ) {
+				// 如果参数多于7个，则分2个更新栏显示最新数据
+				var d_index = add_data_info( 0 );
+				if ( d_index>0 )
+					add_data_info( d_index );
+			}
+			else
+				add_data_info_in_zone( );
+		
 			// 添加各参数视图
 			$.each( dev.data, function(i,v) {
 				dev.data[i].lt = 0;

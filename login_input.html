@@ -55,6 +55,12 @@
 						window.location.href= data;
 					} );
 				} );
+				
+				$('body').keydown( function(e) {
+					if( e.keyCode==13 )
+						$('a.b').click();
+				} );
+				
 			} );
 
 		</script>

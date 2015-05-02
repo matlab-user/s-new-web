@@ -34,7 +34,6 @@
 */
 
 var dev = new Object();
-dev.data = new Array();
 /*
 dev.name = '我的设备1';
 dev.model = 'swaytech-1';
@@ -44,6 +43,38 @@ dev.lt = 0;
 dev.maker = 'swaytech';
 dev.lo = '104.06<sup>。</sup>';
 dev.la = '30.67<sup>。</sup>';
+*/
+
+dev.data = new Array();
+/*
+var mid = new Object();
+mid.name = '污水'
+dev.data[0] = mid;
+dev.data[1] = mid;
+dev.data[2] = mid;
+dev.data[3] = mid;
+dev.data[4] = mid;
+dev.data[5] = mid;
+dev.data[6] = mid;
+dev.data[7] = mid;
+dev.data[8] = mid;
+dev.data[9] = mid;
+dev.data[10] = mid;
+dev.data[11] = mid;
+dev.data[12] = mid;
+dev.data[13] = mid;
+dev.data[14] = mid;
+dev.data[15] = mid;
+dev.data[16] = mid;
+dev.data[17] = mid;
+dev.data[18] = mid;
+dev.data[19] = mid;
+dev.data[20] = mid;
+dev.data[21] = mid;
+dev.data[22] = mid;
+dev.data[23] = mid;
+dev.data[24] = mid;
+dev.data[25] = mid;
 */
 var op = new Array();
 /*
@@ -64,6 +95,7 @@ op[1].p_num = 0;
 // dev_i - 待添加设备在 devs 数组中的索引
 function add_dev_info() {
 	var main = $('#dev_info');
+	main.width( $('body').width()-40 );
 	
 	var li = $('<li class="dev_info_li"></li>');
 	var table = $("<table><caption class='title'>设备信息</caption><tbody></tbody></table>");
@@ -129,6 +161,47 @@ function add_data_info( d_i_s ) {
 	main.append( li );
 	
 	return d_index;
+}
+
+// 当设备参数大于 14 个时，建立专门的 data_info zone 显示数据最新信息
+function add_data_info_in_zone( ) {
+	
+	var p_num = dev.data.length;
+	var f_num = Math.ceil( p_num/2 ) - 1 ;
+	
+	var main = $('#dev_info');
+	main.css( 'margin-bottom', 0 );
+	var zone = $( "<ul class='modules' id='data_info_zone' style='padding:20px;background:#a0a0a0'></ul>" );
+	zone.width( $('body').width()-40 );
+	main.after( zone );
+
+	var li_width = ( zone.width()-20 ) / 2;
+	var li_height = 24 * (f_num+2) + f_num*4;
+	
+	var li_1 = $('<li class="data_info_li"></li>');
+	li_1.css( {'width':li_width+'px','margin':'0 10px 0 0', 'height':li_height+'px'} );
+	var table_1 = $("<table><caption class='title'>数据最新更新</caption><tbody></tbody></table>");
+	li_1.append( table_1 );
+	table_1 = table_1.children('tbody');
+	zone.append( li_1 );
+	
+	var li_2 = $('<li class="data_info_li"></li>');
+	li_2.css( {'width':li_width+'px','margin':'0 0 0 10px', 'height':li_height+'px'} );
+	var table_2 = $("<table style='margin:10px 0'><tbody></tbody></table>");
+	li_2.append( table_2 );
+	table_2 = table_2.children('tbody');
+	zone.append( li_2 );
+	
+	$.each( dev.data, function(i,v) {
+		var tr = $('<tr></tr>');			//  后续时需要修改此代码
+		if( i<f_num )
+			table_1.append( tr );	
+		else
+			table_2.append( tr );
+		
+		var ths = $('<th width="35%">'+dev.data[i].name+'</th><th id="'+i+'_data_info_v" width="25%">no data</th><th id="'+i+'_data_info_t" width="40%">2014-12-19 12:45:20</th>');
+		tr.append( ths );	
+	} );
 }
 
 function info_xml_parser( responseTxt ) {
@@ -273,7 +346,9 @@ function tab_main_show() {
 	// add dev_info_li and data_info_li		
 	add_dev_info();
 	$('#dev_info').outerWidth( $('body').width() );
+	
 	data_info_get_and_add_views_update();
+	//add_data_info_in_zone();
 }
 
 function tab_set_show() {
