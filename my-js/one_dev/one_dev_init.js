@@ -164,7 +164,7 @@ function add_data_info( d_i_s ) {
 }
 
 // 当设备参数大于 14 个时，建立专门的 data_info zone 显示数据最新信息
-function add_data_info_in_zone( ) {
+function add_data_info_in_zone() {
 	
 	var p_num = dev.data.length;
 	var f_num = Math.ceil( p_num/2 ) - 1 ;
@@ -297,7 +297,7 @@ function get_data_and_update_ui() {
 		} );	
 	} );
 	
-	setTimeout( "get_data_and_update_ui();",3000 );	
+	setTimeout( "get_data_and_update_ui();",5000 );	
 }
 
 // 根据 参数id 值d_id， 在dev.data 中找到其 index
@@ -348,7 +348,6 @@ function tab_main_show() {
 	$('#dev_info').outerWidth( $('body').width() );
 	
 	data_info_get_and_add_views_update();
-	//add_data_info_in_zone();
 }
 
 function tab_set_show() {

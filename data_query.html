@@ -1,0 +1,85 @@
+<html>
+
+    <head>
+		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>实唯物联</title>
+		
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
+		<script src="js-lib/jquery-2.1.1.min.js"></script>
+		<script src="js-lib/ichart.1.2.min.js"></script>
+		
+		<style type='text/css'>
+			#canvasDiv{}
+		</style>
+		
+		<script>
+			$( function() {
+				var data = [
+							{
+								name : '北京',
+								value:[-9,1,12,20,26,30,32,29,22,12,0,-6],
+								color:'#1f7e92',
+								line_width:2
+							}
+					   ];
+				   
+				var chart = new iChart.Area2D( {
+						render : 'canvasDiv',
+						data: data,
+						title : '北京2012年平均温度情况',
+						width : 1300,
+						height : 400,
+						coordinate: {height:'90%',width:'90%',background_color:'#edf8fa'},
+						sub_option: {
+							hollow_inside:false,//设置一个点的亮色在外环的效果
+							point_size:10
+						},
+						labels: ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+				} );
+				
+				chart.draw();
+			} );
+		</script>	
+	
+	</head>
+	
+	<body style="min-width:1349px;overflow-x:hidden">
+	
+		<header class="header">
+            <img class='logo' height=50 src='image/login/swaytech.png' />
+
+            <ul class="nav">
+                <li><a href="devs_view.html">监控中心</a></li>
+                <li><a href="user.php">个人资料</a></li>
+            </ul>
+
+            <ul class="nav right">
+                <li id='user_name'>User.Name</li>
+                <li><a href="login.html" class="login-out">注销</a></li>
+            </ul>
+        </header>
+		
+		<div class="adminbar">
+			<p class="title">
+				<a  href="javascript:void(0)" onClick="change_tab('main');"><strong>我的设备－AC001</strong></a>
+			</p>
+
+			<ul class="nav admin">
+				<!--<li><a class="operation-control" href="javascript:void(0)" onClick="change_tab('control');">设备控制</a></li>-->
+				<!--<li><a class="operation-setting" href="javascript:void(0)" onClick="change_tab('set');">设备信息</a></li>-->
+				<!--<li><a class="operation-data" href="javascript:void(0)" onClick="change_tab('record');">操作记录</a></li>-->
+			</ul>
+
+			<ul class="button">
+				<li><button class="refresh" onclick="refresh()">刷新</button></li>
+			</ul>
+		</div>
+		
+		<div id='tab_main'>
+			<div id='canvasDiv' ></div>
+		</div>
+		
+	</body>
+	
+</html>	

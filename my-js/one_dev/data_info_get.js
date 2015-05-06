@@ -15,7 +15,7 @@
 					add_data_info( d_index );
 			}
 			else
-				add_data_info_in_zone( );
+				add_data_info_in_zone();
 		
 			// 添加各参数视图
 			$.each( dev.data, function(i,v) {
@@ -34,7 +34,10 @@
 						else {
 							dev.data[i].update_fun = function() {
 								var index = get_index( this.d_id );
-								$('#'+index+'_data_info_v').html( this.new_v+' '+this.unit );
+								if( this.unit=='sys/null' )
+									$('#'+index+'_data_info_v').html( this.new_v+' ' );
+								else
+									$('#'+index+'_data_info_v').html( this.new_v+' '+this.unit );
 								$('#'+index+'_data_info_t').text( formatDate( this.new_t+dev.tz*3600) );
 								dev.data[index].lt = this.new_t;
 							};	

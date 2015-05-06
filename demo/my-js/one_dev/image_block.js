@@ -15,21 +15,21 @@ function add_image_view( d_i ) {
 	dev.data[d_i].real_w = 0;
 	
 	dev.data[d_i].update_fun = function() {
-		
-		var new_img = $( "<img>" );
+
+		var new_img = $( "<img />" );
 		var main = this.plot.find('img');
-		var real_h = this.real_h, real_w = this.real_w;
 		var new_src = '';
-		
+				
+		var get_t = 0;
 		if( $.type(this.new_v)=='array' ) {
 			new_src = this.new_v[0];
-			var get_t = this.new_t[0];
+			get_t = this.new_t[0];
 		}
 		else {
 			new_src = this.new_v;
-			var get_t = this.new_t;
+			get_t = this.new_t;
 		}
-			
+		
 		if( main.attr('src')==new_src )
 			return;
 		
@@ -40,11 +40,11 @@ function add_image_view( d_i ) {
 		var index = get_index( this.d_id );
 		$('#'+index+'_data_info_v').html( 'image' );
 		$('#'+index+'_data_info_t').text( formatDate( get_t+dev.tz*3600) );
-									
+		
 		new_img.load( function() {
-			
-			real_w = $(this).width();
-			real_w = $(this).height();
+								
+			dev.data[d_i].real_w = this.width;
+			dev.data[d_i].real_h = this.height;
 			
 			main.animate( {opacity:0}, 800, function() {
 				this.src = new_img.attr( 'src' );
@@ -55,6 +55,7 @@ function add_image_view( d_i ) {
 					time.text( t.getUTCFullYear()+'.'+(t.getUTCMonth()+1)+'.'+t.getUTCDate()+" "+t.getUTCHours()+':'+t.getUTCMinutes()+':'+t.getSeconds() );
 				} );	
 			} );	
+			
 		});	
 	};
 	
@@ -64,7 +65,7 @@ function add_image_view( d_i ) {
 		var d_i = parseInt( this.id );			// 参数的索引
 
 		if( div.length<=0 ) {
-			$('body').append( $('<div id="float_img_div" style="padding:0px;margin:0px;"></div>') );
+			$('body').append( $("<div id='float_img_div' style='padding:0px;margin:0px;'><img style='width:100%;height:100%;'/></div>") );
 			div = $('#float_img_div');
 			div.css( {'position':'absolute','background':'rgba(255,255,255,0.8)','border-radius':'2px'} );
 		}
@@ -72,6 +73,8 @@ function add_image_view( d_i ) {
 		// use the image real size
 		div.width( dev.data[d_i].real_w );
 		div.height( dev.data[d_i].real_h );
+		
+		div.find('img').attr( 'src', dev.data[d_i].new_v );
 		
 		var pos_x = e.pageX + div.width(), 
 			pos_y = e.pageY - div.height();
@@ -85,7 +88,7 @@ function add_image_view( d_i ) {
 			pos_y = 10;
 				
 		div.css( {'top':pos_y,'left':pos_x} );
-		div.show();
+		div.show(0);
 		
 		//dev.data[d_i].update_fun();
 		

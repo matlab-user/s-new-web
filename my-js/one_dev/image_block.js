@@ -16,9 +16,8 @@ function add_image_view( d_i ) {
 	
 	dev.data[d_i].update_fun = function() {
 
-		var new_img = $( "<img>" );
+		var new_img = $( "<img />" );
 		var main = this.plot.find('img');
-		var real_h = this.real_h, real_w = this.real_w;
 		var new_src = '';
 				
 		var get_t = 0;
@@ -43,10 +42,10 @@ function add_image_view( d_i ) {
 		$('#'+index+'_data_info_t').text( formatDate( get_t+dev.tz*3600) );
 		
 		new_img.load( function() {
+								
+			dev.data[d_i].real_w = this.width;
+			dev.data[d_i].real_h = this.height;
 			
-			real_w = $(this).width();
-			real_w = $(this).height();
-					
 			main.animate( {opacity:0}, 800, function() {
 				this.src = new_img.attr( 'src' );
 				$(this).animate( {opacity:1},800, function() {
@@ -66,7 +65,7 @@ function add_image_view( d_i ) {
 		var d_i = parseInt( this.id );			// 参数的索引
 
 		if( div.length<=0 ) {
-			$('body').append( $('<div id="float_img_div" style="padding:0px;margin:0px;"></div>') );
+			$('body').append( $("<div id='float_img_div' style='padding:0px;margin:0px;'><img style='width:100%;height:100%;'/></div>") );
 			div = $('#float_img_div');
 			div.css( {'position':'absolute','background':'rgba(255,255,255,0.8)','border-radius':'2px'} );
 		}
@@ -74,6 +73,8 @@ function add_image_view( d_i ) {
 		// use the image real size
 		div.width( dev.data[d_i].real_w );
 		div.height( dev.data[d_i].real_h );
+		
+		div.find('img').attr( 'src', dev.data[d_i].new_v );
 		
 		var pos_x = e.pageX + div.width(), 
 			pos_y = e.pageY - div.height();

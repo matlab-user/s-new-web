@@ -121,7 +121,10 @@ function add_flot_view( d_i ) {
 			plot.draw();
 			
 			var d_i = get_index( this.d_id );
-			$('#'+d_i+'_data_info_v').html( this.new_v[0].toFixed(2)+' '+this.unit );
+			if( this.unit=='sys/null' )
+				$('#'+d_i+'_data_info_v').html( this.new_v[0].toFixed(2)+' ' );
+			else
+				$('#'+d_i+'_data_info_v').html( this.new_v[0].toFixed(2)+' '+this.unit );
 			$('#'+d_i+'_data_info_t').text( formatDate( this.new_t[0]+dev.tz*3600) );
 			
 			dev.data[d_i].lt = this.new_t[0];
@@ -136,7 +139,7 @@ function add_flot_view( d_i ) {
 function add_flot_holder( d_i ) {
 	
 	var div_id = d_i+'_flot_holder';		// 需要修改
-	var main = $('ul.modules');
+	var main = $('#flot_zone');
 	
 	var li = $('<li class="module"><p class="title">'+dev.data[d_i].name+'</p></li>');
 	main.append( li );
