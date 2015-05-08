@@ -2,11 +2,11 @@
 function add_image_view( d_i ) {
 	
 	var main = $('#new_img');
-	main.append( $('<li id="'+d_i+'_img"><div class="img"><img/><time></time></div></li>') );
+	main.append( $('<li id="'+d_i+'_img"><div class="img"><img/><p></p></div></li>') );
 	var img = main.find('#'+d_i+'_img').find('img');
-	var time = main.find('#'+d_i+'_img').find('time');
+	var time = main.find('#'+d_i+'_img').find('p');
 	
-	img.attr( 'src',"http://img.newtheme.cn/www/2014/09/tao2014-thumb.jpg" );
+	img.attr( 'src',"image/default.jpg" );
 	time.text( '2014.12.10 22:44:10' );
 	
 	dev.data[d_i].plot = main.find('#'+d_i+'_img');
