@@ -7,38 +7,25 @@
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
 		<script src="js-lib/jquery-2.1.1.min.js"></script>
-		<script src="js-lib/ichart.1.2.min.js"></script>
+		<script src="js-lib/jquery.flot.0.8.3.min.js"></script>
+		<script src="js-lib/jquery.flot.0.8.3.time.min.js"></script>
+		<script src="my-js/data_query/data_query.js"></script>
 		
 		<style type='text/css'>
-			#canvasDiv{}
+			#plot_div{border-style:none;width:100%;height:300px;}
+			#input_div{padding:12px 0;width:100%;height:32px;margin:10px 0;background:#e0e0e0}
+			select, input{height:100%;margin:0 20px;padding:0 10px;}
+			#dev_sel{width:320px}
+			#did_sel{width:240px}
+			#t1_input,#t2_input{width:128px}
+			#box{height:13px;}
+			#show{margin-left:90px;width:80px;height:30px;background:#fefefe;}
+			#show:hover{background:#eee;}
 		</style>
 		
 		<script>
 			$( function() {
-				var data = [
-							{
-								name : '北京',
-								value:[-9,1,12,20,26,30,32,29,22,12,0,-6],
-								color:'#1f7e92',
-								line_width:2
-							}
-					   ];
-				   
-				var chart = new iChart.Area2D( {
-						render : 'canvasDiv',
-						data: data,
-						title : '北京2012年平均温度情况',
-						width : 1300,
-						height : 400,
-						coordinate: {height:'90%',width:'90%',background_color:'#edf8fa'},
-						sub_option: {
-							hollow_inside:false,//设置一个点的亮色在外环的效果
-							point_size:10
-						},
-						labels: ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
-				} );
-				
-				chart.draw();
+				data_query_init();
 			} );
 		</script>	
 	
@@ -60,15 +47,14 @@
             </ul>
         </header>
 		
-		<div class="adminbar">
-			<p class="title">
-				<a  href="javascript:void(0)" onClick="change_tab('main');"><strong>我的设备－AC001</strong></a>
+		<div class='adminbar'>
+			<p class='title'>
+				<a class='title' href="javascript:void(0)" onClick=""><strong>我的设备－AC001</strong></a>
 			</p>
 
 			<ul class="nav admin">
-				<!--<li><a class="operation-control" href="javascript:void(0)" onClick="change_tab('control');">设备控制</a></li>-->
-				<!--<li><a class="operation-setting" href="javascript:void(0)" onClick="change_tab('set');">设备信息</a></li>-->
-				<!--<li><a class="operation-data" href="javascript:void(0)" onClick="change_tab('record');">操作记录</a></li>-->
+				<li><a class="operation-control" href="javascript:void(0)" onClick="change_tab('control');">设备控制</a></li>
+				<li><a class="operation-setting" href="javascript:void(0)" onClick="change_tab('set');">设备信息</a></li>
 			</ul>
 
 			<ul class="button">
@@ -76,9 +62,19 @@
 			</ul>
 		</div>
 		
-		<div id='tab_main'>
-			<div id='canvasDiv' ></div>
+		<div id='plot_div'></div>
+		
+		<div id='input_div'>
+			<select id='dev_sel'></select>
+			<select id='did_sel'></select>
+			<input id='t1_input' type='text' />
+			--
+			<input id='t2_input' type='text' />
+			<span id='append_box' style='height:32px;font-size:16px;'>追加<input id='box' type='checkbox'></span>
+			<button id='show' type='button' >查询</button>
 		</div>
+		
+		<ul id='ul_list' style='height:300px;width:100%;vertical-align:middle;text-align:center;font-size:16px;'></ul>
 		
 	</body>
 	
