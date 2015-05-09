@@ -1,5 +1,23 @@
+var flot_color = new Array();
+flot_color[0] = '#0011FF';
+flot_color[1] = '#FF0000';
+flot_color[2] = '#00AA00';
+flot_color[3] = '#00AAFF';
+flot_color[4] = '#FFDD00';
+flot_color[5] = '#00DDFF';
+flot_color[6] = '#FF33FF';
+flot_color[7] = '#EE4400';
+flot_color[8] = '#9933FF';
+flot_color[9] = '#551166';
+flot_color[10] = '#FF0055';
+flot_color[11] = '#000000';
+flot_color[12] = '#001133';
+flot_color[13] = '#003311';
+
 var dev = new Array();
 var cur_dev_index = -1;			// 记录当前选中的设备在 dev 中的索引值
+var flot_data = new Array();
+var plot = '';
 
 function data_query_init() {
 	
@@ -56,7 +74,7 @@ function data_query_init() {
 		}
 	};
 	
-	var plot = $.plot( plot_div, [], options );
+	plot = $.plot( plot_div, [], options );
 	
 	var d = new Date();
 	var now_day = d.getDate();
@@ -124,14 +142,86 @@ function data_query_init() {
 		t2_text = pro_time_str( t2_text );	
 		
 		var dev_id = dev[cur_dev_index].g1;
-		var d_id = $('#did_sel').val();
-		console.log(dev_id+'---'+d_id);
+		var did_sel = $('#did_sel');
+		var d_id = did_sel.val();
+		var d_name = did_sel.find('option:selected').text();
 		
 		var d = new Date( t1_text );
 		var t1 = d.getTime()/1000;
 		
 		var d = new Date( t2_text );
 		var t2 = d.getTime()/1000+24*3600;
+		
+		var if_add = $('#box')[0].checked;
+		var c = flot_color[Math.ceil(Math.random()*30)%14];
+		
+		var table_list = $('#line_list tbody');
+		
+		$.post( 'my-php/data_query/data_query.php', {'t0':t1,'t1':t2,'g1':dev_id,'d_id':d_id}, function(data) {
+
+			data_xml_parser( data ); 
+			var s_index = -1;			//  记录数据在 plot.getData() 返回结构中的索引号
+			
+			if( flot_data.length>0 ) {
+				
+				if( if_add==true ) {	// 追加数据
+					var dataset = plot.getData();
+					if( dataset.length<=0 ) {
+						dataset = new Array();
+						dataset[0] = new Object();
+						dataset[0].data = flot_data;
+						dataset[0].color = c;
+						dataset[0].label = d_name;
+						s_index = 0;
+					}
+					else {
+						var mid = new Object();
+						mid.data = flot_data;
+						mid.color = c;
+						mid.label = d_name;
+						dataset.push( mid );
+						s_index = dataset.length-1;
+					}
+				}
+				else {
+					dataset = new Array();
+					dataset[0] = new Object();
+					dataset[0].data = flot_data;
+					dataset[0].color = c;	
+					dataset[0].label = d_name;	
+					s_index = 0;
+					
+					table_list.find('tr').remove();
+				}
+				
+				flot_data = [];
+				
+				options.xaxes[0].min = null;
+				options.xaxes[0].max = null;
+				delete( plot );
+				plot = $.plot( '#plot_div', dataset, options );
+				
+				var tr = $('<tr></tr>');
+				table_list.append( tr );
+				tr.append( $('<td>'+dev[cur_dev_index].name+'</td>') );
+				tr.append( $('<td>'+d_name+'</td>') );
+				tr.append( $('<td>'+t1_text+' 0:0:0 - '+t2_text+' 23:59:59 </td>') );
+				tr.append( $('<td><div style="width:30px;height:30px;margin:10px;background:'+c+'"></div></td>') );
+				var button = $("<button class='button_1' type='button' style='border:1px solid black' >删除</button>");
+				button.attr( 's_index', s_index );
+				tr.append( $("<td></td>").append(button) );
+				
+				button.click( function() {
+					var s_index = $(this).attr('s_index');
+					var dataset = plot.getData();
+					dataset[s_index] = [];
+					delete( plot );
+					plot = $.plot( '#plot_div', dataset, options );
+					$(this).parent().parent().remove();	
+				} );
+				
+			}
+		} );
 		
 	} );
 }
@@ -197,4 +287,41 @@ function pro_time_str( t_str ) {
 		str_a[2] = '0' + str_a[2]; 
 	
 	return str_a.join('-');
+}
+
+// 返回更新参数在 dev.data 中的 index
+function data_xml_parser( responseTxt ) {
+			
+	var xml = $(responseTxt);
+	if ( xml.length<=0 )
+		return -1;
+	
+	var ds = xml.find('d');
+	if( ds.length<=0 )
+		return -1;
+	
+	var res= -1;
+	
+	$.each( ds, function(i,value) {
+		var v = $(value);
+		
+		var b_t = v.children('base_t').text();
+		if( b_t==='' )
+				b_t = 0;
+		else
+			b_t = b_t * 1;
+
+		var vs = v.children('v');
+		var v = 0, t = 0;
+		
+		$.each( vs, function(i,value) {
+			var tv = $(value);
+			v = tv.text()*1;
+			t = b_t + tv.attr('t')*1;
+			flot_data.push( [ t*1000, v ] );
+		} );
+		
+	} );
+	
+	return res;
 }

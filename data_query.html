@@ -13,14 +13,14 @@
 		
 		<style type='text/css'>
 			#plot_div{border-style:none;width:100%;height:300px;}
-			#input_div{padding:12px 0;width:100%;height:32px;margin:10px 0;background:#e0e0e0}
+			#input_div{padding:12px 0;width:100%;height:32px;margin:10px 0 0 0;background:#e0e0e0}
 			select, input{height:100%;margin:0 20px;padding:0 10px;}
 			#dev_sel{width:320px}
 			#did_sel{width:240px}
 			#t1_input,#t2_input{width:160px}
 			#box{height:13px;}
-			#show{margin-left:90px;width:80px;height:30px;background:#fefefe;}
-			#show:hover{background:#eee;}
+			.button_1{margin-left:90px;width:80px;height:30px;background:#fefefe;}
+			.button_1:hover{background:#eee;}
 		</style>
 		
 		<script>
@@ -31,7 +31,7 @@
 	
 	</head>
 	
-	<body style="min-width:1349px;overflow-x:hidden">
+	<body style="min-width:1349px;min-height:768px;overflow-x:hidden">
 	
 		<header class="header">
             <img class='logo' height=50 src='image/login/swaytech.png' />
@@ -70,12 +70,12 @@
 			<input id='t1_input' type='text' />
 			--
 			<input id='t2_input' type='text' />
-			<span id='append_box' style='height:32px;font-size:16px;'>追加<input id='box' type='checkbox'></span>
-			<button id='show' type='button' >查询</button>
+			<span id='append_box' style='height:32px;font-size:16px;'>追加<input id='box' type='checkbox'/></span>
+			<button id='show' class='button_1' type='button' >查询</button>
 		</div>
 		
-		<ul id='ul_list' style='height:300px;width:100%;vertical-align:middle;text-align:center;font-size:16px;'></ul>
-		
+		<table id='line_list' class="default devs_table"><tbody></tbody></table>
+			
 	</body>
 	
 </html>	
