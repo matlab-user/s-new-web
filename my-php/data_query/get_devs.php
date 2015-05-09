@@ -12,7 +12,7 @@
 	
 	$_SESSION['user'] = 'free-bug@163.com';
 	
-	if( !isset($_SESSION['user'] )
+	if( !isset($_SESSION['user']) )
 		exit;
 		
 	require_once( "../php-lib/codec_lib.php" );

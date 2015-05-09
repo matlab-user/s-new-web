@@ -1,5 +1,5 @@
 var dev = new Array();
-
+var cur_dev_index = -1;			// 记录当前选中的设备在 dev 中的索引值
 
 function data_query_init() {
 	
@@ -72,37 +72,68 @@ function data_query_init() {
 	$.post( 'my-php/data_query/get_devs.php',function( data ) {
 		
 		if( devs_xml_parser(data) ) {
-			
+			cur_dev_index = 0;
 			$.each( dev, function(i,value) {
 				dev_sel.append( $("<option value='"+value.g1+"'>"+value.name+"</option>") );		
 			} );
-			
-			console.log( dev_sel.val() );
-/*
+
 			$.post( 'my-php/data_query/get_ps.php', {'g1':dev_sel.val()}, function( data ) {
-				
-				
+				if( ps_xml_parser(data) ) {
+					$.each( dev[cur_dev_index].ps, function(i,value) {
+						did_sel.append( $("<option value='"+value.d_id+"'>"+value.name+"</option>") );		
+					} );		
+				}
 			} );
-*/
 		}	
-		
 	} );
 
-/*
-	did_sel.append( $("<option value='0'>Text1</option>") );
-	did_sel.append( $("<option value='1'>Text2</option>") );
-*/
-
 	dev_sel.change( function() {
-		console.log('wwwwwwww');
+		
+		var dev_id = $(this).val();
+		cur_dev_index = get_index( dev_id );
+		
+		var did_sel = $('#did_sel');
+		did_sel.find('option').remove();
+		
+		if( !dev[cur_dev_index].ps ) {
+			$.post( 'my-php/data_query/get_ps.php', {'g1':dev_sel.val()}, function( data ) {
+				if( ps_xml_parser(data) ) {
+					$.each( dev[cur_dev_index].ps, function(i,value) {
+						did_sel.append( $("<option value='"+value.d_id+"'>"+value.name+"</option>") );		
+					} );		
+				}
+			} );
+		}
+		else {
+			$.each( dev[cur_dev_index].ps, function(i,value) {
+				did_sel.append( $("<option value='"+value.d_id+"'>"+value.name+"</option>") );		
+			} );		
+		}
 		
 	} );
 	
 	did_sel.change( function() {
-		console.log('aaaaaaa');
-		
 	} );
 
+	$('#show').click( function() {
+		
+		var t1_text = $('#t1_input').val();
+		var t2_text = $('#t2_input').val();
+		
+		t1_text = pro_time_str( t1_text );
+		t2_text = pro_time_str( t2_text );	
+		
+		var dev_id = dev[cur_dev_index].g1;
+		var d_id = $('#did_sel').val();
+		console.log(dev_id+'---'+d_id);
+		
+		var d = new Date( t1_text );
+		var t1 = d.getTime()/1000;
+		
+		var d = new Date( t2_text );
+		var t2 = d.getTime()/1000+24*3600;
+		
+	} );
 }
 
 function devs_xml_parser( responseTxt ) {
@@ -120,4 +151,50 @@ function devs_xml_parser( responseTxt ) {
 	} );
 
 	return true;
+}
+
+function ps_xml_parser( responseTxt ) {
+			
+	var xml = $(responseTxt);
+	if ( xml.length<=0 || cur_dev_index<0 )
+		return false;
+	
+	var ds = xml.find('p');
+	dev[cur_dev_index].ps = new Array();
+	$.each( ds, function(i,value) {
+		var v = $(value);
+		dev[cur_dev_index].ps[i] = new Object();
+		dev[cur_dev_index].ps[i].d_id = v.attr( 'i' );
+		dev[cur_dev_index].ps[i].name = v.html();
+	} );
+
+	return true;
+}
+
+function get_index( value ) {
+	var index = -1;
+	$.each( dev, function(i,v) {
+		if( v.g1===value ) {
+			index = i;
+			return false;
+		}
+	} );
+	return index;
+}
+
+// 返回 YYYY-MM-DD 格式的字符串
+function pro_time_str( t_str ) {
+	var str_a = new Array();
+	str_a = t_str.split('-');
+
+	if( str_a.length<3 )
+		return '';
+		
+	if( (str_a[1]*1)<10 && str_a[1].length<2 )
+		str_a[1] = '0' + str_a[1]; 
+	
+	if( (str_a[2]*1)<10 && str_a[2].length<2 )
+		str_a[2] = '0' + str_a[2]; 
+	
+	return str_a.join('-');
 }
