@@ -13,15 +13,18 @@ flot_color[10] = '#FF0055';
 flot_color[11] = '#000000';
 flot_color[12] = '#001133';
 flot_color[13] = '#003311';
-
+	
 var dev = new Array();
 var cur_dev_index = -1;			// 记录当前选中的设备在 dev 中的索引值
 var flot_data = new Array();
 var plot = '';
-
+var tz = 8;
+	
 function data_query_init() {
 	
-	var tz = 8;
+	$('#tooltip').hide();
+	
+
 	
 	var plot_div = $('#plot_div');
 	plot_div.height( plot_div.width()*0.26);
@@ -33,7 +36,7 @@ function data_query_init() {
 	var now_UTC_day = d.getUTCDate();
 	var now_UTC_month = d.getUTCMonth();
 	var now_UTC_year = d.getUTCFullYear();
-
+	
 	var options = {
 		series: { 
 			shadowSize: 0,
@@ -55,7 +58,7 @@ function data_query_init() {
 			{ 	show: true,
 				tickLength: 0,
 				mode: "time",
-				timeformat: "%H:%M",
+				timeformat: "%m/%d %H:%M",
 				minTickSize: [90, 'minute'],
 				min: Date.UTC(now_UTC_year,now_UTC_month,now_UTC_day,0,0),
 				max: Date.UTC(now_UTC_year,now_UTC_month,now_UTC_day,23,59)
@@ -75,6 +78,26 @@ function data_query_init() {
 	};
 	
 	plot = $.plot( plot_div, [], options );
+	
+	plot_div.bind( "plothover", function (event, pos, item) {
+
+		if (item) {
+			var x = item.datapoint[0],
+				y = item.datapoint[1].toFixed(2);
+			
+			var d = new Date( x );   
+			var month = d.getUTCMonth() + 1;
+			var day = d.getUTCDate();
+			var hour = d.getUTCHours();     
+			var minute = d.getUTCMinutes(); 
+			var date_str = month+'-'+day+' '+hour+':'+minute+':'+d.getUTCSeconds();
+			
+			$("#tooltip").html( 'x= ' + date_str + " y= " + y)
+				.css({top: item.pageY+5, left: item.pageX+5})
+				.fadeIn(200);
+		} else
+			$("#tooltip").hide();
+	});
 	
 	var d = new Date();
 	var now_day = d.getDate();
@@ -318,7 +341,7 @@ function data_xml_parser( responseTxt ) {
 			var tv = $(value);
 			v = tv.text()*1;
 			t = b_t + tv.attr('t')*1;
-			flot_data.push( [ t*1000, v ] );
+			flot_data.push( [ t*1000+8*3600000, v ] );
 		} );
 		
 	} );

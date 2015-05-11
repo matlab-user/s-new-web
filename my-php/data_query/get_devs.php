@@ -10,7 +10,7 @@
 
 	session_start();
 	
-	$_SESSION['user'] = 'free-bug@163.com';
+	//$_SESSION['user'] = 'free-bug@163.com';
 	
 	if( !isset($_SESSION['user']) )
 		exit;

@@ -9,8 +9,8 @@
 
 	session_start();
 	
-	$_SESSION['user'] = 'free-bug@163.com';
-	$_POST['g1'] = 'TFwqovfw';
+	//$_SESSION['user'] = 'free-bug@163.com';
+	//$_POST['g1'] = 'TFwqovfw';
 	
 	if( !isset($_SESSION['user']) || !isset($_POST['g1']) )
 		exit;

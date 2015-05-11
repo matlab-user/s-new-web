@@ -1,17 +1,16 @@
 <?php
 
+	session_start();	
+	
+	if( !isset($_SESSION['user']) )
+		exit;
+	
 	require_once( "../php-lib/codec_lib.php" );
 
 	$config = read_config( '../php-lib/config.cf' );
 	$mysql_user = $config->user;
 	$mysql_pass = $config->pass;
 	
-/*
-	$_POST['g1'] = '12091200160055';
-	$_POST['t0'] = 0;
-	$_POST['t1'] = 1430888983;
-	$_POST['d_id'] = 1;
-*/
 	if( !(isset($_POST['t0']) && isset($_POST['d_id']) && isset($_POST['g1']) && isset($_POST['t1'])) )
 		exit;
 

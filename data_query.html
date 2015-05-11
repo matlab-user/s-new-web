@@ -25,10 +25,20 @@
 		
 		<script>
 			$( function() {
-				data_query_init();
+			
+				var user = '';
+				
+				$.post( "my-php/get_user.php", function( data ) {
+					if( data=='' )
+						return;
+					user = data;
+					$('#user_name').html( user );
+				} );
+				
+				data_query_init();			
 			} );
 		</script>	
-	
+		
 	</head>
 	
 	<body style="min-width:1349px;min-height:768px;overflow-x:hidden">
@@ -75,7 +85,9 @@
 		</div>
 		
 		<table id='line_list' class="default devs_table"><tbody></tbody></table>
-			
+		
+		<div id="tooltip"></div>
+
 	</body>
 	
 </html>	

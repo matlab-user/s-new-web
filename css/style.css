@@ -98,7 +98,7 @@ ul#new_img li img{width:100%;display:block}
 #dev_info{width:100%;height:250px;padding:20px;margin-bottom:30px;background:#303030}
 .dev_info_li,.data_info_li{list-style:none;float:left;width:34%;height:100%;background:rgba(255,255,255,0.95);border-radius:2px;}
 .data_info_li{margin-left:40px}
-.dev_info_li table{margin-top:20px;width:100%;padding:0 20px}
+.dev_info_li table{margin-top:20px;width:100%;padding:0 15px}
 .dev_info_li caption{padding-left:20px;line-height:20px;margin-bottom:10px;text-align:left}
 .dev_info_li th{font-weight:500}
 

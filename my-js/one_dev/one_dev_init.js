@@ -155,8 +155,8 @@ function add_data_info( d_i_s ) {
 		}	
 		var tr = $('<tr></tr>');			//  后续时需要修改此代码
 		table.append( tr );	
-		var ths = $('<th width="35%">'+dev.data[i].name+'</th><th id="'+i+'_data_info_v" width="25%">no data</th><th id="'+i+'_data_info_t" width="40%">2014-12-19 12:45:20</th>');
-		tr.append( ths );	
+		var ths = $('<th width="41%">'+dev.data[i].name+'</th><th id="'+i+'_data_info_v" width="25%">no data</th><th id="'+i+'_data_info_t" width="34%">2014-12-19 12:45:20</th>');
+		tr.append( ths );		
 	} );
 	main.append( li );
 	
