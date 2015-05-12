@@ -10,11 +10,75 @@
 		<script src="my-js/devs_view/devs_view.js"></script>
 		<script src="js-lib/jquery.base64.js"></script>
 		
+		<style type='text/css'>
+			.button_1{margin-left:220px;width:80px;height:30px;background:#eee;}
+			.button_1:hover{background:#aaa;}
+			.normal{opacity:0.9;}
+			#float_div{border-radius:5px;background:#dcdcdc}
+			#add_dev_table td{padding:9px 9px 5px 9px;}
+		</style>
+		
 		<script>
 			var view = 'list';					// 显示模式 list icon
 			$( function() {
 				$('#alarm_ul').hide();
+				$('#float_div').hide();
 				
+				$('#float_div').click( function(e) {
+					var t_id = e.target.id;
+					if( t_id==='add_dev_id' || t_id==='add_dev_rcode' ) {
+						e.stopPropagation();
+						return;
+					}
+						
+					if( $('#add_dev_id').val()=='' )
+						$('#add_dev_id').val( 'guid1' );
+					
+					if( $('#add_dev_rcode').val()=='' )
+						$('#add_dev_rcode').val( '注册码' );
+						
+					e.stopPropagation();
+				} );
+				
+				$('body').click( function() {
+					var div = $('#float_div');
+					if( div.is(":visible") ) {
+						$('#float_div input').attr('change','0');
+						$('#add_dev_id').val('guid1');
+						$('#add_dev_rcode').val('注册码');
+						div.hide();
+					}
+				} );
+				
+				$('#float_div input').focus( function(e) {
+					if( $(this).attr('change')!='1' )
+						$(this).val('');
+					e.stopPropagation();
+				} );
+				
+				$('#float_div input').change( function() {
+					$(this).attr('change','1');
+				} );
+				
+				$('#submit').click( function() {
+				
+					var g1 = $('#add_dev_id').val();
+					var rcode = $('#add_dev_rcode').val();
+					
+					$.post( 'my-php/devs_view/add_dev.php', {'g1':g1,'rcode':rcode}, function( data ) {
+						if( data.length>3 ) {
+							var dev_info = new Array();
+							dev_info = data.split( ',' );
+							devs.push( {'g1':dev_info[0],'name':dev_info[1],'tz':8,'lt':'N','state':'running'} );
+							
+							var devs_table = $('#devices1').children('table.devs_table').children('tbody');
+							add_dev_tr( devs_table, devs.length-1 );
+							
+							
+						}
+					} );
+				} );
+/*				
 				$.post( 'my-php/devs_view_init.php', function( res ) {
 					xml_parser( res );
 					$('#devs_info_bar').text('您目前共有'+devs.length+'台设备');
@@ -30,7 +94,8 @@
 					user = data;
 					$('#user_name').html( user );
 				} );
-				
+*/	
+				$('#add_dev_bn').click( function(e) { add_dev(e); } );
 			} );
 		</script>
     </head>
@@ -69,6 +134,7 @@
 			
 			<ul class="button" style='margin-left:20%;float:left;'>
 				<li><button class="refresh" onclick="apply_dev()">申请新设备</button></li>
+				<li><button class="refresh" id='add_dev_bn'>添加新设备</button></li>
 			</ul>
 			
 			<ul class="button">
@@ -93,6 +159,14 @@
 		</div>
 
 		<ul id='alarm_ul'><li></li></ul>
+		
+		<div id='float_div' class='login'>
+			<table id='add_dev_table'>
+				<tr><td><input id='add_dev_id' class="normal" type="text" value='guid1'/></td></tr>
+				<tr><td><input id='add_dev_rcode' class="normal" type="text" value='注册码'/></td></tr>
+				<tr><td><button id='submit' class='button_1'>确 定</button></td></tr>
+			</table>
+		</div>
 	
 	</body>
 	

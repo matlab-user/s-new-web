@@ -186,6 +186,29 @@ function refresh() {
 			else
 				add_dev_icon( devs_table, index );
 		}
-	} );
+	} );	
+}
+
+function add_dev( e ) {
 	
+	var div = $('#float_div');
+	if( div.is(":visible") ) {
+		$('#float_div input').attr('change','0');
+		$('#add_dev_id').val('guid1');
+		$('#add_dev_rcode').val('注册码');
+		div.hide();
+	}
+	else
+		div.show(0);
+	
+	var pos_x = e.pageX+div.width()/2, 
+		pos_y = e.pageY+div.height()/2;
+	
+	if( pos_x>$('body').width() )
+		pos_x = $('body').width() - div.width() - 10;
+			
+	div.css( {'top':pos_y,'left':pos_x} );
+	
+	e.stopPropagation();
+
 }
