@@ -9,50 +9,66 @@
 		<script src="js-lib/jquery-2.1.1.min.js"></script>
 		<script src="js-lib/jquery.flot.0.8.3.min.js"></script>
 		<script src="js-lib/jquery.flot.0.8.3.time.min.js"></script>
-		<script src="my-js/data_query/data_query.js"></script>
 		
 		<style type='text/css'>
-			#tab_main{width:100%;height:780px;}
+			#tab_main{width:100%;}
 			#info_ul li{width:45%;line-height:30px;font-size:16px;padding:0 20px;margin:10px 0;display:inline-table;vertical-align:middle}
 			li span{margin:0 10px;}
 			li input{height:30px;margin:0 10px;}
 			#dev_num{width:64px}
-			.button_1{width:80px;height:30px;background:#fefefe;}
-			.button_1:hover{background:#eee;}
+			.button_1, .button_2{width:80px;height:30px;background:#fefefe;}
+			.button_1:hover, .button_2:hover{background:#eee;}
+			.button_2{width:120px;margin:0 10px 0 0;}
 			
-			.tab_table{border-spacing:0 16px}
-			.tab_table td.f{width:45%}
-			.tab_table td.s{width:25%}
-			.tab_table td.s input{width:40%}
-			.tab_table td.t{width:30%}
-			.tab_table td.f input{width:18%;height:100%;padding:3px 3px 3px 7px;margin:5px 7px}
-			
-			#plot_div{border-style:none;width:100%;height:300px;}
-			#input_div{padding:12px 0;width:100%;height:32px;margin:10px 0 0 0;background:#e0e0e0}
-			select, input{height:100%;margin:0 20px;padding:0 10px;}
-			#dev_sel{width:320px}
-			#did_sel{width:240px}
-			#t1_input,#t2_input{width:160px}
-			#box{height:13px;}
-
+			#devs_info_bar{margin-left:300px;padding-left:200px;}
 		</style>
 		
 		<script>
+			var user_info = new Object();
+			var devs = new Array();
+			
 			$( function() {
-				$('#com_name').html( '×××××××公司' );
-				$('#com_code').html( 'wangdehui' );
-/*			
+		
 				var user = '';
 				
-				$.post( "my-php/get_user.php", function( data ) {
+				$.post( "my-php/company_ui/get_user_info.php", function( data ) {
 					if( data=='' )
 						return;
-					user = data;
-					$('#user_name').html( user );
+					//console.log( data );
+					user_info = JSON.parse( data );
+					$('#user_name').html( user_info.user );
+					$('#com_name strong').html( user_info.m_name );
+					$('#com_code').html( user_info.m_code );
+				} );
+
+				$.post( "my-php/company_ui/get_devs_num.php", function( data ) {
+					if( data=='' )
+						return;
+					$('#devs_info_bar').html( '目前拥有 '+data+' 台设备' );
 				} );
 				
-				data_query_init();		
-*/				
+				$('#list_all_devs').click( function() {
+					$.post( "my-php/company_ui/get_devs.php", function( data ) {
+						devs = [];
+						var mid = JSON.parse( data );
+						devs = mid.devs;
+						delete mid;
+						
+						var devs_table = $('#devices1').children('table.devs_table').children('tbody');
+						devs_table.find('.devs_info_tr').remove();
+						
+						$.each( devs, function(dev_i,value) {
+							add_dev_tr( devs_table, dev_i );
+						} );
+					} );
+				} );
+				
+				$('#query_dev').click( function () {
+					var devs_table = $('#devices1').children('table.devs_table').children('tbody');
+					devs_table.find('.devs_info_tr').remove();
+					devs = [];
+				} );
+				
 			} );
 		</script>	
 		
@@ -76,9 +92,10 @@
 		
 		<div class='adminbar'>
 			<p class='title'>
-				<a class='title' href="javascript:void(0)" onClick=""><strong>我的设备－AC001</strong></a>
+				<a id='com_name' class='title' href="javascript:void(0)" onClick=""><strong>我的设备－AC001</strong></a>
+				<span id='devs_info_bar'></span>
 			</p>
-
+<!--			
 			<ul class="nav admin">
 				<li><a class="operation-control" href="javascript:void(0)" onClick="change_tab('control');">设备控制</a></li>
 				<li><a class="operation-setting" href="javascript:void(0)" onClick="change_tab('set');">设备信息</a></li>
@@ -87,19 +104,61 @@
 			<ul class="button">
 				<li><button class="refresh" onclick="refresh()">刷新</button></li>
 			</ul>
+-->
 		</div>
 		
 		<div id='tab_main'>
 			<ul id='info_ul'>
-				<li><b>公司名称：</b><span id='com_name'></span></li>
 				<li><b>公司代码：</b><span  id='com_code'></span></li>
 				<li><b>设备代码：</b><input id='dev_code' type='text'/></li>
 				<li><b>设备名称：</b><input id='dev_name' type='text'/></li>
 				<li><b>设备型号：</b><input id='dev_model' type='text'/></li>
-				<li><button class='button_1'>增加</button><input id='dev_num' type='text' value='1'/></li>
+				<li><button class='button_1'>增加</button><input id='dev_num' type='text' value='1'/>台</li>
+				<li><button class='button_2' id='query_dev' >查询设备</button><button class='button_2' id='list_all_devs'>列出所有设备</button></li>
 			</ul>		
 		</div>
 
+		
+		<div id='devices1' style='margin:0 2px;'>
+			<table class="default devs_table hover_table">
+				<tbody>
+					<tr>
+						<th width="30%">设备名称</th>
+						<th width="25%">设备ID</th>
+						<th width="20%">型号</th>
+						<th width="20%">状态</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
 	</body>
+	
+	<script>
+		// devs_table - 添加设备 tr 元素的父对象，jquery对象
+		// dev_i - 待添加设备在 devs 数组中的索引
+		function add_dev_tr( devs_table, dev_i ) {
+							   
+			var tr = $('<tr class="devs_info_tr"></tr>');
+			tr.attr( 'id', devs[dev_i].g1 );
+			
+			var td_name = $('<td class="nickname"></td>');
+			td_name.html('<a>'+devs[dev_i].n+'</a>');
+			tr.append( td_name );
+			
+			var td_g1 = $('<td>'+devs[dev_i].g1+'</td>');
+			tr.append( td_g1 );
+			
+			var td_model = $('<td>'+devs[dev_i].m+'</td>');
+			tr.append( td_model );
+			
+			var td_state = $('<td class="green">'+devs[dev_i].s+'</td>');
+			tr.append( td_state );
+			
+			devs_table.append( tr );
+		}
+		
+		
+	</script>
 	
 </html>	

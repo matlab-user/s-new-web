@@ -27,17 +27,33 @@
 		exit;
 	
 	$_POST['user'] = mysql_real_escape_string( $_POST['user'] );
-	$query_str = "SELECT passwd,state,uid,dnum FROM user_table WHERE mail='".$_POST['user']."'";
+	$query_str = "SELECT passwd,state,uid,dnum,type FROM user_table WHERE mail='".$_POST['user']."'";
 	$res = mysql_query( $query_str, $sql_con );
 	while( $row=mysql_fetch_array($res) ) {
 		if( $row[1]=='inactive' )
 			break;
 
 		if( $row[0]==md5($_POST['passwd']) ) {
-			$sig = 'devs_view.html';
+			
 			$_SESSION['user'] = $_POST['user'];
-			$_SESSION['uid'] = $row[2];
 			$_SESSION['dnum'] = $row[3];
+			$_SESSION['uid'] = $row[2];
+								
+			if( $row[4]=='company' ) {
+				$sig = 'company_ui.html';
+				
+				mysql_free_result ( $res );
+				$sql_str = "SELECT code, c_name FROM com_code WHERE uid='".$_SESSION['uid']."'";
+				$res = mysql_query( $sql_str, $sql_con );
+				while( $row=mysql_fetch_array($res) ) {
+					$_SESSION['m_code'] = $row[0];
+					$_SESSION['m_name'] = $row[1];
+				}
+				
+			}
+			else {
+				$sig = 'devs_view.html';
+			}
 		}
 	}
 	
