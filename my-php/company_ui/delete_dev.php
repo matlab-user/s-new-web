@@ -19,7 +19,7 @@
 	if( empty($con) )
 		exit;
 	
-	$sql_str = "DELETE FROM dev_db.dev_store WHERE guid1='".$_POST['g1']."'";
+	$sql_str = "DELETE FROM dev_db.dev_store WHERE guid1='".$_POST['g1']."' AND state<>'active'";
 	mysql_unbuffered_query( $sql_str, $con );
 	
 	$sql_str = "SELECT ROW_COUNT()";
