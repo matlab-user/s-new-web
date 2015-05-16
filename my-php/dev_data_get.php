@@ -8,11 +8,17 @@
 	if( !(isset($_POST['tz']) && isset($_POST['d_id']) && isset($_POST['g1']) && isset($_POST['lt'])) )
 		exit;
 
+	require_once( "./php-lib/codec_lib.php" );
+	
+	$config = read_config( './php-lib/config.cf' );
+	$mysql_user = $config->user;
+	$mysql_pass = $config->pass;	
+	
 	$t_s = get_today_start( $_POST['tz'] );
 
 	$xml = '<xml>';
 	
-	$con = mysql_connect( "localhost", "root", "blue" );
+	$con = mysql_connect( "localhost", $mysql_user, $mysql_pass );
 	if ( !$con )
 		die( 'Could not connect: ' . mysql_error() );
 

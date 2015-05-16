@@ -101,7 +101,7 @@
 				}
 				$i++;
 				//unset( $d_array );
-				$d_array = [];
+				$d_array = array();
 			}
 		}
 		

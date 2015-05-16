@@ -1,13 +1,17 @@
  <?php
 	
-	//$_POST['g1'] = '54455354444556535357415900000001';
+	require_once( "./php-lib/codec_lib.php" );
+	
+	$config = read_config( './php-lib/config.cf' );
+	$mysql_user = $config->user;
+	$mysql_pass = $config->pass;	
 	
 	if( !isset($_POST['g1']) )
 		exit;
 	
 	$xml = '<xml>';
 	
-	$con = mysql_connect( "localhost", "root", "blue" );
+	$con = mysql_connect( "localhost", $mysql_user, $mysql_pass );
 	if ( !$con )
 		die( 'Could not connect: ' . mysql_error() );
 

@@ -96,6 +96,9 @@
 				} );
 	
 				$('#add_dev_bn').click( function(e) { add_dev(e); } );
+				
+				if( $('body').height()<600 )
+					$('body').height( 600 );
 			} );
 		</script>
     </head>

@@ -11,8 +11,11 @@
 		exit;
 	
 	// 从数据库中获取设备控制 ip、port
-	$mysql_user = 'root';
-	$mysql_pass = 'blue';
+	require_once( "./php-lib/codec_lib.php" );
+	
+	$config = read_config( './php-lib/config.cf' );
+	$mysql_user = $config->user;
+	$mysql_pass = $config->pass;	
 	
 	$con = mysql_connect( 'localhost', $mysql_user, $mysql_pass );
 	if( !$con )

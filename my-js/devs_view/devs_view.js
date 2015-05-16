@@ -94,8 +94,6 @@ function formatDate( UTC ) {
 	return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;     
 }
 			  
-//var res = '<xml><dev><g1>00000000000000000000A0B0C0D0E0F0</g1><s>unknown</s><n>气象数据采集仪</n><tz>8</tz><lt>N</lt></dev><dev><g1>1982011602030410182910a1F2C3D02A</g1><s>unknown</s><n>空气参数测量仪</n><tz>8</tz><lt>1406637812</lt></dev><dev><g1>1982011602030410182910a1F2C3D08A</g1><s>need_data</s><n>图像采集仪</n><tz>8</tz><lt>1418785363</lt></dev><dev><g1>54455354444556535357415900000001</g1><s>unknown</s><n>农业环境测量仪</n><tz>8</tz><lt>1418908245</lt></dev><dev><g1>54455354444556535357415900000002</g1><s>unknown</s><n>农业环境测量仪</n><tz>8</tz><lt>1418908233</lt></dev><dev><g1>54455354444556535357415900000003</g1><s>unknown</s><n>农业环境测量仪</n><tz>8</tz><lt>N</lt></dev><dev><g1>A1B0C4D0E0FF</g1><s>unknown</s><n>环境数据采集仪</n><tz>8</tz><lt>N</lt></dev></xml>';
-
 function xml_parser( responseTxt ) {
 	
 	var dev_i = -1;			// dev 索引
@@ -201,8 +199,8 @@ function add_dev( e ) {
 	else
 		div.show(0);
 	
-	var pos_x = e.pageX+div.width()/2, 
-		pos_y = e.pageY+div.height()/2;
+	var pos_x = e.pageX - div.width()/2, 
+		pos_y = e.pageY + div.height()/2;
 	
 	if( pos_x>$('body').width() )
 		pos_x = $('body').width() - div.width() - 10;

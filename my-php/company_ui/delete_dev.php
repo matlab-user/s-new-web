@@ -4,36 +4,35 @@
 	if( !isset($_SESSION['user']) || !isset($_SESSION['m_code']) || !isset($_SESSION['m_name']) )
 		exit;	
 
-	if( !(isset($_POST['name']) && isset($_POST['model']) && isset($_POST['dev_num'])) )
+	if( !isset($_POST['g1']) )
 		exit;
 	
-	if( $_POST['dev_num']>3000 )
-		$_POST['dev_num'] = 3000;
-	
-	$_POST['maker'] = $_SESSION['m_name'];
-	$_POST['m_code'] = $_SESSION['m_code'];
-	
-	require_once( "../php-lib/randcode.php" );
 	require_once( "../php-lib/codec_lib.php" );
 	
 	$config = read_config( '../php-lib/config.cf' );
 	$mysql_user = $config->user;
 	$mysql_pass = $config->pass;	
 	
-	$name = $_POST['name'];
-	$model = $_POST['model'];
-	$maker = $_POST['maker'];
-	$mcode = $_POST['m_code'];
-
+	$res = 'NO';
+	
 	$con = touch_mysql();
 	if( empty($con) )
 		exit;
 	
-	$has_add = add_devs_into_dev_store( $_POST['dev_num'], $con );
-			
+	$sql_str = "DELETE FROM dev_db.dev_store WHERE guid1='".$_POST['g1']."'";
+	mysql_unbuffered_query( $sql_str, $con );
+	
+	$sql_str = "SELECT ROW_COUNT()";
+	$res = mysql_query( $sql_str, $con );
+	if( !empty($res) ) {
+		$row = mysql_fetch_array( $res );
+		if( $row[0]=='1' )
+			$res = 'OK';
+	}
+	
 	mysql_close( $con );
 
-	echo "$has_add";
+	echo $res;
 	
 //---------------------------------------------------------------------------------------
 	function touch_mysql() {

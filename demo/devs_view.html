@@ -15,7 +15,7 @@
 			$( function() {
 				$('#alarm_ul').hide();
 				
-				$.post( 'my-php/devs_view_init.php', function( res ) {
+				$.post( './my-php/devs_view_init.php', function( res ) {
 					xml_parser( res );
 					$('#devs_info_bar').text('您目前共有'+devs.length+'台设备');
 					var devs_table = $('#devices1').children('table.devs_table').children('tbody');

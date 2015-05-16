@@ -14,9 +14,8 @@
 		</dev>
 	</xml>
 */
-	require_once( 'codec_lib.php' );
-	
-	$config = read_config( '../config/config.cf' );
+	require_once( "php-lib/codec_lib.php" );
+	$config = read_config( 'php-lib/config.cf' );
 	$mysql_user = $config->user;
 	$mysql_pass = $config->pass;
 	
