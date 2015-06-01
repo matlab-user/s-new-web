@@ -226,11 +226,11 @@ function data_xml_parser( responseTxt ) {
 	var xml = $(responseTxt);
 	if ( xml.length<=0 )
 		return -1;
-	
+
 	var ds = xml.find('d');
 	if( ds.length<=0 )
 		return -1;
-	
+
 	var res= -1;
 	
 	$.each( ds, function(i,value) {

@@ -98,37 +98,43 @@ function add_flot_view( d_i ) {
 		var dataset = plot.getData();
 		var series = dataset[0];
 		var i = 0, loop = this.new_v.length;
-	
+		
 		if ( loop>0 ) {
 			
+			var d_i = get_index( this.d_id );
+						
+			var y = this.new_v[loop-1];
+			var x = this.new_t[loop-1];
+			
+			if( typeof dev.data[d_i].lt === 'undefined' )
+				dev.data[d_i].lt = 0;
+				
+			if( dev.data[d_i].lt>=x )
+				return;
+			else
+				dev.data[d_i].lt = x;
+					
 			for (i=0; i<loop; i++)				
 				series.data.push( [(this.new_t[i]+dev.tz*3600)*1000,this.new_v[i]] );			
 	
-			var y = this.new_v.pop();
-			var x = this.new_t.pop();
-
 			this.new_t = [];
 			this.new_v = [];
 		
 			this.new_t[0] = x;
 			this.new_v[0] = y;
 			
-			//series.label = 'x='+x.toFixed(2)+'; y='+y.toFixed(2);
 			series.label = '';
 			
 			plot.setData( [series] );
 			plot.setupGrid();
 			plot.draw();
 			
-			var d_i = get_index( this.d_id );
 			if( this.unit=='sys/null' )
 				$('#'+d_i+'_data_info_v').html( this.new_v[0].toFixed(2)+' ' );
 			else
 				$('#'+d_i+'_data_info_v').html( this.new_v[0].toFixed(2)+' '+this.unit );
 			$('#'+d_i+'_data_info_t').text( formatDate( this.new_t[0]+dev.tz*3600) );
-			
-			dev.data[d_i].lt = this.new_t[0];
-			
+					
 		}
 	};
 	
