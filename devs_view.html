@@ -19,6 +19,9 @@
 			.normal{opacity:0.9;}
 			#float_div{border-radius:5px;background:#dcdcdc}
 			#add_dev_table td{padding:9px 9px 5px 9px;}
+			#devices1 table .choose_th{padding:2px;width:28px}
+			.choose_box{margin-left:9px;visibility:hidden}
+			.choose_box_p{visibility:hidden}
 			
 			div.ui-dialog, .ui-button-text{font-family:'Microsoft Yahei'}			
 			#export-box .t_box{margin-top:6px;width:144px;padding:6px;font-family:'Microsoft Yahei'}
@@ -29,7 +32,7 @@
     <body>
 
         <header class="header">
-			<img class='logo' height=50 src='image/login/swaytech.png' />
+			<img class='logo' height=50 src='images/login/swaytech.png' />
 
 			<ul class="nav">
 				<li><a href="devs_view.html">监控中心</a></li>
@@ -74,11 +77,12 @@
 			<table class="default devs_table hover_table">
 				<tbody>
 					<tr>
-						<th width="25%">设备名称</th>
-						<th width="25%">设备ID</th>
-						<th width="20%">状态</th>
+						<th class='choose_th'><p><input type='checkbox' class='choose_box' id='choose_all'/></p><p class='choose_box_p'>全选</p></th>
+						<th width="24%">设备名称</th>
+						<th width="24%">设备ID</th>
+						<th width="15%">状态</th>
 						<th width="20%">更新时间</th>
-						<th width="10%">操作</th>
+						<th>操作</th>
 					</tr>
 				</tbody>
 			</table>
@@ -108,23 +112,38 @@
 		$( function() {
 			$('#alarm_ul').hide();
 			$('#float_div').hide();
-			
+						
 			$('#export-box').dialog( {
 				autoOpen: false,
-				modal: true,
 				width: 368,
 				create: function( event, ui ) {
 					$('div .ui-dialog-titlebar').css( {'padding-top':'2px','padding-bottom':'2px'} );					
 				},
+				close: function( event, ui ) {
+					$('.choose_box').css( 'visibility', 'hidden' );
+					$('.choose_box_p').css( 'visibility', 'hidden' );
+				},
 				buttons: {
 					'导出': function() {
-						$( this ).dialog( "close" );
+						setTimeout( function() {
+							$('.choose_box').css( 'visibility', 'hidden' );
+							$('.choose_box_p').css( 'visibility', 'hidden' );
+							$('#export-box').dialog( 'close' );	
+						}, 1000 );
 					}
 				}
 			} );
 			
 			$('#export-data-a').click( function() {
 				$('#export-box').dialog( 'open' );
+				$('.choose_box').css( 'visibility', 'visible' );
+				$('.choose_box_p').css( 'visibility', 'visible' );
+				$('.choose_box').prop( 'checked', true ); 
+			} );
+			
+			$('#choose_all').click( function() {
+				var state = $('.choose_box').prop( 'checked' );
+				$('.choose_box').prop( 'checked', state );
 			} );
 			
 			$('#float_div').click( function(e) {
