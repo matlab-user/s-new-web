@@ -99,10 +99,13 @@
 		</div>
 	
 		<div id='export-box' title='数据导出'>
-			<p>设备本地时间</p>
-			<p><input id='export-st' class='t_box' type='text'/>-><input id='export-et' class='t_box' type='text'/></p>
-			<p>输出文件名称</p>
-			<p><input id='export-file' class='t_box' type='text' style='width:320px'/></p>
+			<form id='submit_export_data' action='./my-php/devs_view/dev_data_export.php' method='post' >
+				<p>设备本地时间</p>
+				<p><input id='export-st' name='st' class='t_box' type='text'/>-><input id='export-et' name='et' class='t_box' type='text'/></p>
+				<p>输出文件名称</p>
+				<p><input id='export-file' name='save_name' class='t_box' type='text' style='width:320px'/></p>
+				<input id='devs_input' type='hidden' name='devs'/>
+			</form>
 		</div>
 
 	</body>
@@ -117,7 +120,13 @@
 				autoOpen: false,
 				width: 368,
 				create: function( event, ui ) {
-					$('div .ui-dialog-titlebar').css( {'padding-top':'2px','padding-bottom':'2px'} );					
+					$('div .ui-dialog-titlebar').css( {'padding-top':'2px','padding-bottom':'2px'} );
+					var ts = cur_UTC_str();	
+					$('#export-st').val( ts[0] );
+					$('#export-et').val( ts[1] );
+				},
+				open: function( event, ui ) {
+					$('#export-file').val( 'backup_at_'+get_local_time_now()+'.xlsx' );
 				},
 				close: function( event, ui ) {
 					$('.choose_box').css( 'visibility', 'hidden' );
@@ -125,7 +134,25 @@
 				},
 				buttons: {
 					'导出': function() {
-						setTimeout( function() {
+
+						var devs_d = $( '#devs_input' );
+						var s_devs = '';
+						
+						$('.choose_box').each( function() {
+							var m = $(this);
+							if( m.prop('checked') ) {
+								var m_p = m.parent().parent('tr');
+								if( m_p.length>0 )
+									s_devs += m_p.attr('id')+',';	
+							}
+						} );
+						
+						s_devs = s_devs.substring( 0, s_devs.length-1 );
+						devs_d.val( s_devs );
+						
+						$( '#submit_export_data' ).submit();
+										
+						setTimeout( function() {	
 							$('.choose_box').css( 'visibility', 'hidden' );
 							$('.choose_box_p').css( 'visibility', 'hidden' );
 							$('#export-box').dialog( 'close' );	

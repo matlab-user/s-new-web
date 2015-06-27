@@ -95,9 +95,40 @@ function formatDate( UTC ) {
 	var hour = d.getUTCHours();     
 	var minute = d.getUTCMinutes();     
 	var second = d.getUTCSeconds();     
-	return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;     
+	return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;     
 }
-			  
+
+function get_local_time_now() {
+	var d = new Date();
+	var year = d.getFullYear();     
+	var month = d.getMonth() + 1;     
+	var date = d.getDate();     
+	var hour = d.getHours();     
+	var minute = d.getMinutes();     
+	var second = d.getSeconds();     
+	return year+"-"+month+"-"+date+"_"+hour+":"+minute+":"+second;     
+}
+
+// 产生当前UTC时间字符串，以及24小时后的时间字符串
+function cur_UTC_str() {
+	var d = new Date();
+	var year = d.getUTCFullYear();     
+	var month = d.getUTCMonth() + 1;     
+	var date = d.getUTCDate();
+	var t1_str = year+"-"+month+"-"+date+" 0:0";
+	
+	var stp = Date.UTC( year, month-1, date ) + 24*3600000;
+	d = new Date( stp );
+	year = d.getUTCFullYear();     
+	month = d.getUTCMonth() + 1;     
+	date = d.getUTCDate();     
+	hour = d.getUTCHours();     
+	minute = d.getUTCMinutes();
+	var t2_str = year+"-"+month+"-"+date+" "+hour+":"+minute;
+	
+	return [ t1_str, t2_str ];     
+}
+
 function xml_parser( responseTxt ) {
 	
 	var dev_i = -1;			// dev 索引

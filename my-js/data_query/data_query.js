@@ -24,8 +24,6 @@ function data_query_init() {
 	
 	$('#tooltip').hide();
 	
-
-	
 	var plot_div = $('#plot_div');
 	plot_div.height( plot_div.width()*0.26);
 	
