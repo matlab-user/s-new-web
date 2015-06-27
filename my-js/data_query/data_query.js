@@ -102,8 +102,8 @@ function data_query_init() {
 	var now_month = d.getMonth()+1;
 	var now_year = d.getFullYear();
 	
-	$('#t1_input').attr('value', now_year+'-'+now_month+'-'+(now_day-1) );
-	$('#t2_input').attr('value', now_year+'-'+now_month+'-'+now_day );
+	$('#t1_input').attr('value', now_year+'-'+now_month+'-'+now_day+' 0:0' );
+	$('#t2_input').attr('value', now_year+'-'+now_month+'-'+now_day+' 23:59' );
 	
 	var dev_sel = $('#dev_sel');
 	var did_sel = $('#did_sel');
@@ -158,10 +158,7 @@ function data_query_init() {
 		
 		var t1_text = $('#t1_input').val();
 		var t2_text = $('#t2_input').val();
-		
-		t1_text = pro_time_str( t1_text );
-		t2_text = pro_time_str( t2_text );	
-		
+				
 		var dev_id = dev[cur_dev_index].g1;
 		var did_sel = $('#did_sel');
 		var d_id = did_sel.val();
@@ -171,7 +168,10 @@ function data_query_init() {
 		var t1 = d.getTime()/1000;
 		
 		var d = new Date( t2_text );
-		var t2 = d.getTime()/1000+24*3600;
+		var t2 = d.getTime()/1000;
+
+		if( t2<t1 )
+			return;
 		
 		var if_add = $('#box')[0].checked;
 		var c = flot_color[Math.ceil(Math.random()*30)%14];
@@ -291,23 +291,6 @@ function get_index( value ) {
 		}
 	} );
 	return index;
-}
-
-// 返回 YYYY-MM-DD 格式的字符串
-function pro_time_str( t_str ) {
-	var str_a = new Array();
-	str_a = t_str.split('-');
-
-	if( str_a.length<3 )
-		return '';
-		
-	if( (str_a[1]*1)<10 && str_a[1].length<2 )
-		str_a[1] = '0' + str_a[1]; 
-	
-	if( (str_a[2]*1)<10 && str_a[2].length<2 )
-		str_a[2] = '0' + str_a[2]; 
-	
-	return str_a.join('-');
 }
 
 // 返回更新参数在 dev.data 中的 index
