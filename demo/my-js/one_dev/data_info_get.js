@@ -15,10 +15,19 @@
 				dev.data[i].lt = 0;
 				switch( v.ss ) {
 					case 0:
-						if( v.unit=='file/image' )
-							add_image_view( i );
-						else
-							add_flot_view( i );
+						switch(v.unit) {
+							case 'file/image':
+								add_image_view( i );
+								break;
+								
+							case 'state':
+								add_state_view( i );
+								break;
+								
+							default:
+								add_flot_view( i );
+								break;
+						}
 						break;
 						
 					case 1:

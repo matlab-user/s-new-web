@@ -6,7 +6,7 @@ function add_image_view( d_i ) {
 	var img = main.find('#'+d_i+'_img').find('img');
 	var time = main.find('#'+d_i+'_img').find('p');
 	
-	img.attr( 'src',"images/default.jpg" );
+	img.attr( 'src',"../images/default.jpg" );
 	time.text( '2014.12.10 22:44:10' );
 	
 	dev.data[d_i].plot = main.find('#'+d_i+'_img');

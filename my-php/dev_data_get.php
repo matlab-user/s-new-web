@@ -98,11 +98,19 @@
 				// 获取值
 				switch( $d_t ) {
 					case 0:
-						if( $t==0 ) 
-							$sql_str = "SELECT value, time FROM data_db.his_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id." AND time>=".$t_s." AND time<=".time()." ORDER BY time ASC";
-						else
-							$sql_str = "SELECT value, time FROM data_db.his_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id." AND time>".$t." AND time<=".time()." ORDER BY time ASC";
-					//echo $sql_str."\r\n";
+						if( $t==0 )
+							$t = $t_s;
+						
+						switch( $unit ) {
+							case 'state':
+								$sql_str = "SELECT value, time FROM data_db.his_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id." AND time>".$t." AND time<=".time()." ORDER BY time DESC LIMIT 1";
+								break;
+							
+							default:
+								$sql_str = "SELECT value, time FROM data_db.his_data WHERE dev_id='".$dev_id."' AND d_id=".$d_id." AND time>".$t." AND time<=".time()." ORDER BY time ASC";
+								break;
+						}
+
 						$res3 = mysql_query( $sql_str, $con );	
 						$i = 0;					
 						while( $row3=mysql_fetch_array($res3) ) {
