@@ -7,9 +7,16 @@
 	$_POST['lt'] = time()-10;
 	$_POST['tz'] = 8;
 */	
+
+	require_once( './php-lib/codec_lib.php' );
+	
+	$config = read_config( './php-lib/config.cf' );
+	$mysql_user = $config->user;
+	$mysql_pass = $config->pass;
+	
 	$xml = '<xml>';
 	
-	$con = mysql_connect( "localhost", "root", "blue" );
+	$con = mysql_connect( "localhost", $mysql_user, $mysql_pass );
 	if ( !$con )
 		die( 'Could not connect: ' . mysql_error() );
 
@@ -101,7 +108,11 @@ function get_d( $dev_id, $d_id, $t, $con ) {
 				$res = addslashes( $img[$_SESSION['cur_img']] );
 				$x_str .= "<v t='".($mid1+$t_s)."'>".$res."</v></d>";
 				break;
-			
+				
+			case 'state':
+				$x_str = "<d id='".$d_id."'><v t='".time()."'>".rand(0,pow(2,16)-1)."</v></d>";
+				break;
+				
 			default:
 				if( $d_t=='0' )
 					$x_str = get_ds( $t, $d_id );
