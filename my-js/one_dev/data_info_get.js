@@ -22,25 +22,42 @@
 				dev.data[i].lt = 0;
 				switch( v.ss ) {
 					case 0:
-						if( v.unit=='file/image' )
-							add_image_view( i );
-						else
-							add_flot_view( i );
+						switch(v.unit) {
+							case 'file/image':
+								add_image_view( i );
+								break;
+								
+							case 'state':
+								add_state_view( i );
+								break;
+								
+							default:
+								add_flot_view( i );
+								break;
+						}
 						break;
 						
 					case 1:
-						if( v.unit=='file/image' )
-							add_image_view( i );
-						else {
-							dev.data[i].update_fun = function() {
-								var index = get_index( this.d_id );
-								if( this.unit=='sys/null' )
-									$('#'+index+'_data_info_v').html( this.new_v+' ' );
-								else
-									$('#'+index+'_data_info_v').html( this.new_v+' '+this.unit );
-								$('#'+index+'_data_info_t').text( formatDate( this.new_t+dev.tz*3600) );
-								dev.data[index].lt = this.new_t;
-							};	
+						switch(v.unit) {
+							case 'file/image':
+								add_image_view( i );
+								break;
+								
+							case 'state':
+								add_state_view( i );
+								break;
+								
+							default:
+								dev.data[i].update_fun = function() {
+									var index = get_index( this.d_id );
+									if( this.unit=='sys/null' )
+										$('#'+index+'_data_info_v').html( this.new_v+' ' );
+									else
+										$('#'+index+'_data_info_v').html( this.new_v+' '+this.unit );
+									$('#'+index+'_data_info_t').text( formatDate( this.new_t+dev.tz*3600) );
+									dev.data[index].lt = this.new_t;
+								};	
+								break;
 						}						
 						break;
 
@@ -69,6 +86,7 @@ function data_info_xml_parser( responseTxt ) {
 		dev.data[i].name = v.children('name').text();
 		dev.data[i].ss = parseInt( v.children('ss').text() );
 		dev.data[i].unit = v.children('u').html();
+		dev.data[i].remark = v.children('rem').html();
 	} );
 
 	return true;

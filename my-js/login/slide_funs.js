@@ -22,7 +22,7 @@
 */
 
 //------------ user custom ------------------------------------------------------
-var b_image = "url('image/login/banner.jpg')";						// div.slide background-image
+var b_image = "url('images/login/banner.jpg')";						// div.slide background-image
 var slide_top_width = '';				// div.slide_top_level's width
 var slide_top_height = '';				// div.slide_top_level's height
 

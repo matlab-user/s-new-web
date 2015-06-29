@@ -3,9 +3,15 @@
 	if( !isset($_POST['g1']) )
 		exit;
 	
+	require_once( './php-lib/codec_lib.php' );
+	
+	$config = read_config( './php-lib/config.cf' );
+	$mysql_user = $config->user;
+	$mysql_pass = $config->pass;
+	
 	$xml = '<xml>';
 	
-	$con = mysql_connect( "localhost", "root", "blue" );
+	$con = mysql_connect( "localhost", $mysql_user, $mysql_pass );
 	if ( !$con )
 		die( 'Could not connect: ' . mysql_error() );
 

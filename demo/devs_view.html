@@ -5,25 +5,28 @@
     <head>
 		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>实唯物联</title>
+
+    <link rel='shortcut icon' href='../images/login/logo.png' />
+
 		<link rel="stylesheet" type="text/css" href="../css/style.css">
 		<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 		<script src="my-js/devs_view/devs_view.js"></script>
 		<script src="../js-lib/jquery.base64.js"></script>
-		
+
 		<script>
 			var view = 'list';					// 显示模式 list icon
 			$( function() {
 				$('#alarm_ul').hide();
-				
+
 				$.post( './my-php/devs_view_init.php', function( res ) {
 					xml_parser( res );
 					$('#devs_info_bar').text('您目前共有'+devs.length+'台设备');
 					var devs_table = $('#devices1').children('table.devs_table').children('tbody');
 					$.each( devs, function(i,v) {
 						add_dev_tr( devs_table, i );
-					} );				
+					} );
 				} );
-				
+
 			} );
 		</script>
     </head>
@@ -31,7 +34,7 @@
     <body>
 
         <header class="header">
-			<img class='logo' height=50 src='../image/login/swaytech.png' />
+			<img class='logo' height=50 src='../images/login/swaytech.png' />
 
 			<ul class="nav">
 				<li><a href="#">监控中心</a></li>
@@ -43,7 +46,7 @@
 				<li><a href="../login.html" class="login-out">注销</a></li>
 			</ul>
         </header>
-		
+
 		<div class="adminbar">
 			<p class="title">
 				<strong>我的设备</strong>
@@ -53,22 +56,22 @@
 				<li><a class="operation-control" href="#operation-control">设备控制</a></li>
 				<li><a class="operation-setting" href="#operation-setting">设备设置</a></li>
 			</ul>
-			
+
 			<p class="title">
 				<span id='devs_info_bar' style="padding-left:200px;" ></span>
-			</p> 
-			
+			</p>
+
 			<ul class="button" style='margin-left:20%;float:left;'>
 				<li><button class="refresh" onclick="apply_dev()">申请新设备</button></li>
 			</ul>
-			
+
 			<ul class="button">
 				<li><button class="refresh" onclick="change_view()">视图切换</button></li>
 				<li><button class="refresh" onclick="refresh()">刷新</button></li>
 			</ul>
-		
+
 		</div>
-		
+
     <div id="devices1">
         <table class="default devs_table hover_table">
             <tbody>
@@ -82,9 +85,9 @@
             </tbody>
         </table>
     </div>
-	
+
 	<ul id='alarm_ul'><li></li></ul>
-	
+
 	</body>
-	
+
 </html>

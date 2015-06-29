@@ -43,6 +43,10 @@ function add_dev_tr( devs_table, dev_i ) {
 	var tr = $('<tr></tr>');
 	tr.attr( 'id', devs[dev_i].g1 );
 	
+	var td_checkbox = $('<td class="choose"></td>');
+	td_checkbox.html('<input type="checkbox" class="choose_box"/>');
+	tr.append( td_checkbox );
+	
 	var td_name = $('<td class="nickname"></td>');
 	td_name.html('<a target="_blank" href="one_dev.html?g1='+$.base64.btoa(devs[dev_i].g1)+'">'+devs[dev_i].name+'</a>');
 	tr.append( td_name );
@@ -91,9 +95,40 @@ function formatDate( UTC ) {
 	var hour = d.getUTCHours();     
 	var minute = d.getUTCMinutes();     
 	var second = d.getUTCSeconds();     
-	return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;     
+	return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;     
 }
-			  
+
+function get_local_time_now() {
+	var d = new Date();
+	var year = d.getFullYear();     
+	var month = d.getMonth() + 1;     
+	var date = d.getDate();     
+	var hour = d.getHours();     
+	var minute = d.getMinutes();     
+	var second = d.getSeconds();     
+	return year+"-"+month+"-"+date+"_"+hour+":"+minute+":"+second;     
+}
+
+// 产生当前UTC时间字符串，以及24小时后的时间字符串
+function cur_UTC_str() {
+	var d = new Date();
+	var year = d.getUTCFullYear();     
+	var month = d.getUTCMonth() + 1;     
+	var date = d.getUTCDate();
+	var t1_str = year+"-"+month+"-"+date+" 0:0";
+	
+	var stp = Date.UTC( year, month-1, date ) + 24*3600000;
+	d = new Date( stp );
+	year = d.getUTCFullYear();     
+	month = d.getUTCMonth() + 1;     
+	date = d.getUTCDate();     
+	hour = d.getUTCHours();     
+	minute = d.getUTCMinutes();
+	var t2_str = year+"-"+month+"-"+date+" "+hour+":"+minute;
+	
+	return [ t1_str, t2_str ];     
+}
+
 function xml_parser( responseTxt ) {
 	
 	var dev_i = -1;			// dev 索引
@@ -136,7 +171,6 @@ function xml_parser( responseTxt ) {
 function apply_dev() {
 	$.post( 'my-php/devs_view/apply_dev.php', function( data ) {	
 		if( data=='' | data=='NO' ) {
-			//console.log( data );
 			$('#alarm_ul').children('li').text('申请新设备失败，超出最大设备拥有数量！');
 			$('#alarm_ul').show(0).delay(3000).hide(0);
 			return;

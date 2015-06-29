@@ -155,7 +155,7 @@ function add_data_info( d_i_s ) {
 		}	
 		var tr = $('<tr></tr>');			//  后续时需要修改此代码
 		table.append( tr );	
-		var ths = $('<th width="41%">'+dev.data[i].name+'</th><th id="'+i+'_data_info_v" width="25%">no data</th><th id="'+i+'_data_info_t" width="34%">2014-12-19 12:45:20</th>');
+		var ths = $('<th width="34%">'+dev.data[i].name+'</th><th id="'+i+'_data_info_v" width="28%">no data</th><th id="'+i+'_data_info_t" width="38%">2014-12-19 12:45:20</th>');
 		tr.append( ths );		
 	} );
 	main.append( li );
@@ -581,6 +581,12 @@ function parse_fun_xml( xml ) {
 		
 		op.push( mid_op );
 	} );
+}
+
+function gen_link() {
+	$.post( './my-php/one_dev/gen_d_link.php', {'VT':$('#vt_input').val()}, function(data) {
+		$('#link_output').val( data );	
+	} );	
 }
 
 function refresh() {

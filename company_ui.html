@@ -3,13 +3,15 @@
     <head>
 		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>实唯物联</title>
-		
+    
+		<link rel='shortcut icon' href='./images/login/logo.png' />
+
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
 		<script src="js-lib/jquery-2.1.1.min.js"></script>
 		<script src="js-lib/jquery.flot.0.8.3.min.js"></script>
 		<script src="js-lib/jquery.flot.0.8.3.time.min.js"></script>
-		
+
 		<style type='text/css'>
 			#tab_main{width:100%;}
 			#info_ul li{width:45%;line-height:30px;font-size:16px;padding:0 20px;margin:10px 0;display:inline-table;vertical-align:middle}
@@ -20,21 +22,21 @@
 			.button_1:hover, .button_2:hover{background:#eee;}
 			.button_2{width:120px;margin:0 10px 0 0;}
 			#add_res{margin-left:30px;color:#cc3366}
-			
+
 			#devs_info_bar{margin-left:300px;padding-left:200px;}
 			.del_a{cursor:hand;text-decoration:underline;}
-			
+
 			.high_light{color:#cc3366;}
 		</style>
-		
+
 		<script>
 			var user_info = new Object();
 			var devs = new Array();
-			
+
 			$( function() {
-		
+
 				var user = '';
-				
+
 				$.post( "my-php/company_ui/get_user_info.php", function( data ) {
 					if( data=='' )
 						return;
@@ -50,80 +52,80 @@
 						return;
 					$('#devs_info_bar').html( '目前拥有 '+data+' 台设备' );
 				} );
-				
+
 				$('#list_all_devs_b').click( function() {
 					$.post( "my-php/company_ui/get_devs.php", function( data ) {
 						devs = [];
 						var mid = JSON.parse( data );
 						devs = mid.devs;
 						delete mid;
-						
+
 						var devs_table = $('#devices1').children('table.devs_table').children('tbody');
 						devs_table.find('.devs_info_tr').remove();
-						
+
 						$.each( devs, function(dev_i,value) {
 							add_dev_tr( devs_table, dev_i );
 						} );
 					} );
 				} );
-				
+
 				$('#query_dev_b').click( function () {
 					var dev_name = $('#dev_name').val();
 					var dev_model = $('#dev_model').val();
 					var dev_id = $('#dev_code').val();
-								
+
 					$.post( "my-php/company_ui/query_dev.php", {'name':dev_name,'model':dev_model,'g1':dev_id}, function( data ) {
 						var devs_table = $('#devices1').children('table.devs_table').children('tbody');
 						devs_table.find('.devs_info_tr').remove();
 						devs = [];
-						
+
 						var mid = JSON.parse( data );
 						devs = mid.devs;
 						delete mid;
-						
+
 						$.each( devs, function(dev_i,value) {
 							add_dev_tr( devs_table, dev_i );
 						} );
-						
+
 					} );
-									
+
 				} );
-				
+
 				$('#add_devs_b').click( function () {
 					var dev_name = $('#dev_name').val();
 					var dev_model = $('#dev_model').val();
 					var dev_num = $('#dev_num').val();
-					
+
 					if( dev_name=='' || dev_model=='' || dev_num=='' )
 						return;
-						
+
 					$.post( "my-php/company_ui/company_add_devs.php", {'name':dev_name,'model':dev_model,'dev_num':dev_num}, function( data ) {
 						if( data=='' )
 							$('#add_res').html( '<strong>成功添加 0 台设备</strong>' ).show(0).delay(3000).hide(0);
 						else
 							$('#add_res').html( '<strong>成功添加 '+data+' 台设备</strong>' ).show(0).delay(3000).hide(0);
-							
+
 						$.post( "my-php/company_ui/get_devs_num.php", function( data ) {
 							if( data=='' )
 								return;
-								
+
 							$('#devs_info_bar').html( '目前拥有<strong class="high_light" style="font-size:20px;"> '+data+' </strong>台设备' );
-							
-							setTimeout( function() { 
+
+							setTimeout( function() {
 								$('#devs_info_bar').html( '目前拥有 '+data+' 台设备' );
 							}, 2000 );
 						} );
-						
+
 					} );
 				} );
-				
+
 			} );
-		</script>	
-		
+		</script>
+
 	</head>
-	
+
 	<body style="min-width:1349px;min-height:768px;overflow-x:hidden">
-	
+
 		<header class="header">
             <img class='logo' height=50 src='image/login/swaytech.png' />
 
@@ -137,13 +139,13 @@
                 <li><a href="login.html" class="login-out">注销</a></li>
             </ul>
         </header>
-		
+
 		<div class='adminbar'>
 			<p class='title'>
 				<a id='com_name' class='title' href="javascript:void(0)" onClick=""><strong>我的设备－AC001</strong></a>
 				<span id='devs_info_bar'></span>
 			</p>
-<!--			
+<!--
 			<ul class="nav admin">
 				<li><a class="operation-control" href="javascript:void(0)" onClick="change_tab('control');">设备控制</a></li>
 				<li><a class="operation-setting" href="javascript:void(0)" onClick="change_tab('set');">设备信息</a></li>
@@ -154,7 +156,7 @@
 			</ul>
 -->
 		</div>
-		
+
 		<div id='tab_main'>
 			<ul id='info_ul'>
 				<li><b>公司代码：</b><span  id='com_code'></span></li>
@@ -163,10 +165,10 @@
 				<li><b>设备型号：</b><input id='dev_model' type='text'/></li>
 				<li><button class='button_1' id='add_devs_b'>增加</button><input id='dev_num' type='text' value='1'/>台<span id='add_res'></span></li>
 				<li><button class='button_2' id='query_dev_b' >查询设备</button><button class='button_2' id='list_all_devs_b'>列出所有设备</button></li>
-			</ul>		
+			</ul>
 		</div>
 
-		
+
 		<div id='devices1' style='margin:0 2px;'>
 			<table class="default devs_table hover_table">
 				<tbody>
@@ -180,33 +182,33 @@
 				</tbody>
 			</table>
 		</div>
-		
+
 	</body>
-	
+
 	<script>
 		// devs_table - 添加设备 tr 元素的父对象，jquery对象
 		// dev_i - 待添加设备在 devs 数组中的索引
 		function add_dev_tr( devs_table, dev_i ) {
-							   
+
 			var tr = $('<tr class="devs_info_tr"></tr>');
 			tr.attr( 'id', devs[dev_i].g1 );
-			
+
 			var td_name = $('<td class="nickname"></td>');
 			td_name.html('<a>'+devs[dev_i].n+'</a>');
 			tr.append( td_name );
-			
+
 			var td_g1 = $('<td>'+devs[dev_i].g1+'</td>');
 			tr.append( td_g1 );
-			
+
 			var td_model = $('<td>'+devs[dev_i].m+'</td>');
 			tr.append( td_model );
-			
+
 			var td_state = $('<td class="green">'+devs[dev_i].s+'</td>');
 			tr.append( td_state );
-			
+
 			var td_state = $('<td class="green"><a class="del_a">删除</a></td>');
 			tr.append( td_state );
-			
+
 			$('.del_a').click( function() {
 				var main = $(this).parent().parent();
 
@@ -218,7 +220,7 @@
 						return false;
 					}
 				} );
-				
+
 				if( index>=0 ) {
 					$.post( "my-php/company_ui/delete_dev.php", {'g1':g1}, function(data) {
 
@@ -226,29 +228,29 @@
 							main.hide( 800, 'linear', function() {
 								$(this).remove();
 							} );
-							
+
 							devs.splice( index, 1 );
-	
+
 							$.post( "my-php/company_ui/get_devs_num.php", function( data ) {
 								if( data=='' )
 									return;
 								$('#devs_info_bar').html( '目前拥有<strong class="high_light" style="font-size:20px;"> '+data+' </strong>台设备' );
-								setTimeout( function() { 
+								setTimeout( function() {
 									$('#devs_info_bar').html( '目前拥有 '+data+' 台设备' );
 								}, 2000 );
 							} );
-					
+
 						}
 					} );
-				
+
 				}
-			
+
 			} );
-				
+
 			devs_table.append( tr );
 		}
-		
-		
+
+
 	</script>
-	
-</html>	
+
+</html>
