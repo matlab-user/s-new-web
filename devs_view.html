@@ -237,6 +237,7 @@
 				if( n==='load' ) {
 					url_p = url_p.substr( index+1 );
 					$.post( './my-php/devs_view/link_login.php', {'load':url_p}, function( res ) {
+						console.log( res );
 						if( res=='OK' )
 							do_init();
 					} );

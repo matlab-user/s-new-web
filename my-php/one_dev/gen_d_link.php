@@ -14,8 +14,12 @@
 	$mysql_user = $config->user;
 	$mysql_pass = $config->pass;
     $key = pack( 'H*', $config->key_1 );
-     
-	$res_str = 'http://www.swaylink.cn/devs_view.html?load=';
+    
+	$mid = dirname(dirname(dirname($_SERVER['SCRIPT_NAME'])));
+	if( $mid=='/' )
+		$mid = '';
+	
+	$res_str = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].$mid.'/devs_view.html?load=';
 	// A-用户名  	B-是否运行操作    C-申请的时间      D-有效天数
     $plaintext = '{ "A":"'.$_SESSION['user'].'", "B":"NULL", "C":"'.$GEN_UTC.'", "D":"'.$_POST['VT'].'" }';
 
@@ -31,6 +35,6 @@
     # 对密文进行 base64 编码
     $ciphertext_base64 = base64_encode( $ciphertext );
 
-    echo  $res_str.$ciphertext_base64;
+    echo $res_str.$ciphertext_base64;
 
 ?>
