@@ -4,33 +4,35 @@
 
     <head>
 		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>SWAYTECH</title>
-	
+		<title>实唯物联</title>
+
+		<link rel='shortcut icon' href='./images/login/logo.png' />
+
 		<link rel="stylesheet" type="text/css" href="css/slide_style.css">
 		<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
 		<script src="js-lib/jquery-2.1.1.min.js"></script>
 		<script src="my-js/login/slide_funs.js"></script>
-			
+
 		<style type='text/css'>
 			html{-webkit-text-size-adjust:none}
 			body{margin:0 auto;color:#333;background:#f9f9f9;font-size:14px;font-family:"Microsoft Yahei","Helvetica Neue",Helvetica,Arial,sans-serif;line-height:24px;cursor:default}
-			
+
 			#header{line-height:66px;text-align:center;vertical-align:middle;width:100%;height:66px;background:#000}
 			#header img{margin-left:8%;height:100%;float:left}
 			#header div{position:absolute;top:0;right:100px;color:#E0E0E0}
 			#header div a{cursor:pointer}
 			#header div a:hover{color:#fff}
-			
+
 			.login a{color:#E0E0E0}
 			.slide_show h2{width:525px;height:50px;}
 			p.intro{padding-top:10px;font-family:"Hiragino Sans GB","Microsoft YaHei","黑体",Helvetica,Arial,Tahoma,sans-serif;text-align:center;height:20px;width:525px;font-size:16px;top:200px;left:540px;}
-			
+
 			ul.nav{color:#FFF;text-align:center;vertical-align:middle;height:100%;position:relative;left:25%;width:680px;}
 			ul.nav li{float:left;line-height:70px;list-style-type:none;height:100%;width:94px}
 			ul.nav li a{font-weight:bold;color:#E0E0E0;cursor:pointer;font-size:14px}
 			ul.nav li a:hover{color:#fff}
 			ul.nav li a.cur{color:#fff}
-			
+
 			#example_t{width:80%;height:280px;margin:40px 10%}
 			#example_t tr{width:100%;height:100%}
 			#example_t td{display:inline-block;text-align:center;vertical-align:middle;list-style:none;height:100%}
@@ -39,24 +41,24 @@
 			#example_t div.content{width:100%;color:#666;line-height:1.6;font-size:14px}
 			#example_t a{cursor:pointer;text-align:center;line-height:4;width:100%;font-size:16px;color:#3292FF}
 			#example_t a:hover{text-decoration:underline}
-			
+
 			a.b1{display:block;text-shadow:0 1px 0 rgba(0,0,0,0.4);line-height:80px;text-align:center;height:80px;font-size:33px;color:#FFF;border-radius:7px;background:rgb(93,154,255);margin:20px 30%;}
 			a.b1:hover{opacity:0.6;}
-			
+
 			.foot{vertical-align:middle;margin:0 10%;padding-top:5px;width:80%;height:40px;line-height:12px;font-size:12px;color:#909090;border-top:solid 1px #E0E0E0}
 			.foot span{line-height:40px}
 			.foot .ICP{float:right}
-		</style> 
-		
-		<script>		
+		</style>
+
+		<script>
 			$( function() {
-			
+
 				slide_init();
-	
+
 				$('.slide_show').css('left',($('body').width()-$('.slide_show').width())/2-30);
 				$('.slide_show').height( $('.slide_top_level').height() );
 				$('.slide_show img').width( $('.slide_top_level').height() );
-				
+
 				$('#example_t td').outerWidth('33%');
 				var p = 0.5 * ($('#example_t td').width()-308);
 				$('#example_t .content').width( 308 );
@@ -64,9 +66,9 @@
 				$('#example_t .h1').css('line-height',$('#example_t div').eq(0).height()+'px');
 			} );
 		</script>
-		
+
     </head>
-	
+
 	<body>
 		<div id='header'>
 			<img src='images/login/swaytech.png'/>
@@ -81,7 +83,7 @@
 				<a style='padding:0 10px;' href='register_user.html'>注册</a>
 			</div>
 		</div>
-		
+
 		<div class='slide_top_level'>
 			<div id='show_1' class='slide_show'>
 				<img width='100%' height='100%' src='images/login/note.png'/>
@@ -115,7 +117,7 @@
 					<p class='intro' style='top:260px;'><a class='b' style='top:10px;right:10px'>了解更多</a></p>
 				</div>
 			</div>
-			
+
 			<div class='slide'>
 				<ul class='points_line'>
 					<li class='point current'><a>1</a></li>
@@ -125,7 +127,7 @@
 				</ul>
 			</div>
 		</div>
-		
+
 		<table id='example_t'>
 			<tr>
 				<td>
@@ -148,7 +150,7 @@
 				</td>
 			</tr>
 		</table>
-		
+
 		<div style='margin:0 10% 60px 10%;width:80%;padding:0;'>
 			<a class='b1'>快 速 接 入</a>
 		</div>

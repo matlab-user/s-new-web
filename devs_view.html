@@ -5,15 +5,18 @@
     <head>
 		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>实唯物联</title>
+
+		<link rel='shortcut icon' href='./images/login/logo.png' />        
+
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
 		<script src="js-lib/jquery-2.1.1.min.js"></script>
 		<script src="my-js/devs_view/devs_view.js"></script>
 		<script src="js-lib/jquery.base64.js"></script>
-		
+
 		<link href="js-lib/jquery-ui.min.css" rel="stylesheet">
 		<script src="js-lib/jquery-ui.min.js"></script>
-		
+
 		<style type='text/css'>
 			.button_1{margin-left:220px;width:80px;height:30px;background:#eee;}
 			.button_1:hover{background:#aaa;}
@@ -23,11 +26,11 @@
 			#devices1 table .choose_th{padding:2px;width:28px}
 			.choose_box{margin-left:9px;visibility:hidden}
 			.choose_box_p{visibility:hidden}
-			
-			div.ui-dialog, .ui-button-text{font-family:'Microsoft Yahei'}			
+
+			div.ui-dialog, .ui-button-text{font-family:'Microsoft Yahei'}
 			#export-box .t_box{margin-top:6px;width:144px;padding:6px;font-family:'Microsoft Yahei'}
 		</style>
-		
+
     </head>
 
     <body>
@@ -45,7 +48,7 @@
 				<li><a href="login.html" class="login-out">注销</a></li>
 			</ul>
         </header>
-		
+
 		<div class="adminbar">
 			<p class="title">
 				<strong>我的设备</strong>
@@ -57,23 +60,23 @@
 				<li><a target='_blank' class='data-query' href='data_query.html' >数据查询</a></li>
 				<li><a id='export-data-a' class='export-data'>导出数据</a></li>
 			</ul>
-			
+
 			<p class="title">
 				<span id='devs_info_bar' style="padding-left:200px;" ></span>
-			</p> 
-			
+			</p>
+
 			<ul class="button" style='margin-left:20%;float:left;'>
 				<li><button class="refresh" onclick="apply_dev()">申请新设备</button></li>
 				<li><button class="refresh" id='add_dev_bn'>添加新设备</button></li>
 			</ul>
-			
+
 			<ul class="button">
 				<li><button class="refresh" onclick="change_view()">视图切换</button></li>
 				<li><button class="refresh" onclick="refresh()">刷新</button></li>
 			</ul>
-		
+
 		</div>
-		
+
 		<div id="devices1">
 			<table class="default devs_table hover_table">
 				<tbody>
@@ -90,7 +93,7 @@
 		</div>
 
 		<ul id='alarm_ul'><li></li></ul>
-		
+
 		<div id='float_div' class='login'>
 			<table id='add_dev_table'>
 				<tr><td><input id='add_dev_id' class="normal" type="text" value='guid1'/></td></tr>
@@ -98,7 +101,7 @@
 				<tr><td><button id='submit' class='button_1'>确 定</button></td></tr>
 			</table>
 		</div>
-	
+
 		<div id='export-box' title='数据导出'>
 			<form id='submit_export_data' action='./my-php/devs_view/dev_data_export.php' method='post' >
 				<p>设备本地时间</p>
@@ -110,19 +113,19 @@
 		</div>
 
 	</body>
-	
+
 	<script>
 		var view = 'list';					// 显示模式 list icon
 		$( function() {
 			$('#alarm_ul').hide();
 			$('#float_div').hide();
-						
+
 			$('#export-box').dialog( {
 				autoOpen: false,
 				width: 368,
 				create: function( event, ui ) {
 					$('div .ui-dialog-titlebar').css( {'padding-top':'2px','padding-bottom':'2px'} );
-					var ts = cur_UTC_str();	
+					var ts = cur_UTC_str();
 					$('#export-st').val( ts[0] );
 					$('#export-et').val( ts[1] );
 				},
@@ -138,58 +141,58 @@
 
 						var devs_d = $( '#devs_input' );
 						var s_devs = '';
-						
+
 						$('.choose_box').each( function() {
 							var m = $(this);
 							if( m.prop('checked') ) {
 								var m_p = m.parent().parent('tr');
 								if( m_p.length>0 )
-									s_devs += m_p.attr('id')+',';	
+									s_devs += m_p.attr('id')+',';
 							}
 						} );
-						
+
 						s_devs = s_devs.substring( 0, s_devs.length-1 );
 						devs_d.val( s_devs );
-						
+
 						$( '#submit_export_data' ).submit();
-										
-						setTimeout( function() {	
+
+						setTimeout( function() {
 							$('.choose_box').css( 'visibility', 'hidden' );
 							$('.choose_box_p').css( 'visibility', 'hidden' );
-							$('#export-box').dialog( 'close' );	
+							$('#export-box').dialog( 'close' );
 						}, 1000 );
 					}
 				}
 			} );
-			
+
 			$('#export-data-a').click( function() {
 				$('#export-box').dialog( 'open' );
 				$('.choose_box').css( 'visibility', 'visible' );
 				$('.choose_box_p').css( 'visibility', 'visible' );
-				$('.choose_box').prop( 'checked', true ); 
+				$('.choose_box').prop( 'checked', true );
 			} );
-			
+
 			$('#choose_all').click( function() {
 				var state = $('.choose_box').prop( 'checked' );
 				$('.choose_box').prop( 'checked', state );
 			} );
-			
+
 			$('#float_div').click( function(e) {
 				var t_id = e.target.id;
 				if( t_id==='add_dev_id' || t_id==='add_dev_rcode' ) {
 					e.stopPropagation();
 					return;
 				}
-					
+
 				if( $('#add_dev_id').val()=='' )
 					$('#add_dev_id').val( 'guid1' );
-				
+
 				if( $('#add_dev_rcode').val()=='' )
 					$('#add_dev_rcode').val( '注册码' );
-					
+
 				e.stopPropagation();
 			} );
-			
+
 			$('body').click( function() {
 				var div = $('#float_div');
 				if( div.is(":visible") ) {
@@ -199,34 +202,34 @@
 					div.hide();
 				}
 			} );
-			
+
 			$('#float_div input').focus( function(e) {
 				if( $(this).attr('change')!='1' )
 					$(this).val('');
 				e.stopPropagation();
 			} );
-			
+
 			$('#float_div input').change( function() {
 				$(this).attr('change','1');
 			} );
-			
+
 			$('#submit').click( function() {
-			
+
 				var g1 = $('#add_dev_id').val();
 				var rcode = $('#add_dev_rcode').val();
-				
+
 				$.post( 'my-php/devs_view/add_dev.php', {'g1':g1,'rcode':rcode}, function( data ) {
 					if( data.length>3 ) {
 						var dev_info = new Array();
 						dev_info = data.split( ',' );
 						devs.push( {'g1':dev_info[0],'name':dev_info[1],'tz':8,'lt':'N','state':'running'} );
-						
+
 						var devs_table = $('#devices1').children('table.devs_table').children('tbody');
 						add_dev_tr( devs_table, devs.length-1 );
 					}
 				} );
 			} );
-			
+
 			var url_p = window.location.href.split("?")[1];
 			if( typeof(url_p)!=='undefined' ) {
 				var index = url_p.indexOf('=');
@@ -241,13 +244,13 @@
 			}
 			else
 				do_init();
-				
+
 			$('#add_dev_bn').click( function(e) { add_dev(e); } );
-			
+
 			if( $('body').height()<600 )
 				$('body').height( 600 );
 		} );
-		
+
 		function do_init() {
 			$.post( 'my-php/devs_view_init.php', function( res ) {
 				xml_parser( res );
@@ -255,9 +258,9 @@
 				var devs_table = $('#devices1').children('table.devs_table').children('tbody');
 				$.each( devs, function(i,v) {
 					add_dev_tr( devs_table, i );
-				} );				
+				} );
 			} );
-			
+
 			$.post( "my-php/get_user.php", function( data ) {
 				if( data=='' )
 					return;
@@ -266,5 +269,5 @@
 			} );
 		}
 	</script>
-		
+
 </html>

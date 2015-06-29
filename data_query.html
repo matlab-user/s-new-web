@@ -3,14 +3,16 @@
     <head>
 		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>实唯物联</title>
-		
+
+		<link rel='shortcut icon' href='./images/login/logo.png' />
+
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
 		<script src="js-lib/jquery-2.1.1.min.js"></script>
 		<script src="js-lib/jquery.flot.0.8.3.min.js"></script>
 		<script src="js-lib/jquery.flot.0.8.3.time.min.js"></script>
 		<script src="my-js/data_query/data_query.js"></script>
-		
+
 		<style type='text/css'>
 			#plot_div{border-style:none;width:100%;height:300px;}
 			#input_div{padding:12px 0;width:100%;height:32px;margin:10px 0 0 0;background:#e0e0e0}
@@ -22,27 +24,27 @@
 			.button_1{margin-left:90px;width:80px;height:30px;background:#fefefe;}
 			.button_1:hover{background:#eee;}
 		</style>
-		
+
 		<script>
 			$( function() {
-			
+
 				var user = '';
-				
+
 				$.post( "my-php/get_user.php", function( data ) {
 					if( data=='' )
 						return;
 					user = data;
 					$('#user_name').html( user );
 				} );
-				
-				data_query_init();			
+
+				data_query_init();
 			} );
-		</script>	
-		
+		</script>
+
 	</head>
-	
+
 	<body style="min-width:1349px;min-height:768px;overflow-x:hidden">
-	
+
 		<header class="header">
             <img class='logo' height=50 src='images/login/swaytech.png' />
 
@@ -56,7 +58,7 @@
                 <li><a href="login.html" class="login-out">注销</a></li>
             </ul>
         </header>
-		
+
 		<div class='adminbar'>
 			<p class='title'>
 				<a class='title' href="javascript:void(0)" onClick=""><strong>我的设备－AC001</strong></a>
@@ -71,9 +73,9 @@
 				<li><button class="refresh" onclick="refresh()">刷新</button></li>
 			</ul>
 		</div>
-		
+
 		<div id='plot_div'></div>
-		
+
 		<div id='input_div'>
 			<select id='dev_sel'></select>
 			<select id='did_sel'></select>
@@ -83,11 +85,11 @@
 			<span id='append_box' style='height:32px;font-size:16px;'>追加<input id='box' type='checkbox'/></span>
 			<button id='show' class='button_1' type='button' >查询</button>
 		</div>
-		
+
 		<table id='line_list' class="default devs_table"><tbody></tbody></table>
-		
+
 		<div id="tooltip"></div>
 
 	</body>
-	
-</html>	
+
+</html>
