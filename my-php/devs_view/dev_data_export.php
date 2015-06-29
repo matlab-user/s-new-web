@@ -183,7 +183,7 @@
 			// 获取数据
 			$dev_st = $st - $v->tz*3600;
 			$dev_et = $et - $v->tz*3600;
-			$sql_str = "SELECT value, time FROM data_db.his_data WHERE d_id=$k2 AND dev_id='$k' AND time>=$dev_st AND time<=$dev_et ORDER BY time ASC LIMIT 10";
+			$sql_str = "SELECT value, time FROM data_db.his_data WHERE d_id=$k2 AND dev_id='$k' AND time>=$dev_st AND time<=$dev_et ORDER BY time ASC";
 			$res = mysql_query( $sql_str, $con );
 			if( empty($res) )
 				return '';

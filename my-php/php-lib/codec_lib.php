@@ -296,6 +296,7 @@
 		public $pass = '';
 		public $upload_path = '';
 		public $domain = '';
+		public $key_1 = '';
 	}
 	
 	// 从文件中读取 mysql 数据库用户、密钥等配置信息
@@ -319,6 +320,9 @@
 						break;
 					case 'domain':
 						$res->domain = strtok( "= \r\n" );
+						break;
+					case 'key_1':
+						$res->key_1 = strtok( "= \r\n" );
 						break;
 					default:
 						break;

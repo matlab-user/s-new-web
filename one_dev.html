@@ -136,20 +136,32 @@
 				<li><button class='set_button' onclick="">确定</button></li>
 				<li><button class='set_button' onclick="">取消</button></li>
 			</ul>
+			
+			<table id='link_gen' class='tab_table'>
+				<caption class='title'>快捷链接</caption>
+				<tbody>
+					<tr>
+						<td width='45%'>链接：<input id='link_output' type='text' style='width:90%;padding:5px;margin-left:10px;'/></td>
+						<td width='10%'>有效天数：<input id='vt_input' type='text' style='width:25%;padding:5px;margin-left:10px;' value='7'/></td>	
+						<td width='10%'><button class='set_button' style="height:100%;float:left;margin-bottom:10px" onclick="gen_link()">生 成</button></td>
+					</tr>
+				</tbody>
+			</table>
+			
 		</div>
 		
 		<div id='tab_control'>
 			<table id='info_set' class='tab_table'>
 				<caption class='title'>设备控制</caption>
-				<tbody></tbody>
+				<tbody>
+				</tbody>
 			</table>
 		</div>
 		
 		<div id='tab_record'>
 			<table class='tab_table'>
 				<caption class='title'>操作记录</caption>
-				<tbody>
-				</tbody>
+				<tbody></tbody>
 			</table>
 		</div>
 		

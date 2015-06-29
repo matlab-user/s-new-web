@@ -2,3 +2,4 @@ mysql_user=root
 mysql_passwd=blue
 upload_path=/tmp/
 domain=www.swaytech.biz:128
+key_1=ec79d961a3a093e97f221bf1e1b324aa

@@ -583,6 +583,12 @@ function parse_fun_xml( xml ) {
 	} );
 }
 
+function gen_link() {
+	$.post( './my-php/one_dev/gen_d_link.php', {'VT':$('#vt_input').val()}, function(data) {
+		$('#link_output').val( data );	
+	} );	
+}
+
 function refresh() {
 	
 	

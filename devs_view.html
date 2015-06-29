@@ -6,7 +6,8 @@
 		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>实唯物联</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+		<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
+		<script src="js-lib/jquery-2.1.1.min.js"></script>
 		<script src="my-js/devs_view/devs_view.js"></script>
 		<script src="js-lib/jquery.base64.js"></script>
 		
@@ -222,12 +223,32 @@
 						
 						var devs_table = $('#devices1').children('table.devs_table').children('tbody');
 						add_dev_tr( devs_table, devs.length-1 );
-						
-						
 					}
 				} );
 			} );
+			
+			var url_p = window.location.href.split("?")[1];
+			if( typeof(url_p)!=='undefined' ) {
+				var index = url_p.indexOf('=');
+				var n = url_p.substr( 0, index );
+				if( n==='load' ) {
+					url_p = url_p.substr( index+1 );
+					$.post( './my-php/devs_view/link_login.php', {'load':url_p}, function( res ) {
+						if( res=='OK' )
+							do_init();
+					} );
+				}
+			}
+			else
+				do_init();
+				
+			$('#add_dev_bn').click( function(e) { add_dev(e); } );
+			
+			if( $('body').height()<600 )
+				$('body').height( 600 );
+		} );
 		
+		function do_init() {
 			$.post( 'my-php/devs_view_init.php', function( res ) {
 				xml_parser( res );
 				$('#devs_info_bar').text('您目前共有'+devs.length+'台设备');
@@ -243,12 +264,7 @@
 				user = data;
 				$('#user_name').html( user );
 			} );
-
-			$('#add_dev_bn').click( function(e) { add_dev(e); } );
-			
-			if( $('body').height()<600 )
-				$('body').height( 600 );
-		} );
+		}
 	</script>
 		
 </html>

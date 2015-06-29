@@ -73,8 +73,9 @@ table.hover_table tr:hover {opacity:0.5}
 .tab_table tbody th,td{padding:5px 0 5px 30px;text-align:left;font-size:16px;font-weight:normal}
 .tab .button{width:100%;float:left;list-style:none;line-height:36px;margin:16px 0 57px 30%}
 .tab .button li{float:left;padding-left:60px}
-.tab .button .set_button{width:77px;height:43px;line-height:26px;float:right;font-size:17px;padding:0 10px;border:1px solid #ddd;border-radius:4px;background:#fff}
+.tab .button .set_button, .set_button{width:77px;height:43px;line-height:26px;float:right;font-size:17px;padding:0 10px;border:1px solid #ddd;border-radius:4px;background:#fff}
 .tab .button .set_button:hover{color:#009999}
+.set_button:hover{color:#009999}
 
 .tab_table .alarm_rel{border:1px solid #ddd;padding:5px;width:81px;margin-bottom:10px;font-size:16px}
 
