@@ -1,5 +1,4 @@
 <?php
-	session_start();
 	
 	require_once( "../php-lib/codec_lib.php" );
 	
@@ -10,6 +9,8 @@
 	if( !( isset($_POST['user']) & isset($_POST['passwd']) ) )
 		exit;
 	
+	session_start();
+		
 	if( !isset($_SESSION['l_login']) )
 		$_SESSION['l_login'] = time();
 	else {
